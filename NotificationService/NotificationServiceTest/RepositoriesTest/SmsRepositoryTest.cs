@@ -1,8 +1,7 @@
-﻿using System;
-using System.Configuration;
-using System.Text;
+﻿using System.Configuration;
 using NotificationService.Interfaces;
 using NotificationService.Repositories;
+using Xunit;
 
 namespace NotificationServiceTest.RepositoriesTest
 {
@@ -17,5 +16,16 @@ namespace NotificationServiceTest.RepositoriesTest
             var fromPhone = ConfigurationManager.AppSettings["FromPhone"];
             _repository = new SmsRepository(accountSid, authToken, fromPhone);
         }
+
+        [Fact]
+        public void TestSendSms()
+        {
+            string body = "Join Earth's mightiest heroes. Like Kevin Bacon.";
+            var toPhone = ConfigurationManager.AppSettings["ToPhone"];
+
+            _repository.SendSms(toPhone, body);
+
+        }
+
     }
 }
