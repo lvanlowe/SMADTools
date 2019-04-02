@@ -4,13 +4,13 @@ using Microsoft.EntityFrameworkCore.Metadata;
 
 namespace InformationService.Models
 {
-    public partial class PWSODBContext : DbContext
+    public partial class PwsodbContext : DbContext
     {
-        public PWSODBContext()
+        public PwsodbContext()
         {
         }
 
-        public PWSODBContext(DbContextOptions<PWSODBContext> options)
+        public PwsodbContext(DbContextOptions<PwsodbContext> options)
             : base(options)
         {
         }
