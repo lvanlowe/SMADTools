@@ -21,20 +21,23 @@ namespace InformationServiceTest.RepositoriesTest
         }
 
 
-        [Fact]
+        [Theory]
+        [InlineData(3)]
+        [InlineData(13)]
+        [InlineData(9)]
 
-        public void GetAllAthletes_When_executed_create_list_of_Athletes()
+        public void GetAllAthletes_When_executed_create_list_of_Athletes(int last)
 
         {
             // Insert seed data into the database using one instance of the context
+            var athletes = _context.Athletes.ToListAsync();
+            _context.RemoveRange(athletes.Result);
+            _context.SaveChanges();
 
-            int last = 3;
-
-            for (int i = 1; i > last; i++)
+            for (int i = 1; i < last + 1; i++)
             {
                 _context.Athletes.Add(new Athletes {Id = i, FirstName = "Tom" + i, LastName = "Jones" + i});
             }
-
 
             _context.SaveChanges();
 

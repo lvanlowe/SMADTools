@@ -4,6 +4,7 @@ using System.Text;
 using System.Threading.Tasks;
 using InformationService.Interfaces;
 using InformationService.Models;
+using Microsoft.EntityFrameworkCore;
 
 namespace InformationService.Repositories
 {
@@ -16,9 +17,10 @@ namespace InformationService.Repositories
             _context = context;
         }
 
-        public Task<List<Athletes>> GetAllAthletes()
+        public async Task<List<Athletes>> GetAllAthletes()
         {
-            throw new NotImplementedException();
+            var athletes = await _context.Athletes.ToListAsync();
+            return athletes;
         }
     }
 }
