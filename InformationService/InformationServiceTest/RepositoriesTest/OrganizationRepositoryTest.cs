@@ -47,5 +47,70 @@ namespace InformationServiceTest.RepositoriesTest
             Assert.Equal(last, actual.Result.Count);
 
         }
+
+        [Theory]
+        [InlineData(3, 'J', 3)]
+        [InlineData(13, 'P', 13)]
+        [InlineData(5, 'A', 0)]
+        public void FindAthletesByFirstLetter_When_executed_create_list_of_Athletes_Start_Last_Given_Letter(int last, char letter, int expected)
+
+        {
+
+            // Insert seed data into the database using one instance of the context
+            var athletes = _context.Athletes.ToListAsync();
+            _context.RemoveRange(athletes.Result);
+            _context.SaveChanges();
+
+            for (int i = 1; i < last + 1; i++)
+            {
+                _context.Athletes.Add(new Athletes { Id = i, FirstName = "Tom" + i, LastName = "Jones" + i });
+            }
+            for (int i = 1; i < last + 1; i++)
+            {
+                _context.Athletes.Add(new Athletes { Id = i + last, FirstName = "Peter" + i, LastName = "Parker" + i });
+            }
+
+            _context.SaveChanges();
+
+            var repository = new OrganizationRepository(_context);
+            var actual = repository.FindAthletesByFirstLetter(letter);
+
+            Assert.Equal(expected, actual.Result.Count);
+
+        }
+
+
+        [Fact]
+        public void FindAthleteByName_When_name_Then_athlete_with_name()
+
+        {
+            string firstName = "Clark";
+            string lastName = "Kent";
+
+            // Insert seed data into the database using one instance of the context
+            var athletes = _context.Athletes.ToListAsync();
+            _context.RemoveRange(athletes.Result);
+            _context.SaveChanges();
+
+
+            _context.Athletes.Add(new Athletes { Id = 1, FirstName = "Clark", LastName = "Kent" });
+            _context.Athletes.Add(new Athletes { Id = 2, FirstName = "Bruce", LastName = "Wayne" });
+            _context.Athletes.Add(new Athletes { Id = 3, FirstName = "Diana", LastName = "Prince" });
+            _context.Athletes.Add(new Athletes { Id = 4, FirstName = "Barry", LastName = "Allen" });
+            _context.Athletes.Add(new Athletes { Id = 5, FirstName = "Hal", LastName = "Jordon" });
+
+
+            _context.SaveChanges();
+
+         
+
+            var repository = new OrganizationRepository(_context);
+            var actual = repository.FindAthleteByName(firstName, lastName);
+
+            Assert.Equal(firstName, actual.Result.FirstName);
+            Assert.Equal(lastName, actual.Result.LastName);
+
+        }
+
     }
 }
