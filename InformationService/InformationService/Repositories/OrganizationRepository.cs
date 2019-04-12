@@ -1,17 +1,15 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using InformationService.Interfaces;
+﻿using InformationService.Interfaces;
 using InformationService.Models;
 using Microsoft.EntityFrameworkCore;
+using System.Collections.Generic;
+using System.Linq;
+using System.Threading.Tasks;
 
 namespace InformationService.Repositories
 {
     public class OrganizationRepository : IOrganizationRepository
     {
-        private PwsoContext _context;
+        private readonly PwsoContext _context;
 
         public OrganizationRepository(PwsoContext context)
         {
@@ -32,7 +30,16 @@ namespace InformationService.Repositories
 
         public async Task<Athletes> FindAthleteByName(string firstName, string lastName)
         {
-            throw new NotImplementedException();
+            var athlete = await _context.Athletes.Where(a => a.LastName == lastName && a.FirstName == firstName)
+                .FirstOrDefaultAsync();
+            return athlete;
+        }
+
+        public async Task<Athletes> FindAthleteById(int id)
+        {
+            var athlete = await _context.Athletes.Where(a => a.Id == id)
+                .FirstOrDefaultAsync();
+            return athlete;
         }
     }
 }
