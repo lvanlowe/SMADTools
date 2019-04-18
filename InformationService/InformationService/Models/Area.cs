@@ -7,12 +7,12 @@ namespace InformationService.Models
     {
         public Area()
         {
-            Team = new HashSet<Team>();
+            Team = new HashSet<Teams>();
         }
 
         public int AreaId { get; set; }
         public int Number { get; set; }
 
-        public virtual ICollection<Team> Team { get; set; }
+        public virtual ICollection<Teams> Team { get; set; }
     }
 }

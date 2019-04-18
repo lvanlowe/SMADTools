@@ -15,7 +15,7 @@ namespace InformationService.Models
         public int Year { get; set; }
         public int SportId { get; set; }
 
-        public virtual Sport Sport { get; set; }
+        public virtual Sports Sport { get; set; }
         public virtual ICollection<Coach> Coach { get; set; }
     }
 }

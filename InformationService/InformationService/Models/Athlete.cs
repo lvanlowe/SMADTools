@@ -17,7 +17,7 @@ namespace InformationService.Models
         public string AgeGroup { get; set; }
         public bool ScratchInd { get; set; }
 
-        public virtual Team Team { get; set; }
+        public virtual Teams Teams { get; set; }
         public virtual ICollection<AthleteEvent> AthleteEvent { get; set; }
     }
 }

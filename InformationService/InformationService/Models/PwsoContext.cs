@@ -20,7 +20,7 @@ namespace InformationService.Models
         public virtual DbSet<AthleteEvent> AthleteEvent { get; set; }
         public virtual DbSet<Athletes> Athletes { get; set; }
         public virtual DbSet<Event> Event { get; set; }
-        public virtual DbSet<Team> Team { get; set; }
+        public virtual DbSet<Teams> Team { get; set; }
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
@@ -58,11 +58,6 @@ namespace InformationService.Models
                     .HasMaxLength(50)
                     .IsUnicode(false);
 
-                entity.HasOne(d => d.Team)
-                    .WithMany(p => p.Athlete)
-                    .HasForeignKey(d => d.TeamId)
-                    .OnDelete(DeleteBehavior.ClientSetNull)
-                    .HasConstraintName("FK_Athlete_Athlete");
             });
 
             modelBuilder.Entity<AthleteEvent>(entity =>
@@ -173,20 +168,6 @@ namespace InformationService.Models
                     .IsUnicode(false);
             });
 
-            modelBuilder.Entity<Team>(entity =>
-            {
-                entity.ToTable("Team", "track");
-
-                entity.Property(e => e.TeamName)
-                    .HasMaxLength(20)
-                    .IsUnicode(false);
-
-                entity.HasOne(d => d.Area)
-                    .WithMany(p => p.Team)
-                    .HasForeignKey(d => d.AreaId)
-                    .OnDelete(DeleteBehavior.ClientSetNull)
-                    .HasConstraintName("FK_Team_Area");
-            });
         }
     }
 }

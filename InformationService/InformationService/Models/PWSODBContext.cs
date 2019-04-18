@@ -23,7 +23,10 @@ namespace InformationService.Models
         public virtual DbSet<Registrant> Registrant { get; set; }
         public virtual DbSet<RegistrantEmail> RegistrantEmail { get; set; }
         public virtual DbSet<RegistrantPhone> RegistrantPhone { get; set; }
-        public virtual DbSet<Sport> Sport { get; set; }
+        public virtual DbSet<Programs> Programs { get; set; }
+        public virtual DbSet<Sports> Sports { get; set; }
+        public virtual DbSet<SportTypes> SportTypes { get; set; }
+        public virtual DbSet<Teams> Teams { get; set; }
         public virtual DbSet<Uniforms> Uniforms { get; set; }
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
@@ -75,22 +78,22 @@ namespace InformationService.Models
                     .HasConstraintName("FK_Coach_Location");
             });
 
-            modelBuilder.Entity<Location>(entity =>
-            {
-                entity.ToTable("Location", "pwso");
+            //modelBuilder.Entity<Location>(entity =>
+            //{
+            //    entity.ToTable("Location", "pwso");
 
-                entity.Property(e => e.Id).HasColumnName("id");
+            //    entity.Property(e => e.Id).HasColumnName("id");
 
-                entity.Property(e => e.Name)
-                    .HasMaxLength(25)
-                    .IsUnicode(false);
+            //    entity.Property(e => e.Name)
+            //        .HasMaxLength(25)
+            //        .IsUnicode(false);
 
-                entity.HasOne(d => d.Sport)
-                    .WithMany(p => p.Location)
-                    .HasForeignKey(d => d.SportId)
-                    .OnDelete(DeleteBehavior.ClientSetNull)
-                    .HasConstraintName("FK_Location_Sport");
-            });
+            //    entity.HasOne(d => d.Sport)
+            //        .WithMany(p => p.Location)
+            //        .HasForeignKey(d => d.SportId)
+            //        .OnDelete(DeleteBehavior.ClientSetNull)
+            //        .HasConstraintName("FK_Location_Sport");
+            //});
 
             modelBuilder.Entity<PhoneTypes>(entity =>
             {
@@ -194,17 +197,6 @@ namespace InformationService.Models
                     .HasConstraintName("FK_RegistrantPhone_Registrant");
             });
 
-            modelBuilder.Entity<Sport>(entity =>
-            {
-                entity.ToTable("Sport", "pwso");
-
-                entity.Property(e => e.Id).HasColumnName("id");
-
-                entity.Property(e => e.Name)
-                    .IsRequired()
-                    .HasMaxLength(25)
-                    .IsUnicode(false);
-            });
 
             modelBuilder.Entity<Uniforms>(entity =>
             {
@@ -224,6 +216,85 @@ namespace InformationService.Models
                 entity.Property(e => e.UniqueId)
                     .HasMaxLength(1)
                     .IsUnicode(false);
+            });
+
+            modelBuilder.Entity<Programs>(entity =>
+            {
+                entity.ToTable("Programs", "pwso");
+
+                entity.Property(e => e.Id).HasColumnName("id");
+
+                entity.Property(e => e.Name)
+                    .HasMaxLength(25)
+                    .IsUnicode(false);
+
+                entity.HasOne(d => d.SportNavigation)
+                    .WithMany(p => p.Programs)
+                    .HasForeignKey(d => d.Sport)
+                    .OnDelete(DeleteBehavior.ClientSetNull)
+                    .HasConstraintName("FK_Programs_Sport");
+            });
+
+            modelBuilder.Entity<SportTypes>(entity =>
+            {
+                entity.ToTable("SportTypes", "pwso");
+
+                entity.Property(e => e.Id).HasColumnName("id");
+
+                entity.Property(e => e.Abbreviation)
+                    .IsRequired()
+                    .HasMaxLength(5)
+                    .IsUnicode(false);
+
+                entity.Property(e => e.Name)
+                    .IsRequired()
+                    .HasMaxLength(25)
+                    .IsUnicode(false);
+
+                entity.HasOne(d => d.Sport)
+                    .WithMany(p => p.SportTypes)
+                    .HasForeignKey(d => d.SportId)
+                    .OnDelete(DeleteBehavior.ClientSetNull)
+                    .HasConstraintName("FK_SportTypes_Sport");
+            });
+
+            modelBuilder.Entity<Sports>(entity =>
+            {
+                entity.ToTable("Sports", "pwso");
+
+                entity.Property(e => e.Id).HasColumnName("id");
+
+                entity.Property(e => e.Email)
+                    .HasMaxLength(50)
+                    .IsUnicode(false);
+
+                entity.Property(e => e.Name)
+                    .IsRequired()
+                    .HasMaxLength(25)
+                    .IsUnicode(false);
+            });
+
+            modelBuilder.Entity<Teams>(entity =>
+            {
+                entity.ToTable("Teams", "pwso");
+
+                entity.Property(e => e.Id).HasColumnName("id");
+
+                entity.Property(e => e.Name)
+                    .IsRequired()
+                    .HasMaxLength(25)
+                    .IsUnicode(false);
+
+                entity.HasOne(d => d.Program)
+                    .WithMany(p => p.Teams)
+                    .HasForeignKey(d => d.ProgramId)
+                    .OnDelete(DeleteBehavior.ClientSetNull)
+                    .HasConstraintName("FK_Teams_Program");
+
+                entity.HasOne(d => d.SportTypeNavigation)
+                    .WithMany(p => p.Teams)
+                    .HasForeignKey(d => d.SportType)
+                    .HasConstraintName("FK_Teams_SportType");
             });
         }
     }
