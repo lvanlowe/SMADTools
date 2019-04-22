@@ -22,13 +22,40 @@ namespace InformationServiceTest.RepositoriesTest
 
         private void InitializeSports()
         {
+            var categogies = _context.SportTypes.ToListAsync();
+            _context.RemoveRange(categogies.Result);
+            var locations = _context.Programs.ToListAsync();
+            _context.RemoveRange(locations.Result);
             var sports = _context.Sports.ToListAsync();
             _context.RemoveRange(sports.Result);
             _context.SaveChanges();
         }
 
+        private void LoadSports()
+        {
+            _context.Sports.Add(new Sports() { Id = 1, Name = "Basketball" });
+            _context.Sports.Add(new Sports() { Id = 2, Name = "Soccer" });
+            _context.Sports.Add(new Sports() { Id = 3, Name = "Track" });
+            _context.Programs.Add(new Programs() { Id = 1, Sport = 1, Name = "Woodbridge" });
+            _context.Programs.Add(new Programs() { Id = 2, Sport = 1, Name = "Gainesville" });
+            _context.Programs.Add(new Programs() { Id = 3, Sport = 2, });
+            _context.Programs.Add(new Programs() { Id = 4, Sport = 3, Name = "Dale City" });
+            _context.Programs.Add(new Programs() { Id = 5, Sport = 3, Name = "Montclair" });
+            _context.Programs.Add(new Programs() { Id = 6, Sport = 3, Name = "Lake Ridge" });
+            _context.SportTypes.Add(new SportTypes() { Id = 1, SportId = 1, Name = "Full Court" });
+            _context.SportTypes.Add(new SportTypes() { Id = 2, SportId = 1, Name = "Half Court" });
+            _context.SportTypes.Add(new SportTypes() { Id = 3, SportId = 1, Name = "Skills" });
+            _context.SportTypes.Add(new SportTypes() { Id = 4, SportId = 2, Name = "Skills" });
+            _context.SportTypes.Add(new SportTypes() { Id = 5, SportId = 2, Name = "Non Skills" });
+
+
+            _context.SaveChanges();
+        }
+
         [Theory]
         [InlineData(3)]
+        [InlineData(7)]
+        [InlineData(10)]
         public void GetAllSports_When_executed_create_list_of_Sports(int last)
 
         {
@@ -46,6 +73,45 @@ namespace InformationServiceTest.RepositoriesTest
             var actual = repository.GetAllSports();
 
             Assert.Equal(last, actual.Result.Count);
+
+        }
+
+
+        [Theory]
+        [InlineData(1, 2)]
+        [InlineData(2, 1)]
+        [InlineData(3, 3)]
+        public void GetLocationBySport_When_executed_create_list_of_Programs_bySport(int sportId, int expected)
+
+        {
+            // Insert seed data into the database using one instance of the context
+            InitializeSports();
+            LoadSports();
+
+            var repository = new ReferenceRepository(_context);
+            var actual = repository.GetLocationBySport(sportId);
+
+            Assert.Equal(expected, actual.Result.Count);
+
+        }
+
+
+
+        [Theory]
+        [InlineData(1, 3)]
+        [InlineData(2, 2)]
+        [InlineData(3, 0)]
+        public void GetCategoryBySport_When_executed_create_list_of_Categories_bySport(int sportId, int expected)
+
+        {
+            // Insert seed data into the database using one instance of the context
+            InitializeSports();
+            LoadSports();
+
+            var repository = new ReferenceRepository(_context);
+            var actual = repository.GetCategoryBySport(sportId);
+
+            Assert.Equal(expected, actual.Result.Count);
 
         }
     }
