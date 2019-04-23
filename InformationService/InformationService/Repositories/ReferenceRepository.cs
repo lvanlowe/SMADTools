@@ -35,5 +35,11 @@ namespace InformationService.Repositories
             var categories = await _context.SportTypes.Where(s => s.SportId == sportId).ToListAsync();
             return categories;
         }
+
+        public async Task<List<Teams>> GetTeamBySport(int sportId)
+        {
+            var teams = await _context.Teams.Where(t => t.Program.Sport == sportId).ToListAsync();
+            return teams;
+        }
     }
 }
