@@ -33,6 +33,103 @@ namespace InformationServiceTest.RepositoriesTest
             _context.SaveChanges();
         }
 
+        private void LoadRegistrants()
+        {
+            var registrant1 = new Registrant()
+            {
+                Id = 1,
+                FirstName = "Clark",
+                LastName = "Kent",
+                ProgramId = 1,
+                SportId = 1,
+                SportTypeId = 1,
+                TeamId = 1,
+                Selected = true
+            }; var registrant2 = new Registrant()
+            {
+                Id = 1,
+                FirstName = "Bruce",
+                LastName = "Wayne",
+                ProgramId = 2,
+                SportId = 1,
+                SportTypeId = 1,
+                TeamId = 1,
+                Selected = true
+            }; var registrant3 = new Registrant()
+            {
+                Id = 1,
+                FirstName = "Barry",
+                LastName = "Allen",
+                ProgramId = 3,
+                SportId = 2,
+                SportTypeId = 1,
+                TeamId = 2,
+                IsVolunteer = true
+            }; var registrant4 = new Registrant()
+            {
+                Id = 1,
+                FirstName = "Hal",
+                LastName = "Jordan",
+                ProgramId = 3,
+                SportId = 1,
+                SportTypeId = 1,
+                TeamId = 2,
+                Selected = true
+            }; var registrant5 = new Registrant()
+            {
+                Id = 1,
+                FirstName = "Diana",
+                LastName = "Prince",
+                ProgramId = 2,
+                SportId = 1,
+                SportTypeId = 2,
+                TeamId = 3
+            }; var registrant6 = new Registrant()
+            {
+                Id = 1,
+                FirstName = "Oliver",
+                LastName = "Queen",
+                ProgramId = 2,
+                SportId = 1,
+                SportTypeId = 2,
+                TeamId = 3
+            }; var registrant7 = new Registrant()
+            {
+                Id = 1,
+                FirstName = "Ray",
+                LastName = "Palmer",
+                ProgramId = 3,
+                SportId = 2,
+                SportTypeId = 4,
+                TeamId = 4
+            }; var registrant8 = new Registrant()
+            {
+                Id = 1,
+                FirstName = "John",
+                LastName = "Jones",
+                ProgramId = 3,
+                SportId = 2,
+                SportTypeId = 4,
+                TeamId = 4
+            }; var registrant9 = new Registrant()
+            {
+                Id = 1,
+                FirstName = "Dick",
+                LastName = "Grayson",
+                ProgramId = 4,
+                SportId = 3,
+                IsVolunteer = true
+            }; var registrant0  = new Registrant()
+            {
+                Id = 1,
+                FirstName = "Iris",
+                LastName = "West",
+                ProgramId = 4,
+                SportId = 3,
+            };
+            _context.Registrant.Add(new Registrant() {Id = 1, FirstName = "Clark", LastName = "Kent", ProgramId = 1, SportId = 1, SportTypeId = 1, TeamId = 1});
+        }
+
         [Theory]
         [InlineData(3)]
         [InlineData(7)]
