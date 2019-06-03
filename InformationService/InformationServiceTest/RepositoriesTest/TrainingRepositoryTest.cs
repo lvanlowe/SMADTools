@@ -52,6 +52,27 @@ namespace InformationServiceTest.RepositoriesTest
             RegistrantEmail email01 = new RegistrantEmail() { Id = 15, Email = "barbara@batman.com", RegistrantId = 9 };
             RegistrantEmail email02 = new RegistrantEmail() { Id = 16, Email = "iris@flash.net", RegistrantId = 10 };
 
+            RegistrantPhone phone11 = new RegistrantPhone() { Id = 1, RegistrantId = 1, CanText = true, PhoneTypeId = 1, CarrierId = 1, Phone = "7035551212" };
+            RegistrantPhone phone21 = new RegistrantPhone() { Id = 2, RegistrantId = 2, CanText = true, PhoneTypeId = 1, CarrierId = 1, Phone = "3015551212" };
+            RegistrantPhone phone22 = new RegistrantPhone() { Id = 3, RegistrantId = 2, CanText = true, PhoneTypeId = 1, CarrierId = 1, Phone = "3105551212" };
+            RegistrantPhone phone31 = new RegistrantPhone() { Id = 4, RegistrantId = 3, CanText = false, PhoneTypeId = 2, Phone = "2025551212" };
+            RegistrantPhone phone41 = new RegistrantPhone() { Id = 5, RegistrantId = 4, CanText = true, PhoneTypeId = 1, CarrierId = 1, Phone = "7185551212" };
+            RegistrantPhone phone42 = new RegistrantPhone() { Id = 6, RegistrantId = 4, CanText = false, PhoneTypeId = 2, Phone = "2035551212" };
+            RegistrantPhone phone51 = new RegistrantPhone() { Id = 7, RegistrantId = 5, CanText = false, PhoneTypeId = 2, Phone = "4045551212" };
+            RegistrantPhone phone52 = new RegistrantPhone() { Id = 8, RegistrantId = 5, CanText = false, PhoneTypeId = 3, Phone = "9185551212" };
+            RegistrantPhone phone61 = new RegistrantPhone() { Id = 9, RegistrantId = 6, CanText = true, PhoneTypeId = 1, CarrierId = 1, Phone = "2045551212" };
+            RegistrantPhone phone62 = new RegistrantPhone() { Id = 10, RegistrantId = 6, CanText = true, PhoneTypeId = 1, CarrierId = 1, Phone = "2055551212" };
+            RegistrantPhone phone63 = new RegistrantPhone() { Id = 11, RegistrantId = 6, CanText = true, PhoneTypeId = 1, CarrierId = 1, Phone = "2065551212" };
+            RegistrantPhone phone71 = new RegistrantPhone() { Id = 12, RegistrantId = 7, CanText = true, PhoneTypeId = 1, CarrierId = 1, Phone = "2075551212" };
+            RegistrantPhone phone72 = new RegistrantPhone() { Id = 13, RegistrantId = 7, CanText = true, PhoneTypeId = 1, CarrierId = 1, Phone = "2085551212" };
+            RegistrantPhone phone73 = new RegistrantPhone() { Id = 14, RegistrantId = 7, CanText = false, PhoneTypeId = 3, Phone = "2125551212" };
+            RegistrantPhone phone81 = new RegistrantPhone() { Id = 15, RegistrantId = 8, CanText = true, PhoneTypeId = 1, CarrierId = 1, Phone = "2135551212" };
+            RegistrantPhone phone82 = new RegistrantPhone() { Id = 16, RegistrantId = 8, CanText = false, PhoneTypeId = 3, Phone = "2145551212" };
+            RegistrantPhone phone83 = new RegistrantPhone() { Id = 17, RegistrantId = 8, CanText = false, PhoneTypeId = 2, Phone = "2155551212" };
+            RegistrantPhone phone91 = new RegistrantPhone() { Id = 18, RegistrantId = 9, CanText = false, PhoneTypeId = 2, Phone = "2165551212" };
+            RegistrantPhone phone92 = new RegistrantPhone() { Id = 19, RegistrantId = 9, CanText = false, PhoneTypeId = 3, Phone = "2175551212" };
+            RegistrantPhone phone93 = new RegistrantPhone() { Id = 20, RegistrantId = 9, CanText = false, PhoneTypeId = 3, Phone = "2185551212" };
+
             var registrant1 = new Registrant()
             {
                 Id = 1,
@@ -175,22 +196,15 @@ namespace InformationServiceTest.RepositoriesTest
         }
 
         [Theory]
-        [InlineData(1, 2)]
-        //[InlineData(7)]
-        //[InlineData(10)]
+        [InlineData(1, 5)]
+        [InlineData(2, 3)]
+        [InlineData(3, 2)]
         public void GetEmailsBySport_When_executed_create_list_of_SportEmails(int sportId, int expected)
 
         {
             // Insert seed data into the database using one instance of the context
             InitializeRegistrants();
             LoadRegistrants();
-
-            //for (int i = 1; i < last + 1; i++)
-            //{
-            //    _context.Sports.Add(new Sports() { Id = i, Name = "Baseball" + i, Email = i + "Jones@pwsova.org" });
-            //}
-
-            //_context.SaveChanges();
 
             var repository = new TrainingRepository(_context);
             var actual = repository.GetEmailsBySport(sportId);
