@@ -181,6 +181,26 @@ namespace InformationServiceTest.RepositoriesTest
             registrant8.RegistrantEmail.Add(email82);
             registrant8.RegistrantEmail.Add(email83);
             registrant9.RegistrantEmail.Add(email91);
+            registrant1.RegistrantPhone.Add(phone11);
+            registrant2.RegistrantPhone.Add(phone21);
+            registrant2.RegistrantPhone.Add(phone22);
+            registrant3.RegistrantPhone.Add(phone31);
+            registrant4.RegistrantPhone.Add(phone41);
+            registrant4.RegistrantPhone.Add(phone42);
+            registrant5.RegistrantPhone.Add(phone51);
+            registrant5.RegistrantPhone.Add(phone52);
+            registrant6.RegistrantPhone.Add(phone61);
+            registrant6.RegistrantPhone.Add(phone62);
+            registrant6.RegistrantPhone.Add(phone63);
+            registrant7.RegistrantPhone.Add(phone71);
+            registrant7.RegistrantPhone.Add(phone72);
+            registrant7.RegistrantPhone.Add(phone73);
+            registrant8.RegistrantPhone.Add(phone81);
+            registrant8.RegistrantPhone.Add(phone82);
+            registrant8.RegistrantPhone.Add(phone83);
+            registrant9.RegistrantPhone.Add(phone91);
+            registrant9.RegistrantPhone.Add(phone92);
+            registrant9.RegistrantPhone.Add(phone93);
             _context.Registrant.Add(registrant0);
             _context.Registrant.Add(registrant1);
             _context.Registrant.Add(registrant2);
@@ -212,5 +232,24 @@ namespace InformationServiceTest.RepositoriesTest
             Assert.Equal(expected, actual.Result.Count);
 
         }
+
+        [Theory]
+        [InlineData(1, 7)]
+        //[InlineData(2, 3)]
+        //[InlineData(3, 2)]
+        public void GetPhonesBySport_When_executed_create_list_of_SportPhoness(int sportId, int expected)
+
+        {
+            // Insert seed data into the database using one instance of the context
+            InitializeRegistrants();
+            LoadRegistrants();
+
+            var repository = new TrainingRepository(_context);
+            var actual = repository.GetPhonesBySport(sportId);
+
+            Assert.Equal(expected, actual.Result.Count);
+
+        }
+
     }
 }
