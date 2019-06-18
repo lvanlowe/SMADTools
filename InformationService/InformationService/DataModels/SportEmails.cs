@@ -12,8 +12,8 @@ namespace InformationService.DataModels
         public long ProgramId { get; set; }
         public long? SportTypeId { get; set; }
         public long? TeamId { get; set; }
-        public bool Selected { get; set; }
-        public bool IsVolunteer { get; set; }
+        public bool? Selected { get; set; }
+        public bool? IsVolunteer { get; set; }
         public string Email { get; set; }
     }
 }

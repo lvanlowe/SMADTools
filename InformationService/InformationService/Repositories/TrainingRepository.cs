@@ -24,6 +24,22 @@ namespace InformationService.Repositories
         {
             var emails = await _context.Registrant.Where(r => r.SportId == sportId).Select(r => new SportEmails{FirstName = r.FirstName, LastName = r.LastName, NickName = r.NickName, ProgramId = r.ProgramId, SportTypeId = r.SportTypeId, TeamId = r.TeamId }).ToListAsync();
 
+            var phones = await _context.Registrant
+                .Join(_context.RegistrantEmail,
+                    r => r.Id,
+                    e => e.RegistrantId,
+                    (r, e) => new { r, e }).Where(c => c.r.SportId == sportId).Select(c => new SportEmails
+                {
+                    FirstName = c.r.FirstName,
+                    LastName = c.r.LastName,
+                    NickName = c.r.NickName,
+                    ProgramId = c.r.ProgramId,
+                    SportTypeId = c.r.SportTypeId,
+                    TeamId = c.r.TeamId,
+                    Email = c.e.Email,
+                    Selected = c.r.Selected,
+                    IsVolunteer = c.r.IsVolunteer
+                }).ToListAsync();
             return emails;
         }
 
@@ -43,6 +59,8 @@ namespace InformationService.Repositories
                     SportTypeId = c.r.SportTypeId,
                     TeamId = c.r.TeamId,
                     Phone = c.p.Phone,
+                    Selected = c.r.Selected,
+                    IsVolunteer = c.r.IsVolunteer
                 }).ToListAsync();
 
             return phones;

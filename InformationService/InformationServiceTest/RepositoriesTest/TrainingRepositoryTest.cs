@@ -235,8 +235,8 @@ namespace InformationServiceTest.RepositoriesTest
 
         [Theory]
         [InlineData(1, 7)]
-        //[InlineData(2, 3)]
-        //[InlineData(3, 2)]
+        [InlineData(2, 3)]
+        [InlineData(3, 0)]
         public void GetPhonesBySport_When_executed_create_list_of_SportPhoness(int sportId, int expected)
 
         {
