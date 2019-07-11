@@ -1,4 +1,5 @@
 ﻿using System.Configuration;
+using Microsoft.Extensions.Configuration;
 using NotificationService.Interfaces;
 using NotificationService.Repositories;
 using Xunit;
@@ -8,12 +9,23 @@ namespace NotificationServiceTest.RepositoriesTest
     public class SmsRepositoryTest
     {
         private ISmsRepository _repository;
+        private string _toPhone;
 
+        public static IConfiguration InitConfiguration()
+        {
+            var config = new ConfigurationBuilder()
+                .AddJsonFile("appsettings.test.json")
+                .Build();
+            return config;
+        }
         public SmsRepositoryTest()
         {
-            var accountSid = ConfigurationManager.AppSettings["AccountSid"];
-            var authToken = ConfigurationManager.AppSettings["AuthToken"];
-            var fromPhone = ConfigurationManager.AppSettings["FromPhone"];
+            var config = InitConfiguration();
+            var accountSid = config["AccountSid"];
+            var authToken = config["AuthToken"];
+            var fromPhone = config["FromPhone"];
+            _toPhone = config["ToPhone"];
+
             _repository = new SmsRepository(accountSid, authToken, fromPhone);
         }
 
@@ -21,10 +33,8 @@ namespace NotificationServiceTest.RepositoriesTest
         public void TestSendSms()
         {
             string body = "Join Earth's mightiest heroes. Like Kevin Bacon.";
-            var toPhone = ConfigurationManager.AppSettings["ToPhone"];
 
-            _repository.SendSms(toPhone, body);
-
+            _repository.SendSms(_toPhone, body);
         }
 
     }
