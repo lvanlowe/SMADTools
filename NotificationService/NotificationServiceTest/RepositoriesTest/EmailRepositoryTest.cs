@@ -43,7 +43,7 @@ namespace NotificationServiceTest.RepositoriesTest
             const string plainTextContent = "and easy to do anywhere, even with C#";
             const string htmlContent = "<br>Hi {{deacon}}<br><br>&nbsp;&nbsp;&nbsp;&nbsp;Just a reminder you are the Deacon on Duty for {{month}},<br><br>&nbsp;&nbsp;&nbsp;&nbsp;You will responsible to lock up the church on Sundays after worship. If you are not going to be there then it is your responsibility to get another Deacon to close up for you. You are responsible for taking out the trash. Also make sure the offering baskets are out for the next week.<br><br>&nbsp;&nbsp;&nbsp;&nbsp;If you are going to miss more than one Sunday in {{month}} please change with another deacon";
 
-            _repository.SendEmail(from,to,null, subject,plainTextContent,htmlContent);
+            _repository.SendEmail(from,to,null, subject,plainTextContent,htmlContent).Wait();
         }
 
         [Fact]
@@ -55,7 +55,7 @@ namespace NotificationServiceTest.RepositoriesTest
             const string plainTextContent = "and easy to do anywhere, even with C#";
             const string htmlContent = "<br>Hi {{deacon}}<br><br>&nbsp;&nbsp;&nbsp;&nbsp;Just a reminder you are the Deacon on Duty for {{month}},<br><br>&nbsp;&nbsp;&nbsp;&nbsp;You will responsible to lock up the church on Sundays after worship. If you are not going to be there then it is your responsibility to get another Deacon to close up for you. You are responsible for taking out the trash. Also make sure the offering baskets are out for the next week.<br><br>&nbsp;&nbsp;&nbsp;&nbsp;If you are going to miss more than one Sunday in {{month}} please change with another deacon";
 
-            _repository.SendEmailString(_fromEmail, _toEmail, subject, plainTextContent, htmlContent);
+            _repository.SendEmailString(_fromEmail, _toEmail, subject, plainTextContent, htmlContent).Wait();
         }
 
 
