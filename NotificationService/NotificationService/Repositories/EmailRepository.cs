@@ -39,5 +39,16 @@ namespace NotificationService.Repositories
             return response;
         }
 
+        public async Task<Response> SendEmailString(string fromEmail, string toEmail, string subject,
+            string plainTextContent, string htmlContent)
+        {
+            var from = new EmailAddress(fromEmail);
+            var to = new EmailAddress(toEmail);
+
+            var msg = MailHelper.CreateSingleEmail(from, to, subject, plainTextContent, htmlContent);
+
+            var response = await _client.SendEmailAsync(msg);
+            return response;
+        }
     }
 }

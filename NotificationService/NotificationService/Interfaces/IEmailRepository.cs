@@ -12,5 +12,7 @@ namespace NotificationService.Interfaces
     {
         Task<Response> SendEmail(EmailAddress from, EmailAddress to, EmailAddress cc, string subject, string plainTextContent,
             string htmlContent);
+
+        Task<Response> SendEmailString(string fromEmail, string toEmail, string subject, string plainTextContent, string htmlContent);
     }
 }
