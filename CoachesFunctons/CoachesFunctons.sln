@@ -13,6 +13,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TrainingNotificationWorker"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "InterfaceModels", "..\InterfaceModels\InterfaceModels.csproj", "{42BF21EE-3648-4351-BC30-C4EB3B20C0D4}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TrainingNotificationWorkerTest", "TrainingNotificationWorkerTest\TrainingNotificationWorkerTest.csproj", "{07592BF9-B12E-4E07-B99F-584BDC4D41AE}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -39,6 +41,10 @@ Global
 		{42BF21EE-3648-4351-BC30-C4EB3B20C0D4}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{42BF21EE-3648-4351-BC30-C4EB3B20C0D4}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{42BF21EE-3648-4351-BC30-C4EB3B20C0D4}.Release|Any CPU.Build.0 = Release|Any CPU
+		{07592BF9-B12E-4E07-B99F-584BDC4D41AE}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{07592BF9-B12E-4E07-B99F-584BDC4D41AE}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{07592BF9-B12E-4E07-B99F-584BDC4D41AE}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{07592BF9-B12E-4E07-B99F-584BDC4D41AE}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
