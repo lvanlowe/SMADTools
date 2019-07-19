@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Threading.Tasks;
 using Castle.Components.DictionaryAdapter;
 using InformationService.DataModels;
 using InformationService.Interfaces;
@@ -13,15 +14,20 @@ namespace TrainingNotificationWorkerTest
 
     public class EmailWorkerTest
     {
+        private List<List<SportEmails>> _emailList;
+
 
         private void LoadEmails()
         {
+            _emailList = new List<List<SportEmails>>();
             List<SportEmails> emails1 = new List<SportEmails>();
             emails1.Add(new SportEmails { FirstName = "Bruce", Email = "batman@dc.com", LastName = "Wayne", NickName = "Batman", IsVolunteer = true});
             emails1.Add(new SportEmails { FirstName = "Bruce", Email = "batman@dc.com", LastName = "Wayne", NickName = "Batman", Selected = true});
             emails1.Add(new SportEmails { FirstName = "Bruce", Email = "batman@dc.com", LastName = "Wayne", NickName = "Batman" });
             emails1.Add(new SportEmails { FirstName = "Bruce", Email = "batman@dc.com", LastName = "Wayne", NickName = "Batman" });
             emails1.Add(new SportEmails { FirstName = "Bruce", Email = "batman@dc.com", LastName = "Wayne", NickName = "Batman"});
+            _emailList.Add(emails1);
+
 
             List<SportEmails> emails2 = new List<SportEmails>();
             emails2.Add(new SportEmails { FirstName = "Bruce", Email = "batman@dc.com", LastName = "Wayne", NickName = "Batman", ProgramId = 1, SportTypeId = 1, IsVolunteer = true });
@@ -63,6 +69,7 @@ namespace TrainingNotificationWorkerTest
             emails2.Add(new SportEmails { FirstName = "Bruce", Email = "batman@dc.com", LastName = "Wayne", NickName = "Batman", ProgramId = 3, SportTypeId = 3, TeamId = 4 });
             emails2.Add(new SportEmails { FirstName = "Bruce", Email = "batman@dc.com", LastName = "Wayne", NickName = "Batman", ProgramId = 3, SportTypeId = 3, TeamId = 4 });
             emails2.Add(new SportEmails { FirstName = "Bruce", Email = "batman@dc.com", LastName = "Wayne", NickName = "Batman", ProgramId = 3, SportTypeId = 3, TeamId = 4 });
+            _emailList.Add(emails2);
 
 
             List<SportEmails> emails3 = new List<SportEmails>();
@@ -88,6 +95,7 @@ namespace TrainingNotificationWorkerTest
             emails3.Add(new SportEmails { FirstName = "Bruce", Email = "batman@dc.com", LastName = "Wayne", NickName = "Batman", ProgramId = 4, SportTypeId = 4, TeamId = 6 });
             emails3.Add(new SportEmails { FirstName = "Bruce", Email = "batman@dc.com", LastName = "Wayne", NickName = "Batman", ProgramId = 4, SportTypeId = 4, TeamId = 6 });
             emails3.Add(new SportEmails { FirstName = "Bruce", Email = "batman@dc.com", LastName = "Wayne", NickName = "Batman", ProgramId = 4, SportTypeId = 4, TeamId = 6 });
+            _emailList.Add(emails3);
 
 
             List<SportEmails> emails4 = new List<SportEmails>();
@@ -107,6 +115,7 @@ namespace TrainingNotificationWorkerTest
             emails4.Add(new SportEmails { FirstName = "Bruce", Email = "batman@dc.com", LastName = "Wayne", NickName = "Batman", ProgramId = 5, SportTypeId = 7, TeamId = 8 });
             emails4.Add(new SportEmails { FirstName = "Bruce", Email = "batman@dc.com", LastName = "Wayne", NickName = "Batman", ProgramId = 5, SportTypeId = 7, TeamId = 8 });
             emails4.Add(new SportEmails { FirstName = "Bruce", Email = "batman@dc.com", LastName = "Wayne", NickName = "Batman", ProgramId = 5, SportTypeId = 7, TeamId = 8 });
+            _emailList.Add(emails4);
 
 
             List<SportEmails> emails5 = new List<SportEmails>();
@@ -149,22 +158,21 @@ namespace TrainingNotificationWorkerTest
             emails5.Add(new SportEmails { FirstName = "Bruce", Email = "batman@dc.com", LastName = "Wayne", NickName = "Batman", ProgramId = 8, SportTypeId = 8, TeamId = 11 });
             emails5.Add(new SportEmails { FirstName = "Bruce", Email = "batman@dc.com", LastName = "Wayne", NickName = "Batman", ProgramId = 8, SportTypeId = 8, TeamId = 11 });
             emails5.Add(new SportEmails { FirstName = "Bruce", Email = "batman@dc.com", LastName = "Wayne", NickName = "Batman", ProgramId = 8, SportTypeId = 8, TeamId = 11 });
+            _emailList.Add(emails5);
 
         }
 
         [Theory]
-        [InlineData(1, 7)]
+        [InlineData(1, 5)]
         public void GetEmailsForSport_When_executed_create_list_of_SportPhones(int sportId, int expected)
 
         {
-            // Insert seed data into the database using one instance of the context
-            //InitializeRegistrants();
-            //LoadRegistrants();
-            var mock = new Mock<ITrainingRepository>();
-            mock.Setup(repository => repository.GetEmailsBySport(sportId)).ReturnsAsync(new EditableList<SportEmails>());
-            var worker = new EmailWorker("connection string");
+            LoadEmails();
+            var repositoryMock = new Mock<ITrainingRepository>();
+            var emails = _emailList[sportId - 1];
+            repositoryMock.Setup(repository => repository.GetEmailsBySport(sportId)).ReturnsAsync(_emailList[sportId - 1]);
+            var worker = new EmailWorker(repositoryMock.Object);
             var actual = worker.GetEmailsForSport(sportId);
-
             Assert.Equal(expected, actual.Result.Count);
 
         }

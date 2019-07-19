@@ -1,9 +1,12 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Runtime.CompilerServices;
 using System.Text;
 using System.Threading.Tasks;
 using InformationService.DataModels;
+using InformationService.Interfaces;
 using InformationService.Models;
+using InformationService.Repositories;
 using Microsoft.EntityFrameworkCore;
 
 namespace TrainingNotificationWorker
@@ -11,21 +14,18 @@ namespace TrainingNotificationWorker
     public class EmailWorker
     {
 
-        private PwsodbContext _context;
+        private ITrainingRepository _repository;
 
-        public EmailWorker(string connectionString)
+        public EmailWorker(ITrainingRepository repository)
         {
-            var options = new DbContextOptionsBuilder<PwsodbContext>().
-                UseSqlServer(connectionString, providerOptions => providerOptions.CommandTimeout(60))
-                .UseQueryTrackingBehavior(QueryTrackingBehavior.NoTracking).Options;
-
-            _context = new PwsodbContext(options);
+            _repository = repository;
         }
 
 
         public async Task<List<SportEmails>> GetEmailsForSport(int sportId)
         {
-            throw new NotImplementedException();
+            var emails = await _repository.GetEmailsBySport(sportId);
+            return emails;
         }
     }
 }
