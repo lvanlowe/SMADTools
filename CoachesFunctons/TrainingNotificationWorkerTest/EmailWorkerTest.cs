@@ -164,6 +164,10 @@ namespace TrainingNotificationWorkerTest
 
         [Theory]
         [InlineData(1, 5)]
+        [InlineData(2, 39)]
+        [InlineData(3, 22)]
+        [InlineData(4, 16)]
+        [InlineData(5, 39)]
         public void GetEmailsForSport_When_executed_create_list_of_SportPhones(int sportId, int expected)
 
         {
@@ -176,5 +180,24 @@ namespace TrainingNotificationWorkerTest
             Assert.Equal(expected, actual.Result.Count);
 
         }
+
+        [Theory]
+        [InlineData(null, 1, 5)]
+        [InlineData(1, 2, 5)]
+        [InlineData(2, 3, 0)]
+        [InlineData(0, 4, 16)]
+        [InlineData(8, 5, 17)]
+        public void GetEmailsForLocation_When_executed_create_list_of_SportPhones_for_location(int? locationId, int sportId, int expected)
+
+        {
+            LoadEmails();
+            var repositoryMock = new Mock<ITrainingRepository>();
+            var emails = _emailList[sportId - 1];
+            var worker = new EmailWorker(repositoryMock.Object);
+            var actual = worker.GetEmailsForLocation(locationId, emails);
+            Assert.Equal(expected, actual.Count);
+
+        }
+
     }
 }

@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Runtime.CompilerServices;
 using System.Text;
 using System.Threading.Tasks;
@@ -26,6 +27,16 @@ namespace TrainingNotificationWorker
         {
             var emails = await _repository.GetEmailsBySport(sportId);
             return emails;
+        }
+
+        public List<SportEmails> GetEmailsForLocation(int? locationId, List<SportEmails> emails)
+        {
+            if (locationId == null || locationId == 0)
+            {
+                return emails;
+            }
+            var locationEmails = emails.Where(e => e.ProgramId == locationId).ToList();
+            return locationEmails;
         }
     }
 }
