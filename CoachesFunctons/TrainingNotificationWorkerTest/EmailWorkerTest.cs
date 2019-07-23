@@ -168,7 +168,7 @@ namespace TrainingNotificationWorkerTest
         [InlineData(3, 22)]
         [InlineData(4, 16)]
         [InlineData(5, 39)]
-        public void GetEmailsForSport_When_executed_create_list_of_SportPhones(int sportId, int expected)
+        public void GetEmailsForSport_When_executed_create_list_of_SportEmails(int sportId, int expected)
 
         {
             LoadEmails();
@@ -187,7 +187,7 @@ namespace TrainingNotificationWorkerTest
         [InlineData(2, 3, 0)]
         [InlineData(0, 4, 16)]
         [InlineData(8, 5, 17)]
-        public void GetEmailsForLocation_When_executed_create_list_of_SportPhones_for_location(int? locationId, int sportId, int expected)
+        public void GetEmailsForLocation_When_executed_create_list_of_SportEmails_for_location(int? locationId, int sportId, int expected)
 
         {
             LoadEmails();
@@ -198,6 +198,62 @@ namespace TrainingNotificationWorkerTest
             Assert.Equal(expected, actual.Count);
 
         }
+
+
+        [Theory]
+        [InlineData(null, 1, 5)]
+        [InlineData(1, 2, 13)]
+        [InlineData(2, 3, 0)]
+        [InlineData(0, 4, 16)]
+        [InlineData(8, 5, 39)]
+        public void GetEmailsForCategory_When_executed_create_list_of_SportEmails_for_caregoryn(int? categoryId, int sportId, int expected)
+
+        {
+            LoadEmails();
+            var repositoryMock = new Mock<ITrainingRepository>();
+            var emails = _emailList[sportId - 1];
+            var worker = new EmailWorker(repositoryMock.Object);
+            var actual = worker.GetEmailsForCategory(categoryId, emails);
+            Assert.Equal(expected, actual.Count);
+
+        }
+
+        [Theory]
+        [InlineData(null, 1, 5)]
+        [InlineData(1, 2, 7)]
+        [InlineData(2, 3, 0)]
+        [InlineData(0, 4, 16)]
+        [InlineData(11, 5, 6)]
+        public void GetEmailsForTeam_When_executed_create_list_of_SportEmails_for_team(int? teamId, int sportId, int expected)
+
+        {
+            LoadEmails();
+            var repositoryMock = new Mock<ITrainingRepository>();
+            var emails = _emailList[sportId - 1];
+            var worker = new EmailWorker(repositoryMock.Object);
+            var actual = worker.GetEmailsForTeam(teamId, emails);
+            Assert.Equal(expected, actual.Count);
+
+        }
+
+        [Theory]
+        [InlineData(null, 1, 5)]
+        [InlineData(false, 2, 39)]
+        [InlineData(true, 3, 12)]
+        [InlineData(false, 4, 16)]
+        [InlineData(true, 5, 21)]
+        public void GetEmailsForSelected_When_executed_create_list_of_SportEmails_for_selected(bool? isSelected, int sportId, int expected)
+
+        {
+            LoadEmails();
+            var repositoryMock = new Mock<ITrainingRepository>();
+            var emails = _emailList[sportId - 1];
+            var worker = new EmailWorker(repositoryMock.Object);
+            List<SportEmails> actual = worker.GetEmailsForSelected(isSelected, emails);
+            Assert.Equal(expected, actual.Count);
+
+        }
+
 
     }
 }

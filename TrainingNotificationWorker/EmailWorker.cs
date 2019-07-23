@@ -38,5 +38,34 @@ namespace TrainingNotificationWorker
             var locationEmails = emails.Where(e => e.ProgramId == locationId).ToList();
             return locationEmails;
         }
+
+        public List<SportEmails> GetEmailsForCategory(int? categoryId, List<SportEmails> emails)
+        {
+            if (categoryId == null || categoryId == 0)
+            {
+                return emails;
+            }
+            var categoryEmail = emails.Where(e => e.SportTypeId == categoryId).ToList();
+            return categoryEmail;
+        }
+
+        public List<SportEmails> GetEmailsForTeam(int? teamId, List<SportEmails> emails)
+        {
+            if (teamId == null || teamId == 0)
+            {
+                return emails;
+            }
+            var teamEmails = emails.Where(e => e.TeamId == teamId).ToList();
+            return teamEmails;
+        }
+
+        public List<SportEmails> GetEmailsForSelected(bool? isSelected, List<SportEmails> emails)
+        {
+            if (isSelected.HasValue && isSelected.Value)
+            {
+                return emails.Where(e => e.Selected == true || e.IsVolunteer == true).ToList();
+            }
+            return emails;
+        }
     }
 }
