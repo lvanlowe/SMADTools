@@ -14,6 +14,7 @@
   </ItemGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\..\NotificationService\NotificationService\NotificationService.csproj" />
     <ProjectReference Include="..\..\TrainingNotificationWorker\TrainingNotificationWorker.csproj" />
   </ItemGroup>
 

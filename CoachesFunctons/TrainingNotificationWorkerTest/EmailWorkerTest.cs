@@ -1,10 +1,12 @@
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
 using Castle.Components.DictionaryAdapter;
 using InformationService.DataModels;
 using InformationService.Interfaces;
 using Moq;
+using NotificationService.Interfaces;
 using TrainingNotificationWorker;
 using Xunit;
 
@@ -286,8 +288,29 @@ namespace TrainingNotificationWorkerTest
             var repositoryMock = new Mock<ITrainingRepository>();
             var emails = _emailList[sportId - 1];
             var worker = new EmailWorker(repositoryMock.Object);
-            List<string> actual = worker.RemoveDuplicateEmails(emails);
+            var actual = worker.RemoveDuplicateEmails(emails);
             Assert.Equal(expected, actual.Count);
+
+        }
+
+        [Theory]
+        [InlineData(1, 5)]
+        //[InlineData(false, 2, 39)]
+        //[InlineData(true, 3, 5)]
+        //[InlineData(false, 4, 16)]
+        //[InlineData(true, 5, 9)]
+        public void SendEmails_When_executed_x_emails_sent(int sportId, int expected)
+
+        {
+            LoadEmails();
+            var repositoryMock = new Mock<ITrainingRepository>();
+            var emailRepositoryMock = new Mock<IEmailRepository>();
+            var emails = _emailList[sportId - 1];
+            var worker = new EmailWorker(repositoryMock.Object);
+            var emailList = emails.Select(e => e.Email.ToList());
+
+            worker.RemoveDuplicateEmails(emails);
+            emailRepositoryMock.Verify(mock => mock.SendEmailString(It.IsAny<string>(), It.IsAny<string>(), It.IsAny<string>(), It.IsAny<string>(), It.IsAny<string>()), Times.Exactly(expected));
 
         }
     }
