@@ -67,5 +67,21 @@ namespace TrainingNotificationWorker
             }
             return emails;
         }
+
+        public List<SportEmails> GetEmailsForVolunteers(bool? isVolunteer, List<SportEmails> emails)
+        {
+            if (isVolunteer.HasValue && isVolunteer.Value)
+            {
+                return emails.Where(e => e.IsVolunteer == true).ToList();
+            }
+
+            return emails;
+        }
+
+        public List<string> RemoveDuplicateEmails(List<SportEmails> emails)
+        {
+            var emailList = emails.Select(e => e.Email.ToLower()).Distinct().ToList();
+            return emailList;
+        }
     }
 }

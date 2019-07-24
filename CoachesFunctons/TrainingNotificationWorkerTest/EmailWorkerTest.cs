@@ -21,11 +21,11 @@ namespace TrainingNotificationWorkerTest
         {
             _emailList = new List<List<SportEmails>>();
             List<SportEmails> emails1 = new List<SportEmails>();
-            emails1.Add(new SportEmails { FirstName = "Bruce", Email = "batman@dc.com", LastName = "Wayne", NickName = "Batman", IsVolunteer = true});
-            emails1.Add(new SportEmails { FirstName = "Bruce", Email = "batman@dc.com", LastName = "Wayne", NickName = "Batman", Selected = true});
-            emails1.Add(new SportEmails { FirstName = "Bruce", Email = "batman@dc.com", LastName = "Wayne", NickName = "Batman" });
-            emails1.Add(new SportEmails { FirstName = "Bruce", Email = "batman@dc.com", LastName = "Wayne", NickName = "Batman" });
-            emails1.Add(new SportEmails { FirstName = "Bruce", Email = "batman@dc.com", LastName = "Wayne", NickName = "Batman"});
+            emails1.Add(new SportEmails { FirstName = "Bruce", Email = "Batman@dc.com", LastName = "Wayne", NickName = "Batman", IsVolunteer = true});
+            emails1.Add(new SportEmails { FirstName = "Bruce", Email = "batMan@dc.com", LastName = "Wayne", NickName = "Batman", Selected = true});
+            emails1.Add(new SportEmails { FirstName = "Bruce", Email = "BatMan@dc.com", LastName = "Wayne", NickName = "Batman" });
+            emails1.Add(new SportEmails { FirstName = "Bruce", Email = "BATMAN@dc.com", LastName = "Wayne", NickName = "Batman" });
+            emails1.Add(new SportEmails { FirstName = "Bruce", Email = "batman@DC.com", LastName = "Wayne", NickName = "Batman"});
             _emailList.Add(emails1);
 
 
@@ -249,11 +249,46 @@ namespace TrainingNotificationWorkerTest
             var repositoryMock = new Mock<ITrainingRepository>();
             var emails = _emailList[sportId - 1];
             var worker = new EmailWorker(repositoryMock.Object);
-            List<SportEmails> actual = worker.GetEmailsForSelected(isSelected, emails);
+            var actual = worker.GetEmailsForSelected(isSelected, emails);
+            Assert.Equal(expected, actual.Count);
+
+        }
+
+        [Theory]
+        [InlineData(null, 1, 5)]
+        [InlineData(false, 2, 39)]
+        [InlineData(true, 3, 5)]
+        [InlineData(false, 4, 16)]
+        [InlineData(true, 5, 9)]
+        public void GetEmailsForVolunteers_When_executed_create_list_of_SportEmails_for_volunteers(bool? isVolunteer, int sportId, int expected)
+
+        {
+            LoadEmails();
+            var repositoryMock = new Mock<ITrainingRepository>();
+            var emails = _emailList[sportId - 1];
+            var worker = new EmailWorker(repositoryMock.Object);
+            List<SportEmails> actual = worker.GetEmailsForVolunteers(isVolunteer, emails);
             Assert.Equal(expected, actual.Count);
 
         }
 
 
+        [Theory]
+        [InlineData(1, 1)]
+        //[InlineData(false, 2, 39)]
+        //[InlineData(true, 3, 5)]
+        //[InlineData(false, 4, 16)]
+        //[InlineData(true, 5, 9)]
+        public void RemoveDuplicateEmails_When_executed_create_list_of_Emails_wityh_no_dups(int sportId, int expected)
+
+        {
+            LoadEmails();
+            var repositoryMock = new Mock<ITrainingRepository>();
+            var emails = _emailList[sportId - 1];
+            var worker = new EmailWorker(repositoryMock.Object);
+            List<string> actual = worker.RemoveDuplicateEmails(emails);
+            Assert.Equal(expected, actual.Count);
+
+        }
     }
 }
