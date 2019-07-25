@@ -9,23 +9,26 @@ using InformationService.Interfaces;
 using InformationService.Models;
 using InformationService.Repositories;
 using Microsoft.EntityFrameworkCore;
+using NotificationService.Interfaces;
 
 namespace TrainingNotificationWorker
 {
     public class EmailWorker
     {
 
-        private ITrainingRepository _repository;
+        private ITrainingRepository _trainingRepository;
+        private IEmailRepository _emailRepository;
 
-        public EmailWorker(ITrainingRepository repository)
+        public EmailWorker(ITrainingRepository trainingRepository, IEmailRepository emailRepository)
         {
-            _repository = repository;
+            _trainingRepository = trainingRepository;
+            _emailRepository = emailRepository;
         }
 
 
         public async Task<List<SportEmails>> GetEmailsForSport(int sportId)
         {
-            var emails = await _repository.GetEmailsBySport(sportId);
+            var emails = await _trainingRepository.GetEmailsBySport(sportId);
             return emails;
         }
 
@@ -82,6 +85,14 @@ namespace TrainingNotificationWorker
         {
             var emailList = emails.Select(e => e.Email.ToLower()).Distinct().ToList();
             return emailList;
+        }
+
+        public void SendEmails(List<string> emailList, string fromEmail, string subject, string plainTextContent, string htmlContent)
+        {
+            foreach (var toEmail in emailList)
+            {
+                _emailRepository.SendEmailString(fromEmail, toEmail, subject, plainTextContent, htmlContent);
+            }
         }
     }
 }

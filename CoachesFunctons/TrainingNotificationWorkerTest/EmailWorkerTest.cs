@@ -17,7 +17,16 @@ namespace TrainingNotificationWorkerTest
     public class EmailWorkerTest
     {
         private List<List<SportEmails>> _emailList;
+        private Mock<ITrainingRepository> _mockTrainingRepository;
+        private Mock<IEmailRepository> _mockEmailRepository;
+        private EmailWorker _worker;
+        public EmailWorkerTest()
+        {
+            _mockTrainingRepository = new Mock<ITrainingRepository>();
+            _mockEmailRepository = new Mock<IEmailRepository>();
+            _worker = new EmailWorker(_mockTrainingRepository.Object, _mockEmailRepository.Object);
 
+        }
 
         private void LoadEmails()
         {
@@ -174,11 +183,8 @@ namespace TrainingNotificationWorkerTest
 
         {
             LoadEmails();
-            var repositoryMock = new Mock<ITrainingRepository>();
-            var emails = _emailList[sportId - 1];
-            repositoryMock.Setup(repository => repository.GetEmailsBySport(sportId)).ReturnsAsync(_emailList[sportId - 1]);
-            var worker = new EmailWorker(repositoryMock.Object);
-            var actual = worker.GetEmailsForSport(sportId);
+            _mockTrainingRepository.Setup(repository => repository.GetEmailsBySport(sportId)).ReturnsAsync(_emailList[sportId - 1]);
+            var actual = _worker.GetEmailsForSport(sportId);
             Assert.Equal(expected, actual.Result.Count);
 
         }
@@ -193,10 +199,8 @@ namespace TrainingNotificationWorkerTest
 
         {
             LoadEmails();
-            var repositoryMock = new Mock<ITrainingRepository>();
             var emails = _emailList[sportId - 1];
-            var worker = new EmailWorker(repositoryMock.Object);
-            var actual = worker.GetEmailsForLocation(locationId, emails);
+            var actual = _worker.GetEmailsForLocation(locationId, emails);
             Assert.Equal(expected, actual.Count);
 
         }
@@ -212,10 +216,8 @@ namespace TrainingNotificationWorkerTest
 
         {
             LoadEmails();
-            var repositoryMock = new Mock<ITrainingRepository>();
             var emails = _emailList[sportId - 1];
-            var worker = new EmailWorker(repositoryMock.Object);
-            var actual = worker.GetEmailsForCategory(categoryId, emails);
+            var actual = _worker.GetEmailsForCategory(categoryId, emails);
             Assert.Equal(expected, actual.Count);
 
         }
@@ -230,10 +232,8 @@ namespace TrainingNotificationWorkerTest
 
         {
             LoadEmails();
-            var repositoryMock = new Mock<ITrainingRepository>();
             var emails = _emailList[sportId - 1];
-            var worker = new EmailWorker(repositoryMock.Object);
-            var actual = worker.GetEmailsForTeam(teamId, emails);
+            var actual = _worker.GetEmailsForTeam(teamId, emails);
             Assert.Equal(expected, actual.Count);
 
         }
@@ -248,10 +248,8 @@ namespace TrainingNotificationWorkerTest
 
         {
             LoadEmails();
-            var repositoryMock = new Mock<ITrainingRepository>();
             var emails = _emailList[sportId - 1];
-            var worker = new EmailWorker(repositoryMock.Object);
-            var actual = worker.GetEmailsForSelected(isSelected, emails);
+            var actual = _worker.GetEmailsForSelected(isSelected, emails);
             Assert.Equal(expected, actual.Count);
 
         }
@@ -266,10 +264,8 @@ namespace TrainingNotificationWorkerTest
 
         {
             LoadEmails();
-            var repositoryMock = new Mock<ITrainingRepository>();
             var emails = _emailList[sportId - 1];
-            var worker = new EmailWorker(repositoryMock.Object);
-            List<SportEmails> actual = worker.GetEmailsForVolunteers(isVolunteer, emails);
+            var actual = _worker.GetEmailsForVolunteers(isVolunteer, emails);
             Assert.Equal(expected, actual.Count);
 
         }
@@ -277,40 +273,32 @@ namespace TrainingNotificationWorkerTest
 
         [Theory]
         [InlineData(1, 1)]
-        //[InlineData(false, 2, 39)]
-        //[InlineData(true, 3, 5)]
-        //[InlineData(false, 4, 16)]
-        //[InlineData(true, 5, 9)]
         public void RemoveDuplicateEmails_When_executed_create_list_of_Emails_wityh_no_dups(int sportId, int expected)
 
         {
             LoadEmails();
-            var repositoryMock = new Mock<ITrainingRepository>();
             var emails = _emailList[sportId - 1];
-            var worker = new EmailWorker(repositoryMock.Object);
-            var actual = worker.RemoveDuplicateEmails(emails);
+            var actual = _worker.RemoveDuplicateEmails(emails);
             Assert.Equal(expected, actual.Count);
 
         }
 
         [Theory]
         [InlineData(1, 5)]
-        //[InlineData(false, 2, 39)]
-        //[InlineData(true, 3, 5)]
-        //[InlineData(false, 4, 16)]
-        //[InlineData(true, 5, 9)]
         public void SendEmails_When_executed_x_emails_sent(int sportId, int expected)
 
         {
             LoadEmails();
-            var repositoryMock = new Mock<ITrainingRepository>();
-            var emailRepositoryMock = new Mock<IEmailRepository>();
             var emails = _emailList[sportId - 1];
-            var worker = new EmailWorker(repositoryMock.Object);
-            var emailList = emails.Select(e => e.Email.ToList());
+            var emailList = emails.Select(e => e.Email).ToList();
+            const string fromEmail = "superman@dc.com";
+            const string subject = "Sending with SendGrid is Fun";
+            const string plainTextContent = "and easy to do anywhere, even with C#";
+            const string htmlContent = "<br>Hi {{deacon}}<br><br>&nbsp;&nbsp;&nbsp;&nbsp;Just a reminder you are the Deacon on Duty for {{month}},<br><br>&nbsp;&nbsp;&nbsp;&nbsp;You will responsible to lock up the church on Sundays after worship. If you are not going to be there then it is your responsibility to get another Deacon to close up for you. You are responsible for taking out the trash. Also make sure the offering baskets are out for the next week.<br><br>&nbsp;&nbsp;&nbsp;&nbsp;If you are going to miss more than one Sunday in {{month}} please change with another deacon";
 
-            worker.RemoveDuplicateEmails(emails);
-            emailRepositoryMock.Verify(mock => mock.SendEmailString(It.IsAny<string>(), It.IsAny<string>(), It.IsAny<string>(), It.IsAny<string>(), It.IsAny<string>()), Times.Exactly(expected));
+
+            _worker.SendEmails(emailList, fromEmail, subject, plainTextContent, htmlContent);
+            _mockEmailRepository.Verify(mock => mock.SendEmailString(It.IsAny<string>(), It.IsAny<string>(), It.IsAny<string>(), It.IsAny<string>(), It.IsAny<string>()), Times.Exactly(expected));
 
         }
     }
