@@ -298,7 +298,7 @@ namespace TrainingNotificationWorkerTest
 
 
             _worker.SendEmails(emailList, fromEmail, subject, plainTextContent, htmlContent);
-            _mockEmailRepository.Verify(mock => mock.SendEmailString(It.IsAny<string>(), It.IsAny<string>(), It.IsAny<string>(), It.IsAny<string>(), It.IsAny<string>()), Times.Exactly(expected));
+            _mockEmailRepository.Verify(mock => mock.SendEmailString(fromEmail, It.IsAny<string>(), subject, plainTextContent, htmlContent), Times.Exactly(expected));
 
         }
     }
