@@ -5,6 +5,7 @@ using System.Threading.Tasks;
 using Castle.Components.DictionaryAdapter;
 using InformationService.DataModels;
 using InformationService.Interfaces;
+using InterfaceModels;
 using Moq;
 using NotificationService.Interfaces;
 using TrainingNotificationWorker;
@@ -85,22 +86,22 @@ namespace TrainingNotificationWorkerTest
 
             List<SportEmails> emails3 = new List<SportEmails>();
             emails3.Add(new SportEmails { FirstName = "Bruce", Email = "batman@dc.com", LastName = "Wayne", NickName = "Batman", ProgramId = 3, SportTypeId = 3, IsVolunteer = true });
-            emails3.Add(new SportEmails { FirstName = "Bruce", Email = "batman@dc.com", LastName = "Wayne", NickName = "Batman", ProgramId = 3, SportTypeId = 3, Selected = true });
+            emails3.Add(new SportEmails { FirstName = "Bruce", Email = "superman@dc.com", LastName = "Wayne", NickName = "Batman", ProgramId = 3, SportTypeId = 3, Selected = true });
             emails3.Add(new SportEmails { FirstName = "Bruce", Email = "batman@dc.com", LastName = "Wayne", NickName = "Batman", ProgramId = 3, SportTypeId = 3 });
             emails3.Add(new SportEmails { FirstName = "Bruce", Email = "batman@dc.com", LastName = "Wayne", NickName = "Batman", ProgramId = 3, SportTypeId = 3 });
             emails3.Add(new SportEmails { FirstName = "Bruce", Email = "batman@dc.com", LastName = "Wayne", NickName = "Batman", ProgramId = 3, SportTypeId = 3 });
-            emails3.Add(new SportEmails { FirstName = "Bruce", Email = "batman@dc.com", LastName = "Wayne", NickName = "Batman", ProgramId = 4, SportTypeId = 3, IsVolunteer = true });
-            emails3.Add(new SportEmails { FirstName = "Bruce", Email = "batman@dc.com", LastName = "Wayne", NickName = "Batman", ProgramId = 4, SportTypeId = 3, Selected = true });
+            emails3.Add(new SportEmails { FirstName = "Bruce", Email = "robin@dc.com", LastName = "Wayne", NickName = "Batman", ProgramId = 4, SportTypeId = 3, IsVolunteer = true });
+            emails3.Add(new SportEmails { FirstName = "Bruce", Email = "flash@dc.com", LastName = "Wayne", NickName = "Batman", ProgramId = 4, SportTypeId = 3, Selected = true });
             emails3.Add(new SportEmails { FirstName = "Bruce", Email = "batman@dc.com", LastName = "Wayne", NickName = "Batman", ProgramId = 4, SportTypeId = 3 });
             emails3.Add(new SportEmails { FirstName = "Bruce", Email = "batman@dc.com", LastName = "Wayne", NickName = "Batman", ProgramId = 4, SportTypeId = 3 });
-            emails3.Add(new SportEmails { FirstName = "Bruce", Email = "batman@dc.com", LastName = "Wayne", NickName = "Batman", ProgramId = 4, SportTypeId = 4, TeamId = 5, IsVolunteer = true });
-            emails3.Add(new SportEmails { FirstName = "Bruce", Email = "batman@dc.com", LastName = "Wayne", NickName = "Batman", ProgramId = 4, SportTypeId = 4, TeamId = 5, IsVolunteer = true });
+            emails3.Add(new SportEmails { FirstName = "Bruce", Email = "batgirl@dc.com", LastName = "Wayne", NickName = "Batman", ProgramId = 4, SportTypeId = 4, TeamId = 5, IsVolunteer = true });
+            emails3.Add(new SportEmails { FirstName = "Bruce", Email = "batwoman@dc.com", LastName = "Wayne", NickName = "Batman", ProgramId = 4, SportTypeId = 4, TeamId = 5, IsVolunteer = true });
+            emails3.Add(new SportEmails { FirstName = "Bruce", Email = "ace@dc.com", LastName = "Wayne", NickName = "Batman", ProgramId = 4, SportTypeId = 4, TeamId = 5, Selected = true });
             emails3.Add(new SportEmails { FirstName = "Bruce", Email = "batman@dc.com", LastName = "Wayne", NickName = "Batman", ProgramId = 4, SportTypeId = 4, TeamId = 5, Selected = true });
             emails3.Add(new SportEmails { FirstName = "Bruce", Email = "batman@dc.com", LastName = "Wayne", NickName = "Batman", ProgramId = 4, SportTypeId = 4, TeamId = 5, Selected = true });
             emails3.Add(new SportEmails { FirstName = "Bruce", Email = "batman@dc.com", LastName = "Wayne", NickName = "Batman", ProgramId = 4, SportTypeId = 4, TeamId = 5, Selected = true });
             emails3.Add(new SportEmails { FirstName = "Bruce", Email = "batman@dc.com", LastName = "Wayne", NickName = "Batman", ProgramId = 4, SportTypeId = 4, TeamId = 5, Selected = true });
-            emails3.Add(new SportEmails { FirstName = "Bruce", Email = "batman@dc.com", LastName = "Wayne", NickName = "Batman", ProgramId = 4, SportTypeId = 4, TeamId = 5, Selected = true });
-            emails3.Add(new SportEmails { FirstName = "Bruce", Email = "batman@dc.com", LastName = "Wayne", NickName = "Batman", ProgramId = 4, SportTypeId = 4, TeamId = 6, IsVolunteer = true });
+            emails3.Add(new SportEmails { FirstName = "Bruce", Email = "nightwing@dc.com", LastName = "Wayne", NickName = "Batman", ProgramId = 4, SportTypeId = 4, TeamId = 6, IsVolunteer = true });
             emails3.Add(new SportEmails { FirstName = "Bruce", Email = "batman@dc.com", LastName = "Wayne", NickName = "Batman", ProgramId = 4, SportTypeId = 4, TeamId = 6 });
             emails3.Add(new SportEmails { FirstName = "Bruce", Email = "batman@dc.com", LastName = "Wayne", NickName = "Batman", ProgramId = 4, SportTypeId = 4, TeamId = 6 });
             emails3.Add(new SportEmails { FirstName = "Bruce", Email = "batman@dc.com", LastName = "Wayne", NickName = "Batman", ProgramId = 4, SportTypeId = 4, TeamId = 6 });
@@ -301,5 +302,35 @@ namespace TrainingNotificationWorkerTest
             _mockEmailRepository.Verify(mock => mock.SendEmailString(fromEmail, It.IsAny<string>(), subject, plainTextContent, htmlContent), Times.Exactly(expected));
 
         }
+
+        [Theory]
+        [InlineData(1, null, null, null, null, null, 1)]
+        [InlineData(3, null, null, null, null, true, 5)]
+        [InlineData(3, null, null, null, true, null, 8)]
+        public void SendEmailsForSport_When_executed_x_emails_sent(int sportId, int? locationId, int? categoryId, int? teamId, bool? selected, bool? volunteerOnly,  int expected)
+
+        {
+            LoadEmails();
+            LoadEmails();
+            _mockTrainingRepository.Setup(repository => repository.GetEmailsBySport(sportId)).ReturnsAsync(_emailList[sportId - 1]);
+
+            const string fromEmail = "superman@dc.com";
+            const string subject = "Sending with SendGrid is Fun";
+            const string plainTextContent = "and easy to do anywhere, even with C#";
+            const string htmlContent = "<br>Hi {{deacon}}<br><br>&nbsp;&nbsp;&nbsp;&nbsp;Just a reminder you are the Deacon on Duty for {{month}},<br><br>&nbsp;&nbsp;&nbsp;&nbsp;You will responsible to lock up the church on Sundays after worship. If you are not going to be there then it is your responsibility to get another Deacon to close up for you. You are responsible for taking out the trash. Also make sure the offering baskets are out for the next week.<br><br>&nbsp;&nbsp;&nbsp;&nbsp;If you are going to miss more than one Sunday in {{month}} please change with another deacon";
+            CoachEmailDto message = new CoachEmailDto { SportId = sportId,
+                                                        From = fromEmail,
+                                                        HtmlContent = htmlContent,
+                                                        PlainTextContent = plainTextContent,
+                                                        Subject = subject,
+                                                        IsVolunteer = volunteerOnly,
+                                                        Selected = selected,
+            };
+
+            _worker.SendEmailsForSport(message);
+            _mockEmailRepository.Verify(mock => mock.SendEmailString(fromEmail, It.IsAny<string>(), subject, plainTextContent, htmlContent), Times.Exactly(expected));
+
+        }
+
     }
 }

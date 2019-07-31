@@ -8,6 +8,7 @@ using InformationService.DataModels;
 using InformationService.Interfaces;
 using InformationService.Models;
 using InformationService.Repositories;
+using InterfaceModels;
 using Microsoft.EntityFrameworkCore;
 using NotificationService.Interfaces;
 
@@ -93,6 +94,15 @@ namespace TrainingNotificationWorker
             {
                 _emailRepository.SendEmailString(fromEmail, toEmail, subject, plainTextContent, htmlContent);
             }
+        }
+
+        public async void SendEmailsForSport(CoachEmailDto message)
+        {
+            var sportEmailList = await GetEmailsForSport(Convert.ToInt32(message.SportId));
+            var selectedEmailList = GetEmailsForSelected(message.Selected, sportEmailList);
+            var volEmailList = GetEmailsForVolunteers(message.IsVolunteer, selectedEmailList);
+            var emailList = RemoveDuplicateEmails(volEmailList);
+            SendEmails(emailList, message.From, message.Subject, message.PlainTextContent, message.HtmlContent);
         }
     }
 }

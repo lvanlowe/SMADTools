@@ -6,6 +6,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\InformationService\InformationService\InformationService.csproj" />
+    <ProjectReference Include="..\InterfaceModels\InterfaceModels.csproj" />
     <ProjectReference Include="..\NotificationService\NotificationService\NotificationService.csproj" />
   </ItemGroup>
 
