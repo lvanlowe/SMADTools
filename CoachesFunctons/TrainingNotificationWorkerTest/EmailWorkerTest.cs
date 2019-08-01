@@ -88,7 +88,7 @@ namespace TrainingNotificationWorkerTest
             emails3.Add(new SportEmails { FirstName = "Bruce", Email = "batman@dc.com", LastName = "Wayne", NickName = "Batman", ProgramId = 3, SportTypeId = 3, IsVolunteer = true });
             emails3.Add(new SportEmails { FirstName = "Bruce", Email = "superman@dc.com", LastName = "Wayne", NickName = "Batman", ProgramId = 3, SportTypeId = 3, Selected = true });
             emails3.Add(new SportEmails { FirstName = "Bruce", Email = "batman@dc.com", LastName = "Wayne", NickName = "Batman", ProgramId = 3, SportTypeId = 3 });
-            emails3.Add(new SportEmails { FirstName = "Bruce", Email = "batman@dc.com", LastName = "Wayne", NickName = "Batman", ProgramId = 3, SportTypeId = 3 });
+            emails3.Add(new SportEmails { FirstName = "Bruce", Email = "manbat@dc.com", LastName = "Wayne", NickName = "Batman", ProgramId = 3, SportTypeId = 3 });
             emails3.Add(new SportEmails { FirstName = "Bruce", Email = "batman@dc.com", LastName = "Wayne", NickName = "Batman", ProgramId = 3, SportTypeId = 3 });
             emails3.Add(new SportEmails { FirstName = "Bruce", Email = "robin@dc.com", LastName = "Wayne", NickName = "Batman", ProgramId = 4, SportTypeId = 3, IsVolunteer = true });
             emails3.Add(new SportEmails { FirstName = "Bruce", Email = "flash@dc.com", LastName = "Wayne", NickName = "Batman", ProgramId = 4, SportTypeId = 3, Selected = true });
@@ -307,6 +307,11 @@ namespace TrainingNotificationWorkerTest
         [InlineData(1, null, null, null, null, null, 1)]
         [InlineData(3, null, null, null, null, true, 5)]
         [InlineData(3, null, null, null, true, null, 8)]
+        [InlineData(3, 3, null, null, null, null, 3)]
+        [InlineData(3, null, 3, null, null, null, 5)]
+        [InlineData(3, null, null, 5, null, null, 4)]
+        [InlineData(3, null, 3, null, true, null, 4)]
+        [InlineData(3, null, 3, null, null, true, 2)]
         public void SendEmailsForSport_When_executed_x_emails_sent(int sportId, int? locationId, int? categoryId, int? teamId, bool? selected, bool? volunteerOnly,  int expected)
 
         {
@@ -325,6 +330,9 @@ namespace TrainingNotificationWorkerTest
                                                         Subject = subject,
                                                         IsVolunteer = volunteerOnly,
                                                         Selected = selected,
+                                                        ProgramId = locationId,
+                                                        SportTypeId = categoryId,
+                                                        TeamId = teamId
             };
 
             _worker.SendEmailsForSport(message);

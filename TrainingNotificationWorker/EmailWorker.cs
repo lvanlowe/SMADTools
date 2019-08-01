@@ -99,7 +99,10 @@ namespace TrainingNotificationWorker
         public async void SendEmailsForSport(CoachEmailDto message)
         {
             var sportEmailList = await GetEmailsForSport(Convert.ToInt32(message.SportId));
-            var selectedEmailList = GetEmailsForSelected(message.Selected, sportEmailList);
+            var locationEmailList = GetEmailsForLocation(Convert.ToInt32(message.ProgramId), sportEmailList);
+            var categoryEmailList = GetEmailsForCategory(Convert.ToInt32(message.SportTypeId), locationEmailList);
+            var teamEmailList = GetEmailsForTeam(Convert.ToInt32(message.TeamId), categoryEmailList);
+            var selectedEmailList = GetEmailsForSelected(message.Selected, teamEmailList);
             var volEmailList = GetEmailsForVolunteers(message.IsVolunteer, selectedEmailList);
             var emailList = RemoveDuplicateEmails(volEmailList);
             SendEmails(emailList, message.From, message.Subject, message.PlainTextContent, message.HtmlContent);
