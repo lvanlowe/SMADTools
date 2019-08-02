@@ -5,7 +5,9 @@ using System.Threading.Tasks;
 using Castle.Components.DictionaryAdapter;
 using InformationService.DataModels;
 using InformationService.Interfaces;
+using InformationService.Models;
 using InterfaceModels;
+using Microsoft.EntityFrameworkCore;
 using Moq;
 using NotificationService.Interfaces;
 using TrainingNotificationWorker;
@@ -340,5 +342,49 @@ namespace TrainingNotificationWorkerTest
 
         }
 
+        [Theory]
+        [InlineData(1, null, null, null, null, null, 1)]
+        [InlineData(3, null, null, null, null, true, 5)]
+        [InlineData(3, null, null, null, true, null, 8)]
+        [InlineData(3, 3, null, null, null, null, 3)]
+        [InlineData(3, null, 3, null, null, null, 5)]
+        [InlineData(3, null, null, 5, null, null, 4)]
+        [InlineData(3, null, 3, null, true, null, 4)]
+        [InlineData(3, null, 3, null, null, true, 2)]
+        public void SendEmailsForSport_WithoutMock(int sportId, int? locationId, int? categoryId, int? teamId, bool? selected, bool? volunteerOnly, int expected)
+
+        {
+            var connectionString = "";
+            var options = new DbContextOptionsBuilder<PwsodbContext>().UseSqlServer(connectionString).Options;
+
+            PwsodbContext _context = new PwsodbContext(options);
+
+
+            LoadEmails();
+            LoadEmails();
+            _mockTrainingRepository.Setup(repository => repository.GetEmailsBySport(sportId)).ReturnsAsync(_emailList[sportId - 1]);
+
+            const string fromEmail = "superman@dc.com";
+            const string subject = "Sending with SendGrid is Fun";
+            const string plainTextContent = "and easy to do anywhere, even with C#";
+            const string htmlContent = "<br>Hi {{deacon}}<br><br>&nbsp;&nbsp;&nbsp;&nbsp;Just a reminder you are the Deacon on Duty for {{month}},<br><br>&nbsp;&nbsp;&nbsp;&nbsp;You will responsible to lock up the church on Sundays after worship. If you are not going to be there then it is your responsibility to get another Deacon to close up for you. You are responsible for taking out the trash. Also make sure the offering baskets are out for the next week.<br><br>&nbsp;&nbsp;&nbsp;&nbsp;If you are going to miss more than one Sunday in {{month}} please change with another deacon";
+            CoachEmailDto message = new CoachEmailDto
+            {
+                SportId = sportId,
+                From = fromEmail,
+                HtmlContent = htmlContent,
+                PlainTextContent = plainTextContent,
+                Subject = subject,
+                IsVolunteer = volunteerOnly,
+                Selected = selected,
+                ProgramId = locationId,
+                SportTypeId = categoryId,
+                TeamId = teamId
+            };
+
+            _worker.SendEmailsForSport(message);
+            _mockEmailRepository.Verify(mock => mock.SendEmailString(fromEmail, It.IsAny<string>(), subject, plainTextContent, htmlContent), Times.Exactly(expected));
+
+        }
     }
 }
