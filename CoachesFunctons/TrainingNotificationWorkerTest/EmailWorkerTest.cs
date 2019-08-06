@@ -6,8 +6,10 @@ using Castle.Components.DictionaryAdapter;
 using InformationService.DataModels;
 using InformationService.Interfaces;
 using InformationService.Models;
+using InformationService.Repositories;
 using InterfaceModels;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Configuration;
 using Moq;
 using NotificationService.Interfaces;
 using TrainingNotificationWorker;
@@ -318,7 +320,6 @@ namespace TrainingNotificationWorkerTest
 
         {
             LoadEmails();
-            LoadEmails();
             _mockTrainingRepository.Setup(repository => repository.GetEmailsBySport(sportId)).ReturnsAsync(_emailList[sportId - 1]);
 
             const string fromEmail = "superman@dc.com";
@@ -343,28 +344,30 @@ namespace TrainingNotificationWorkerTest
         }
 
         [Theory]
-        [InlineData(1, null, null, null, null, null, 1)]
-        [InlineData(3, null, null, null, null, true, 5)]
-        [InlineData(3, null, null, null, true, null, 8)]
-        [InlineData(3, 3, null, null, null, null, 3)]
-        [InlineData(3, null, 3, null, null, null, 5)]
-        [InlineData(3, null, null, 5, null, null, 4)]
-        [InlineData(3, null, 3, null, true, null, 4)]
-        [InlineData(3, null, 3, null, null, true, 2)]
+        [InlineData(6, null, null, null, null, null, 1)]
+        //[InlineData(3, null, null, null, null, true, 5)]
+        //[InlineData(3, null, null, null, true, null, 8)]
+        //[InlineData(3, 3, null, null, null, null, 3)]
+        //[InlineData(3, null, 3, null, null, null, 5)]
+        //[InlineData(3, null, null, 5, null, null, 4)]
+        //[InlineData(3, null, 3, null, true, null, 4)]
+        //[InlineData(3, null, 3, null, null, true, 2)]
         public void SendEmailsForSport_WithoutMock(int sportId, int? locationId, int? categoryId, int? teamId, bool? selected, bool? volunteerOnly, int expected)
 
         {
-            var connectionString = "";
+
+            IConfiguration config = new ConfigurationBuilder().AddJsonFile("appsettings.test.json").Build();
+            var connectionString = config["TrainingDatabase"];
             var options = new DbContextOptionsBuilder<PwsodbContext>().UseSqlServer(connectionString).Options;
 
-            PwsodbContext _context = new PwsodbContext(options);
+            PwsodbContext context = new PwsodbContext(options);
 
 
-            LoadEmails();
-            LoadEmails();
-            _mockTrainingRepository.Setup(repository => repository.GetEmailsBySport(sportId)).ReturnsAsync(_emailList[sportId - 1]);
+            //LoadEmails();
+            //LoadEmails();
+            //_mockTrainingRepository.Setup(repository => repository.GetEmailsBySport(sportId)).ReturnsAsync(_emailList[sportId - 1]);
 
-            const string fromEmail = "superman@dc.com";
+            const string fromEmail = "lvanlowe@comcast.net.com";
             const string subject = "Sending with SendGrid is Fun";
             const string plainTextContent = "and easy to do anywhere, even with C#";
             const string htmlContent = "<br>Hi {{deacon}}<br><br>&nbsp;&nbsp;&nbsp;&nbsp;Just a reminder you are the Deacon on Duty for {{month}},<br><br>&nbsp;&nbsp;&nbsp;&nbsp;You will responsible to lock up the church on Sundays after worship. If you are not going to be there then it is your responsibility to get another Deacon to close up for you. You are responsible for taking out the trash. Also make sure the offering baskets are out for the next week.<br><br>&nbsp;&nbsp;&nbsp;&nbsp;If you are going to miss more than one Sunday in {{month}} please change with another deacon";
@@ -381,9 +384,12 @@ namespace TrainingNotificationWorkerTest
                 SportTypeId = categoryId,
                 TeamId = teamId
             };
+            ITrainingRepository trainingRepository = new TrainingRepository(context);
+            EmailWorker worker = new EmailWorker(trainingRepository, _mockEmailRepository.Object);
 
-            _worker.SendEmailsForSport(message);
-            _mockEmailRepository.Verify(mock => mock.SendEmailString(fromEmail, It.IsAny<string>(), subject, plainTextContent, htmlContent), Times.Exactly(expected));
+
+            worker.SendEmailsForSport(message);
+            //_mockEmailRepository.Verify(mock => mock.SendEmailString(fromEmail, It.IsAny<string>(), subject, plainTextContent, htmlContent), Times.Exactly(expected));
 
         }
     }

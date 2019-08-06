@@ -22,9 +22,7 @@ namespace InformationService.Repositories
 
         public async Task<List<SportEmails>> GetEmailsBySport(int sportId)
         {
-            var emails = await _context.Registrant.Where(r => r.SportId == sportId).Select(r => new SportEmails{FirstName = r.FirstName, LastName = r.LastName, NickName = r.NickName, ProgramId = r.ProgramId, SportTypeId = r.SportTypeId, TeamId = r.TeamId }).ToListAsync();
-
-            var phones = await _context.Registrant
+            var emails = await _context.Registrant
                 .Join(_context.RegistrantEmail,
                     r => r.Id,
                     e => e.RegistrantId,
