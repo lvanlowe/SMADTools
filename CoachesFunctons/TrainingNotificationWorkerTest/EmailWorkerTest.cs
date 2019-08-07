@@ -12,6 +12,7 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Moq;
 using NotificationService.Interfaces;
+using NotificationService.Repositories;
 using TrainingNotificationWorker;
 using Xunit;
 
@@ -345,13 +346,6 @@ namespace TrainingNotificationWorkerTest
 
         [Theory]
         [InlineData(6, null, null, null, null, null, 1)]
-        //[InlineData(3, null, null, null, null, true, 5)]
-        //[InlineData(3, null, null, null, true, null, 8)]
-        //[InlineData(3, 3, null, null, null, null, 3)]
-        //[InlineData(3, null, 3, null, null, null, 5)]
-        //[InlineData(3, null, null, 5, null, null, 4)]
-        //[InlineData(3, null, 3, null, true, null, 4)]
-        //[InlineData(3, null, 3, null, null, true, 2)]
         public void SendEmailsForSport_WithoutMock(int sportId, int? locationId, int? categoryId, int? teamId, bool? selected, bool? volunteerOnly, int expected)
 
         {
@@ -362,12 +356,7 @@ namespace TrainingNotificationWorkerTest
 
             PwsodbContext context = new PwsodbContext(options);
 
-
-            //LoadEmails();
-            //LoadEmails();
-            //_mockTrainingRepository.Setup(repository => repository.GetEmailsBySport(sportId)).ReturnsAsync(_emailList[sportId - 1]);
-
-            const string fromEmail = "lvanlowe@comcast.net.com";
+            var fromEmail = config["FromEmail"]; 
             const string subject = "Sending with SendGrid is Fun";
             const string plainTextContent = "and easy to do anywhere, even with C#";
             const string htmlContent = "<br>Hi {{deacon}}<br><br>&nbsp;&nbsp;&nbsp;&nbsp;Just a reminder you are the Deacon on Duty for {{month}},<br><br>&nbsp;&nbsp;&nbsp;&nbsp;You will responsible to lock up the church on Sundays after worship. If you are not going to be there then it is your responsibility to get another Deacon to close up for you. You are responsible for taking out the trash. Also make sure the offering baskets are out for the next week.<br><br>&nbsp;&nbsp;&nbsp;&nbsp;If you are going to miss more than one Sunday in {{month}} please change with another deacon";
@@ -385,11 +374,12 @@ namespace TrainingNotificationWorkerTest
                 TeamId = teamId
             };
             ITrainingRepository trainingRepository = new TrainingRepository(context);
-            EmailWorker worker = new EmailWorker(trainingRepository, _mockEmailRepository.Object);
+            var apiKey = config["ApiKey"];
+            IEmailRepository emailRepository = new EmailRepository(apiKey);
+            EmailWorker worker = new EmailWorker(trainingRepository, emailRepository);
 
 
-            worker.SendEmailsForSport(message);
-            //_mockEmailRepository.Verify(mock => mock.SendEmailString(fromEmail, It.IsAny<string>(), subject, plainTextContent, htmlContent), Times.Exactly(expected));
+            //worker.SendEmailsForSport(message);
 
         }
     }
