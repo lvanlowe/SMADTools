@@ -1,7 +1,7 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-# Visual Studio 15
-VisualStudioVersion = 15.0.28307.421
+# Visual Studio Version 16
+VisualStudioVersion = 16.0.29123.88
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "CoachesFunctons", "CoachesFunctons\CoachesFunctons.csproj", "{736017F6-EC2E-4D5A-B3C7-6D9B668A9761}"
 EndProject
@@ -9,11 +9,11 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "InformationService", "..\In
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "NotificationService", "..\NotificationService\NotificationService\NotificationService.csproj", "{CE2AE14E-45EE-4CCD-BA0B-E4B5A37B79EA}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TrainingNotificationWorker", "..\TrainingNotificationWorker\TrainingNotificationWorker.csproj", "{F6FF03E3-81D5-4F96-BF31-4526BF6ABBD9}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "TrainingNotificationWorker", "..\TrainingNotificationWorker\TrainingNotificationWorker.csproj", "{F6FF03E3-81D5-4F96-BF31-4526BF6ABBD9}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "InterfaceModels", "..\InterfaceModels\InterfaceModels.csproj", "{42BF21EE-3648-4351-BC30-C4EB3B20C0D4}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "InterfaceModels", "..\InterfaceModels\InterfaceModels.csproj", "{42BF21EE-3648-4351-BC30-C4EB3B20C0D4}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TrainingNotificationWorkerTest", "TrainingNotificationWorkerTest\TrainingNotificationWorkerTest.csproj", "{07592BF9-B12E-4E07-B99F-584BDC4D41AE}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "TrainingNotificationWorkerTest", "TrainingNotificationWorkerTest\TrainingNotificationWorkerTest.csproj", "{07592BF9-B12E-4E07-B99F-584BDC4D41AE}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

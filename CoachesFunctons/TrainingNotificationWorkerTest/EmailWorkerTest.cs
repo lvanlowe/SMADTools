@@ -309,14 +309,14 @@ namespace TrainingNotificationWorkerTest
         }
 
         [Theory]
-        [InlineData(1, null, null, null, null, null, 1)]
-        [InlineData(3, null, null, null, null, true, 5)]
-        [InlineData(3, null, null, null, true, null, 8)]
-        [InlineData(3, 3, null, null, null, null, 3)]
-        [InlineData(3, null, 3, null, null, null, 5)]
-        [InlineData(3, null, null, 5, null, null, 4)]
-        [InlineData(3, null, 3, null, true, null, 4)]
-        [InlineData(3, null, 3, null, null, true, 2)]
+        [InlineData(1, null, null, null, null, null, 2)]
+        [InlineData(3, null, null, null, null, true, 6)]
+        [InlineData(3, null, null, null, true, null, 9)]
+        [InlineData(3, 3, null, null, null, null, 4)]
+        [InlineData(3, null, 3, null, null, null, 6)]
+        [InlineData(3, null, null, 5, null, null, 5)]
+        [InlineData(3, null, 3, null, true, null, 5)]
+        [InlineData(3, null, 3, null, null, true, 3)]
         public void SendEmailsForSport_When_executed_x_emails_sent(int sportId, int? locationId, int? categoryId, int? teamId, bool? selected, bool? volunteerOnly,  int expected)
 
         {

@@ -105,6 +105,7 @@ namespace TrainingNotificationWorker
             var selectedEmailList = GetEmailsForSelected(message.Selected, teamEmailList);
             var volEmailList = GetEmailsForVolunteers(message.IsVolunteer, selectedEmailList);
             var emailList = RemoveDuplicateEmails(volEmailList);
+            emailList.Add(message.From);
             SendEmails(emailList, message.From, message.Subject, message.PlainTextContent, message.HtmlContent);
         }
     }
