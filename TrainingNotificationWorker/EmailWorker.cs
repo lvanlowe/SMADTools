@@ -96,7 +96,7 @@ namespace TrainingNotificationWorker
             }
         }
 
-        public async void SendEmailsForSport(CoachEmailDto message)
+        public async Task<int> SendEmailsForSport(CoachEmailDto message)
         {
             var sportEmailList = await GetEmailsForSport(Convert.ToInt32(message.SportId));
             var locationEmailList = GetEmailsForLocation(Convert.ToInt32(message.ProgramId), sportEmailList);
@@ -107,6 +107,7 @@ namespace TrainingNotificationWorker
             var emailList = RemoveDuplicateEmails(volEmailList);
             emailList.Add(message.From);
             SendEmails(emailList, message.From, message.Subject, message.PlainTextContent, message.HtmlContent);
+            return emailList.Count;
         }
     }
 }

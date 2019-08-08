@@ -339,8 +339,9 @@ namespace TrainingNotificationWorkerTest
                                                         TeamId = teamId
             };
 
-            _worker.SendEmailsForSport(message);
+            var actual = _worker.SendEmailsForSport(message);
             _mockEmailRepository.Verify(mock => mock.SendEmailString(fromEmail, It.IsAny<string>(), subject, plainTextContent, htmlContent), Times.Exactly(expected));
+            Assert.Equal(expected, actual.Result);
 
         }
 
