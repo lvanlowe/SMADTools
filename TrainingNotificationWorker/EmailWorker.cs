@@ -88,11 +88,11 @@ namespace TrainingNotificationWorker
             return emailList;
         }
 
-        public void SendEmails(List<string> emailList, string fromEmail, string subject, string plainTextContent, string htmlContent)
+        public async Task SendEmailsAsync(List<string> emailList, string fromEmail, string subject, string plainTextContent, string htmlContent)
         {
             foreach (var toEmail in emailList)
             {
-                _emailRepository.SendEmailString(fromEmail, toEmail, subject, plainTextContent, htmlContent);
+               await _emailRepository.SendEmailString(fromEmail, toEmail, subject, plainTextContent, htmlContent);
             }
         }
 
@@ -106,7 +106,7 @@ namespace TrainingNotificationWorker
             var volEmailList = GetEmailsForVolunteers(message.IsVolunteer, selectedEmailList);
             var emailList = RemoveDuplicateEmails(volEmailList);
             emailList.Add(message.From);
-            SendEmails(emailList, message.From, message.Subject, message.PlainTextContent, message.HtmlContent);
+            await SendEmailsAsync(emailList, message.From, message.Subject, message.PlainTextContent, message.HtmlContent);
             return emailList.Count;
         }
     }

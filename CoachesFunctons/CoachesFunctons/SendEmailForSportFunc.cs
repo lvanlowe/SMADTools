@@ -8,6 +8,13 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Logging;
 using Newtonsoft.Json;
 using InterfaceModels;
+using NotificationService.Interfaces;
+using NotificationService.Repositories;
+using InformationService.Interfaces;
+using InformationService.Repositories;
+using InformationService.Models;
+using Microsoft.EntityFrameworkCore;
+using TrainingNotificationWorker;
 
 namespace CoachesFunctons
 {
@@ -23,16 +30,25 @@ namespace CoachesFunctons
             string requestBody = await new StreamReader(req.Body).ReadToEndAsync();
             dynamic sportEmail = JsonConvert.DeserializeObject<CoachEmailDto>(requestBody);
 
-            //dynamic body = await req.Content.ReadAsStringAsync();
-            //var sportEmail = JsonConvert.DeserializeObject<CoachEmailDto>(body as string);
 
-            string name = "";
+            try
+            {
+                var apiKey = System.Environment.GetEnvironmentVariable("ApiKey");
+                IEmailRepository emailRepository = new EmailRepository(apiKey);
+                var connectionString = System.Environment.GetEnvironmentVariable("SQLAZUCONNSTR_TrainingModel");
+                var options = new DbContextOptionsBuilder<PwsodbContext>().UseSqlServer(connectionString).Options;
+                PwsodbContext context = new PwsodbContext(options);
+                ITrainingRepository trainingRepository = new TrainingRepository(context);
+                EmailWorker worker = new EmailWorker(trainingRepository, emailRepository);
+                var numOfEmails = await worker.SendEmailsForSport(sportEmail);
+                return (ActionResult)new OkObjectResult(numOfEmails);
 
-            //string requestBody = await new StreamReader(req.Body).ReadToEndAsync();
-            //dynamic data = JsonConvert.DeserializeObject(requestBody);
-            //name = name ?? data?.name;
+            }
+            catch (Exception ex)
+            {
 
-            return (ActionResult)new OkObjectResult(6);
+                return (ActionResult)new BadRequestObjectResult(ex);
+            }
                 
         }
     }

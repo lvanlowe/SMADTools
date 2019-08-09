@@ -7,7 +7,10 @@
     <PackageReference Include="Microsoft.NET.Sdk.Functions" Version="1.0.28" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\..\InformationService\InformationService\InformationService.csproj" />
     <ProjectReference Include="..\..\InterfaceModels\InterfaceModels.csproj" />
+    <ProjectReference Include="..\..\NotificationService\NotificationService\NotificationService.csproj" />
+    <ProjectReference Include="..\..\TrainingNotificationWorker\TrainingNotificationWorker.csproj" />
   </ItemGroup>
   <ItemGroup>
     <None Update="host.json">
