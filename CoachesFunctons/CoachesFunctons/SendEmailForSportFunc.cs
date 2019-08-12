@@ -22,7 +22,7 @@ namespace CoachesFunctons
     {
         [FunctionName("SendEmailForSportFunc")]
         public static async Task<IActionResult> Run(
-            [HttpTrigger(AuthorizationLevel.Function, "get", "post", Route = null)] HttpRequest req,
+            [HttpTrigger(AuthorizationLevel.Function, "post", Route = null)] HttpRequest req,
             ILogger log)
         {
             log.LogInformation("C# HTTP trigger function processed a request.");
@@ -35,7 +35,7 @@ namespace CoachesFunctons
             {
                 var apiKey = System.Environment.GetEnvironmentVariable("ApiKey");
                 IEmailRepository emailRepository = new EmailRepository(apiKey);
-                var connectionString = System.Environment.GetEnvironmentVariable("SQLAZUCONNSTR_TrainingModel");
+                var connectionString = System.Environment.GetEnvironmentVariable("SQLAZURECONNSTR_TrainingModel");
                 var options = new DbContextOptionsBuilder<PwsodbContext>().UseSqlServer(connectionString).Options;
                 PwsodbContext context = new PwsodbContext(options);
                 ITrainingRepository trainingRepository = new TrainingRepository(context);
