@@ -206,7 +206,7 @@ namespace TrainingNotificationWorkerTest
         {
             LoadEmails();
             var emails = _emailList[sportId - 1];
-            var actual = _worker.GetEmailsForLocation(locationId, emails);
+            var actual = _worker.GetAddressesForLocation(locationId, emails);
             Assert.Equal(expected, actual.Count);
 
         }
@@ -223,7 +223,7 @@ namespace TrainingNotificationWorkerTest
         {
             LoadEmails();
             var emails = _emailList[sportId - 1];
-            var actual = _worker.GetEmailsForCategory(categoryId, emails);
+            var actual = _worker.GetAddressesForCategory(categoryId, emails);
             Assert.Equal(expected, actual.Count);
 
         }
@@ -239,7 +239,7 @@ namespace TrainingNotificationWorkerTest
         {
             LoadEmails();
             var emails = _emailList[sportId - 1];
-            var actual = _worker.GetEmailsForTeam(teamId, emails);
+            var actual = _worker.GetAddressesForTeam(teamId, emails);
             Assert.Equal(expected, actual.Count);
 
         }
@@ -255,7 +255,7 @@ namespace TrainingNotificationWorkerTest
         {
             LoadEmails();
             var emails = _emailList[sportId - 1];
-            var actual = _worker.GetEmailsForSelected(isSelected, emails);
+            var actual = _worker.GetAddressesForSelected(isSelected, emails);
             Assert.Equal(expected, actual.Count);
 
         }
@@ -271,7 +271,7 @@ namespace TrainingNotificationWorkerTest
         {
             LoadEmails();
             var emails = _emailList[sportId - 1];
-            var actual = _worker.GetEmailsForVolunteers(isVolunteer, emails);
+            var actual = _worker.GetAddressesForVolunteers(isVolunteer, emails);
             Assert.Equal(expected, actual.Count);
 
         }
