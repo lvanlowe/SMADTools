@@ -4,7 +4,7 @@ using System.Text;
 
 namespace InterfaceModels
 {
-    public class CoachEmailDto
+    public class CoachEmailDto : IMessageDto
     {
         public string From { get; set; }
         public string Copy { get; set; }
