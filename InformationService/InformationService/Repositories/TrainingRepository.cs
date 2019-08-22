@@ -41,22 +41,22 @@ namespace InformationService.Repositories
             return emails;
         }
 
-        public async Task<List<SportPhones>> GetPhonesBySport(int sportId)
+        public async Task<List<SportEmails>> GetPhonesBySport(int sportId)
         {
 
             var phones = await _context.Registrant
                 .Join(_context.RegistrantPhone,
                     r => r.Id,
                     p => p.RegistrantId,
-                    (r, p) => new {r, p}).Where(c => c.r.SportId == sportId && c.p.CanText).Select(c => new SportPhones
-                {
+                    (r, p) => new {r, p}).Where(c => c.r.SportId == sportId && c.p.CanText).Select(c => new SportEmails
+                    {
                     FirstName = c.r.FirstName,
                     LastName = c.r.LastName,
                     NickName = c.r.NickName,
                     ProgramId = c.r.ProgramId,
                     SportTypeId = c.r.SportTypeId,
                     TeamId = c.r.TeamId,
-                    Phone = c.p.Phone,
+                    Email = c.p.Phone,
                     Selected = c.r.Selected,
                     IsVolunteer = c.r.IsVolunteer
                 }).ToListAsync();

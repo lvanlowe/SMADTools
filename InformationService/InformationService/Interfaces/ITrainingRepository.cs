@@ -9,6 +9,6 @@ namespace InformationService.Interfaces
     public interface ITrainingRepository
     {
         Task<List<SportEmails>> GetEmailsBySport(int sportId);
-        Task<List<SportPhones>> GetPhonesBySport(int sportId);
+        Task<List<SportEmails>> GetPhonesBySport(int sportId);
     }
 }
