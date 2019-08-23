@@ -33,5 +33,14 @@ namespace TrainingNotificationWorker
             var phoneList = phones.Select(e => Regex.Replace(e.Email, "[^0-9]", "")).Distinct().ToList();
             return phoneList;
         }
+
+        public async Task SendSmsAsync(List<string> phoneList, string message)
+        {
+            foreach (var phone in phoneList)
+            {
+                _smsRepository.SendSms(phone, message);
+            }
+
+        }
     }
 }

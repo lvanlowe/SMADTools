@@ -4,6 +4,7 @@ using Moq;
 using NotificationService.Interfaces;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Text;
 using TrainingNotificationWorker;
 using Xunit;
@@ -198,6 +199,22 @@ namespace TrainingNotificationWorkerTest
             var phone = _phoneList[sportId - 1];
             List<string> actual = _worker.RemoveDuplicatePhones(phone);
             Assert.Equal(expected, actual.Count);
+
+        }
+
+        [Theory]
+        [InlineData(1, 5)]
+        public void SendSms_When_executed_x_emails_sent(int sportId, int expected)
+
+        {
+            LoadPhones();
+            var phone = _phoneList[sportId - 1];
+            var phoneList = phone.Select(e => e.Email).ToList();
+            const string message = "text test with C#";
+
+
+            _worker.SendSmsAsync(phoneList, message);
+            _mockSmsRepository.Verify(mock => mock.SendSms(It.IsAny<string>(), message), Times.Exactly(expected));
 
         }
     }

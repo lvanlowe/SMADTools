@@ -57,14 +57,6 @@ namespace TrainingNotificationWorker
             return emailList.Count;
         }
 
-        private List<SportEmails> GetAddresses(IMessageDto message, List<SportEmails> sportEmailList)
-        {
-            var locationEmailList = GetAddressesForLocation(Convert.ToInt32(message.ProgramId), sportEmailList);
-            var categoryEmailList = GetAddressesForCategory(Convert.ToInt32(message.SportTypeId), locationEmailList);
-            var teamEmailList = GetAddressesForTeam(Convert.ToInt32(message.TeamId), categoryEmailList);
-            var selectedEmailList = GetAddressesForSelected(message.Selected, teamEmailList);
-            var volEmailList = GetAddressesForVolunteers(message.IsVolunteer, selectedEmailList);
-            return volEmailList;
-        }
+
     }
 }
