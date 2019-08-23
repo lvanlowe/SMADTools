@@ -1,6 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Text;
+using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using InformationService.DataModels;
 using InformationService.Interfaces;
@@ -24,6 +26,12 @@ namespace TrainingNotificationWorker
         {
             var emails = await _trainingRepository.GetPhonesBySport(sportId);
             return emails;
+        }
+
+        public List<string> RemoveDuplicatePhones(List<SportEmails> phones)
+        {
+            var phoneList = phones.Select(e => Regex.Replace(e.Email, "[^0-9]", "")).Distinct().ToList();
+            return phoneList;
         }
     }
 }

@@ -31,11 +31,11 @@ namespace TrainingNotificationWorkerTest
         {
             _phoneList = new List<List<SportEmails>>();
             List<SportEmails> emails1 = new List<SportEmails>();
-            emails1.Add(new SportEmails { FirstName = "Bruce", Email = "Batman@dc.com", LastName = "Wayne", NickName = "Batman", IsVolunteer = true });
-            emails1.Add(new SportEmails { FirstName = "Bruce", Email = "batMan@dc.com", LastName = "Wayne", NickName = "Batman", Selected = true });
-            emails1.Add(new SportEmails { FirstName = "Bruce", Email = "BatMan@dc.com", LastName = "Wayne", NickName = "Batman" });
-            emails1.Add(new SportEmails { FirstName = "Bruce", Email = "BATMAN@dc.com", LastName = "Wayne", NickName = "Batman" });
-            emails1.Add(new SportEmails { FirstName = "Bruce", Email = "batman@DC.com", LastName = "Wayne", NickName = "Batman" });
+            emails1.Add(new SportEmails { FirstName = "Bruce", Email = "7035551212", LastName = "Wayne", NickName = "Batman", IsVolunteer = true });
+            emails1.Add(new SportEmails { FirstName = "Bruce", Email = "7035551212___", LastName = "Wayne", NickName = "Batman", Selected = true });
+            emails1.Add(new SportEmails { FirstName = "Bruce", Email = "(703) 555-1212", LastName = "Wayne", NickName = "Batman" });
+            emails1.Add(new SportEmails { FirstName = "Bruce", Email = "703-555-1212", LastName = "Wayne", NickName = "Batman" });
+            emails1.Add(new SportEmails { FirstName = "Bruce", Email = "703_555_1212", LastName = "Wayne", NickName = "Batman" });
             _phoneList.Add(emails1);
 
 
@@ -175,10 +175,10 @@ namespace TrainingNotificationWorkerTest
 
         [Theory]
         [InlineData(1, 5)]
-        //[InlineData(2, 39)]
-        //[InlineData(3, 22)]
-        //[InlineData(4, 16)]
-        //[InlineData(5, 39)]
+        [InlineData(2, 39)]
+        [InlineData(3, 22)]
+        [InlineData(4, 16)]
+        [InlineData(5, 39)]
         public void GetPhonesForSport_When_executed_create_list_of_SportEmails(int sportId, int expected)
 
         {
@@ -186,6 +186,18 @@ namespace TrainingNotificationWorkerTest
             _mockTrainingRepository.Setup(repository => repository.GetPhonesBySport(sportId)).ReturnsAsync(_phoneList[sportId - 1]);
             var actual = _worker.GetPhonesForSport(sportId);
             Assert.Equal(expected, actual.Result.Count);
+
+        }
+
+        [Theory]
+        [InlineData(1, 1)]
+        public void RemoveDuplicatePhones_When_executed_create_list_of_Phones_with_no_dups(int sportId, int expected)
+
+        {
+            LoadPhones();
+            var phone = _phoneList[sportId - 1];
+            List<string> actual = _worker.RemoveDuplicatePhones(phone);
+            Assert.Equal(expected, actual.Count);
 
         }
     }
