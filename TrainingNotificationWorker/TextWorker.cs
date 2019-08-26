@@ -6,6 +6,7 @@ using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using InformationService.DataModels;
 using InformationService.Interfaces;
+using InterfaceModels;
 using NotificationService.Interfaces;
 
 namespace TrainingNotificationWorker
@@ -41,6 +42,15 @@ namespace TrainingNotificationWorker
                 _smsRepository.SendSms(phone, message);
             }
 
+        }
+
+        public async Task<int> SendSmsForSport(CoachTextDto message)
+        {
+            var sportPhoneList = await GetPhonesForSport(Convert.ToInt32(message.SportId));
+            var addresses = GetAddresses(message, sportPhoneList);
+            var phoneList = RemoveDuplicatePhones(addresses);
+            await SendSmsAsync(phoneList, message.Message);
+            return phoneList.Count;
         }
     }
 }

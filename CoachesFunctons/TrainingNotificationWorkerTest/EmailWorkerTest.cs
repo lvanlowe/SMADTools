@@ -380,7 +380,7 @@ namespace TrainingNotificationWorkerTest
             EmailWorker worker = new EmailWorker(trainingRepository, emailRepository);
 
 
-            //var actual = _worker.SendEmailsForSport(message);
+            //var actual = worker.SendEmailsForSport(message);
             //Assert.Equal(expected, actual.Result);
 
         }

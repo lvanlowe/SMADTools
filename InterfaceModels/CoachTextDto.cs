@@ -7,7 +7,6 @@ namespace InterfaceModels
     public class CoachTextDto : IMessageDto
     {
         public string Message { get; set; }
-        public string Phone { get; set; }
         public long SportId { get; set; }
         public long? ProgramId { get; set; }
         public long? SportTypeId { get; set; }
