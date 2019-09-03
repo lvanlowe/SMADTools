@@ -216,9 +216,9 @@ namespace InformationServiceTest.RepositoriesTest
         }
 
         [Theory]
-        [InlineData(1, 5)]
-        [InlineData(2, 3)]
-        [InlineData(3, 2)]
+        [InlineData(1, 8)]
+        [InlineData(2, 5)]
+        [InlineData(3, 3)]
         public void GetEmailsBySport_When_executed_create_list_of_SportEmails(int sportId, int expected)
 
         {
