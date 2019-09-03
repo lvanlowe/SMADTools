@@ -41,5 +41,13 @@ namespace InformationService.Repositories
             var teams = await _context.Teams.Where(t => t.Program.Sport == sportId).ToListAsync();
             return teams;
         }
+
+        public async Task<List<Sports>> GetSports()
+        {
+            var sports = await _context.Sports
+                .Include(s => s.Programs)
+                .ThenInclude(p => p.Teams).ToListAsync();
+            return sports;
+        }
     }
 }

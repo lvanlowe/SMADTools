@@ -140,5 +140,23 @@ namespace InformationServiceTest.RepositoriesTest
             Assert.Equal(expected, actual.Result.Count);
 
         }
+
+        [Theory]
+        [InlineData()]
+        public void GetSports_When_executed_create_list_of_Sport_with_Children()
+
+        {
+            // Insert seed data into the database using one instance of the context
+            InitializeSports();
+            LoadSports();
+
+            var repository = new ReferenceRepository(_context);
+            var actual = repository.GetSports();
+
+            Assert.Equal(3, actual.Result.Count);
+            Assert.Equal(2, actual.Result[0].Programs.Count);
+
+        }
+
     }
 }
