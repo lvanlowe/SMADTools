@@ -63,5 +63,13 @@ namespace InformationService.Repositories
 
             return phones;
         }
+
+        public async Task<List<Registrant>> GetRegistrantsBySport(int sportId)
+        {
+            var registrants = await _context.Registrant
+                .Where(c => c.SportId == sportId).ToListAsync();
+
+            return registrants;
+        }
     }
 }

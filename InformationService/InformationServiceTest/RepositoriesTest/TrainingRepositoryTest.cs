@@ -49,7 +49,7 @@ namespace InformationServiceTest.RepositoriesTest
             RegistrantEmail email82 = new RegistrantEmail() { Id = 12, Email = "jones@manhunter.com", RegistrantId = 8 };
             RegistrantEmail email83 = new RegistrantEmail() { Id = 13, Email = "john@manhunter.com", RegistrantId = 8 };
             RegistrantEmail email91 = new RegistrantEmail() { Id = 14, Email = "dick@batman.com", RegistrantId = 9 };
-            RegistrantEmail email01 = new RegistrantEmail() { Id = 15, Email = "barbara@batman.com", RegistrantId = 9 };
+            RegistrantEmail email01 = new RegistrantEmail() { Id = 15, Email = "barbara@batman.com", RegistrantId = 10 };
             RegistrantEmail email02 = new RegistrantEmail() { Id = 16, Email = "iris@flash.net", RegistrantId = 10 };
 
             RegistrantPhone phone11 = new RegistrantPhone() { Id = 1, RegistrantId = 1, CanText = true, PhoneTypeId = 1, CarrierId = 1, Phone = "7035551212" };
@@ -72,6 +72,13 @@ namespace InformationServiceTest.RepositoriesTest
             RegistrantPhone phone91 = new RegistrantPhone() { Id = 18, RegistrantId = 9, CanText = false, PhoneTypeId = 2, Phone = "2165551212" };
             RegistrantPhone phone92 = new RegistrantPhone() { Id = 19, RegistrantId = 9, CanText = false, PhoneTypeId = 3, Phone = "2175551212" };
             RegistrantPhone phone93 = new RegistrantPhone() { Id = 20, RegistrantId = 9, CanText = false, PhoneTypeId = 3, Phone = "2185551212" };
+
+
+            RegisteredAthlete athlete1 = new RegisteredAthlete() { AthletesId = 10, RegistrantId = 1 };
+            RegisteredAthlete athlete2 = new RegisteredAthlete() { AthletesId = 11, RegistrantId = 2 };
+            RegisteredAthlete athlete4 = new RegisteredAthlete() { AthletesId = 12, RegistrantId = 4 };
+            RegisteredAthlete athlete7 = new RegisteredAthlete() { AthletesId = 13, RegistrantId = 7 };
+            RegisteredAthlete athlete0 = new RegisteredAthlete() { AthletesId = 14, RegistrantId = 10 };
 
             var registrant1 = new Registrant()
             {
@@ -201,6 +208,13 @@ namespace InformationServiceTest.RepositoriesTest
             registrant9.RegistrantPhone.Add(phone91);
             registrant9.RegistrantPhone.Add(phone92);
             registrant9.RegistrantPhone.Add(phone93);
+
+            registrant0.RegisteredAthlete.Add(athlete0);
+            registrant1.RegisteredAthlete.Add(athlete1);
+            registrant2.RegisteredAthlete.Add(athlete2);
+            registrant4.RegisteredAthlete.Add(athlete4);
+            registrant6.RegisteredAthlete.Add(athlete7);
+
             _context.Registrant.Add(registrant0);
             _context.Registrant.Add(registrant1);
             _context.Registrant.Add(registrant2);
@@ -251,5 +265,25 @@ namespace InformationServiceTest.RepositoriesTest
 
         }
 
+        [Theory]
+        [InlineData(1, 5, 1, 1, 1)]
+        [InlineData(2, 3, 0, 1, 0)]
+        [InlineData(3, 2, 2, 0, 1)]
+        public void GetRegistrantsBySport_When_executed_create_list_of_SportRegistrants(int sportId, int count, int emails, int phones, int hasMedical)
+
+        {
+            // Insert seed data into the database using one instance of the context
+            InitializeRegistrants();
+            LoadRegistrants();
+
+            var repository = new TrainingRepository(_context);
+            var actual = repository.GetRegistrantsBySport(sportId);
+
+            Assert.Equal(count, actual.Result.Count);
+            Assert.Equal(emails, actual.Result[0].RegistrantEmail.Count);
+            Assert.Equal(phones, actual.Result[0].RegistrantPhone.Count);
+            Assert.Equal(hasMedical, actual.Result[0].RegisteredAthlete.Count);
+
+        }
     }
 }
