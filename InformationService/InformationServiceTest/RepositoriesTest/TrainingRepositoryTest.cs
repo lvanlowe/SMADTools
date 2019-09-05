@@ -89,7 +89,8 @@ namespace InformationServiceTest.RepositoriesTest
                 SportId = 1,
                 SportTypeId = 1,
                 TeamId = 1,
-                Selected = true
+                Selected = true,
+
             }; var registrant2 = new Registrant()
             {
                 Id = 2,
@@ -99,7 +100,8 @@ namespace InformationServiceTest.RepositoriesTest
                 SportId = 1,
                 SportTypeId = 1,
                 TeamId = 1,
-                Selected = true
+                Selected = true,
+                Year = "1999"
             }; var registrant3 = new Registrant()
             {
                 Id = 3,
@@ -266,7 +268,7 @@ namespace InformationServiceTest.RepositoriesTest
         }
 
         [Theory]
-        [InlineData(1, 5, 1, 1, 1)]
+        [InlineData(1, 4, 1, 1, 1)]
         [InlineData(2, 3, 0, 1, 0)]
         [InlineData(3, 2, 2, 0, 1)]
         public void GetRegistrantsBySport_When_executed_create_list_of_SportRegistrants(int sportId, int count, int emails, int phones, int hasMedical)
