@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Text;
 using InformationService.Models;
 using InformationService.Repositories;
@@ -287,5 +288,28 @@ namespace InformationServiceTest.RepositoriesTest
             Assert.Equal(hasMedical, actual.Result[0].RegisteredAthlete.Count);
 
         }
+
+        [Theory]
+        [InlineData(3, 10)]
+        public void AddRegisteredAthlete_When_executed_add_record(int registrantId, int athleteId)
+
+        {
+            // Insert seed data into the database using one instance of the context
+            InitializeRegistrants();
+            LoadRegistrants();
+            int registeredAthleteCount = _context.RegisteredAthlete.Count();
+
+            var repository = new TrainingRepository(_context);
+            repository.AddRegisteredAthlete(registrantId, athleteId);
+
+            int newRegisteredAthleteCount = _context.RegisteredAthlete.Count();
+            Registrant registrant = _context.Registrant.FirstOrDefault(r => r.Id == registrantId);
+
+            Assert.Equal(registeredAthleteCount + 1, newRegisteredAthleteCount);
+            Assert.True(registrant.RegisteredAthlete.Count > 0);
+            Assert.Equal(athleteId, registrant.RegisteredAthlete.FirstOrDefault().AthletesId);
+
+        }
+
     }
 }

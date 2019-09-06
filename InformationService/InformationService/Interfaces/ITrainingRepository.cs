@@ -12,5 +12,6 @@ namespace InformationService.Interfaces
         Task<List<SportEmails>> GetEmailsBySport(int sportId);
         Task<List<SportEmails>> GetPhonesBySport(int sportId);
         Task<List<Registrant>> GetRegistrantsBySport(int sportId);
+        Task AddRegisteredAthlete(int registrantId, int athleteId);
     }
 }

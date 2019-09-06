@@ -71,5 +71,15 @@ namespace InformationService.Repositories
 
             return registrants;
         }
+
+        public async Task AddRegisteredAthlete(int registrantId, int athleteId)
+        {
+            var athlete = new RegisteredAthlete() { AthletesId = athleteId, RegistrantId = registrantId };
+            var registrant = await _context.Registrant
+                .Where(r => r.Id == registrantId).FirstOrDefaultAsync();
+            registrant?.RegisteredAthlete.Add(athlete);
+            _context.SaveChanges();
+
+        }
     }
 }
