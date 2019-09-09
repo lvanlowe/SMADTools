@@ -81,5 +81,17 @@ namespace InformationService.Repositories
             _context.SaveChanges();
 
         }
+
+        public async Task AddPhone(List<RegistrantPhone> phoneList)
+        {
+            var registrant = await _context.Registrant
+                .Where(r => r.Id == phoneList[0].RegistrantId).FirstOrDefaultAsync();
+            foreach (var phone in phoneList)
+            {
+                registrant?.RegistrantPhone.Add(phone);
+            }
+            _context.SaveChanges();
+
+        }
     }
 }

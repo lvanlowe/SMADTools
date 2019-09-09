@@ -311,5 +311,28 @@ namespace InformationServiceTest.RepositoriesTest
 
         }
 
+        [Theory]
+        [InlineData(3, 3)]
+        [InlineData(2, 4)]
+        [InlineData(10, 2)]
+        public void AddPhone_When_executed_add_record(int registrantId, int expected)
+
+        {
+            // Insert seed data into the database using one instance of the context
+            InitializeRegistrants();
+            LoadRegistrants();
+
+            RegistrantPhone phone1 = new RegistrantPhone() { RegistrantId = registrantId, CanText = true, PhoneTypeId = 1, Phone = "5715551212" };
+            RegistrantPhone phone2 = new RegistrantPhone() { RegistrantId = registrantId, CanText = false, PhoneTypeId = 2, Phone = "4045551212" };
+
+            List<RegistrantPhone> phoneList = new List<RegistrantPhone> {phone1, phone2};
+
+            var repository = new TrainingRepository(_context);
+            repository.AddPhone(phoneList);
+            Registrant registrant = _context.Registrant.FirstOrDefault(r => r.Id == registrantId);
+
+            if (registrant != null) Assert.Equal(expected, registrant.RegistrantPhone.Count);
+        }
+
     }
 }
