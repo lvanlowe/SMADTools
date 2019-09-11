@@ -334,5 +334,39 @@ namespace InformationServiceTest.RepositoriesTest
             if (registrant != null) Assert.Equal(expected, registrant.RegistrantPhone.Count);
         }
 
+
+        [Theory]
+        [InlineData(1, 1, 0)]
+        [InlineData(2, 1, 1)]
+        [InlineData(4, 2, 0)]
+        public void RemovePhone_When_executed_remove_records(int registrantId, int count, int expected)
+
+        {
+            // Insert seed data into the database using one instance of the context
+            InitializeRegistrants();
+            LoadRegistrants();
+            List<RegistrantPhone> phoneList = new List<RegistrantPhone>( );
+
+            Registrant beginRegistrant = _context.Registrant.FirstOrDefault(r => r.Id == registrantId);
+
+            int i = 0;
+            foreach (var phone in beginRegistrant.RegistrantPhone)
+            {
+                if (i < count)
+                {
+                    phoneList.Add(phone);
+                }
+
+                i++;
+            }
+
+
+            var repository = new TrainingRepository(_context);
+            repository.RemovePhone(phoneList);
+            Registrant registrant = _context.Registrant.FirstOrDefault(r => r.Id == registrantId);
+
+            if (registrant != null) Assert.Equal(expected, registrant.RegistrantPhone.Count);
+        }
+
     }
 }

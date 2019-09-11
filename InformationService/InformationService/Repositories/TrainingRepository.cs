@@ -93,5 +93,15 @@ namespace InformationService.Repositories
             _context.SaveChanges();
 
         }
+
+        public async Task RemovePhone(List<RegistrantPhone> phoneList)
+        {
+            foreach (var phone in phoneList.Where(phone => phone != null))
+            {
+                _context.RegistrantPhone.Remove(phone);
+            }
+
+            _context.SaveChanges();
+        }
     }
 }
