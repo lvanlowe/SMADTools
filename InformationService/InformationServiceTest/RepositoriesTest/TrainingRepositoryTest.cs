@@ -368,5 +368,31 @@ namespace InformationServiceTest.RepositoriesTest
             if (registrant != null) Assert.Equal(expected, registrant.RegistrantPhone.Count);
         }
 
+
+        [Theory]
+        [InlineData(1, false)]
+        //[InlineData(2, 1, 1)]
+        //[InlineData(4, 2, 0)]
+        public void UpdatePhone_When_executed_update_records(int registrantId, bool canText)
+
+        {
+            // Insert seed data into the database using one instance of the context
+            InitializeRegistrants();
+            LoadRegistrants();
+            List<RegistrantPhone> phoneList = new List<RegistrantPhone>();
+
+            Registrant beginRegistrant = _context.Registrant.FirstOrDefault(r => r.Id == registrantId);
+
+            var phone = beginRegistrant.RegistrantPhone.FirstOrDefault();
+            phone.CanText = canText;
+            phoneList.Add(phone);
+
+            var repository = new TrainingRepository(_context);
+            repository.UpdatePhone(phoneList);
+            var registrantPhone = _context.RegistrantPhone.FirstOrDefault(r => r.Id == phone.Id);
+
+            if (registrantPhone != null) Assert.Equal(canText, registrantPhone.CanText);
+        }
+
     }
 }

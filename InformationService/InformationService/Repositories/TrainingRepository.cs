@@ -103,5 +103,15 @@ namespace InformationService.Repositories
 
             _context.SaveChanges();
         }
+
+        public async Task UpdatePhone(List<RegistrantPhone> phoneList)
+        {
+            foreach (var phone in phoneList.Where(phone => phone != null))
+            {
+                _context.RegistrantPhone.Update(phone);
+            }
+
+            _context.SaveChanges();
+        }
     }
 }
