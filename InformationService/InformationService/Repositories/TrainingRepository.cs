@@ -118,5 +118,10 @@ namespace InformationService.Repositories
 
             _context.SaveChanges();
         }
+
+        public async Task ModifyPhone(List<RegistrantPhone> phoneList)
+        {
+            throw new NotImplementedException();
+        }
     }
 }
