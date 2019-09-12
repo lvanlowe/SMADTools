@@ -108,7 +108,12 @@ namespace InformationService.Repositories
         {
             foreach (var phone in phoneList.Where(phone => phone != null))
             {
-                _context.RegistrantPhone.Update(phone);
+                var originalPhone = _context.RegistrantPhone.FirstOrDefault(r => r.Id == phone.Id);
+                if (originalPhone == null) continue;
+                originalPhone.Phone = phone.Phone;
+                originalPhone.PhoneType = phone.PhoneType;
+                originalPhone.PhoneTypeId = phone.PhoneTypeId;
+                originalPhone.CanText = phone.CanText;
             }
 
             _context.SaveChanges();

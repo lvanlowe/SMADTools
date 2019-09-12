@@ -370,28 +370,68 @@ namespace InformationServiceTest.RepositoriesTest
 
 
         [Theory]
-        [InlineData(1, false)]
-        //[InlineData(2, 1, 1)]
-        //[InlineData(4, 2, 0)]
-        public void UpdatePhone_When_executed_update_records(int registrantId, bool canText)
+        [InlineData(2, false)]
+        public void UpdatePhone_When_executed_update_records_1(int registrantId, bool canText)
 
         {
             // Insert seed data into the database using one instance of the context
             InitializeRegistrants();
             LoadRegistrants();
             List<RegistrantPhone> phoneList = new List<RegistrantPhone>();
-
-            Registrant beginRegistrant = _context.Registrant.FirstOrDefault(r => r.Id == registrantId);
-
-            var phone = beginRegistrant.RegistrantPhone.FirstOrDefault();
-            phone.CanText = canText;
+            RegistrantPhone phone = new RegistrantPhone() { Id = 2, RegistrantId = 2, CanText = canText, PhoneTypeId = 1, CarrierId = 1, Phone = "3015551212" };
             phoneList.Add(phone);
 
             var repository = new TrainingRepository(_context);
             repository.UpdatePhone(phoneList);
-            var registrantPhone = _context.RegistrantPhone.FirstOrDefault(r => r.Id == phone.Id);
+            var registrant = _context.Registrant.FirstOrDefault(r => r.Id == registrantId);
+            var phone1 = registrant.RegistrantPhone.FirstOrDefault(r => r.Id == 2);
+            var phone2 = registrant.RegistrantPhone.FirstOrDefault(r => r.Id == 3);
+            Assert.Equal(canText, phone1.CanText);
+            Assert.Equal(!canText, phone2.CanText);
+        }
 
-            if (registrantPhone != null) Assert.Equal(canText, registrantPhone.CanText);
+        [Theory]
+        [InlineData(2, false)]
+        public void UpdatePhone_When_executed_update_records_2(int registrantId, bool canText)
+
+        {
+            // Insert seed data into the database using one instance of the context
+            InitializeRegistrants();
+            LoadRegistrants();
+            List<RegistrantPhone> phoneList = new List<RegistrantPhone>();
+            RegistrantPhone phone = new RegistrantPhone() { Id = 3, RegistrantId = 2, CanText = canText, PhoneTypeId = 1, CarrierId = 1, Phone = "3015551212" };
+            phoneList.Add(phone);
+
+            var repository = new TrainingRepository(_context);
+            repository.UpdatePhone(phoneList);
+            var registrant = _context.Registrant.FirstOrDefault(r => r.Id == registrantId);
+            var phone1 = registrant.RegistrantPhone.FirstOrDefault(r => r.Id == 2);
+            var phone2 = registrant.RegistrantPhone.FirstOrDefault(r => r.Id == 3);
+            Assert.Equal(canText, phone2.CanText);
+            Assert.Equal(!canText, phone1.CanText);
+        }
+
+        [Theory]
+        [InlineData(2, false)]
+        public void UpdatePhone_When_executed_update_records_1_2(int registrantId, bool canText)
+
+        {
+            // Insert seed data into the database using one instance of the context
+            InitializeRegistrants();
+            LoadRegistrants();
+            List<RegistrantPhone> phoneList = new List<RegistrantPhone>();
+            RegistrantPhone phoneA = new RegistrantPhone() { Id = 2, RegistrantId = 2, CanText = canText, PhoneTypeId = 1, CarrierId = 1, Phone = "3015551212" };
+            RegistrantPhone phoneB = new RegistrantPhone() { Id = 3, RegistrantId = 2, CanText = canText, PhoneTypeId = 1, CarrierId = 1, Phone = "3105551212" };
+            phoneList.Add(phoneA);
+            phoneList.Add(phoneB);
+
+            var repository = new TrainingRepository(_context);
+            repository.UpdatePhone(phoneList);
+            var registrant = _context.Registrant.FirstOrDefault(r => r.Id == registrantId);
+            var phone1 = registrant.RegistrantPhone.FirstOrDefault(r => r.Id == 2);
+            var phone2 = registrant.RegistrantPhone.FirstOrDefault(r => r.Id == 3);
+            Assert.Equal(canText, phone1.CanText);
+            Assert.Equal(canText, phone2.CanText);
         }
 
     }
