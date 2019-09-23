@@ -121,7 +121,21 @@ namespace InformationService.Repositories
 
         public async Task ModifyPhone(List<RegistrantPhone> phoneList)
         {
-            throw new NotImplementedException();
+            var registrant = await _context.Registrant
+                .Where(r => r.Id == phoneList[0].RegistrantId).FirstOrDefaultAsync();
+            List<RegistrantPhone> deletedPhone = new List<RegistrantPhone>();
+            var newPhoneList = phoneList.Where(p => p.Id == 0).ToList();
+            foreach (var phone in registrant.RegistrantPhone)
+            {
+                var exsistingPhone = phoneList.Where(p => p.Id == phone.Id).FirstOrDefault();
+                if (exsistingPhone == null)
+                {
+                    deletedPhone.Add(phone);
+                }
+            }
+            await RemovePhone(deletedPhone);
+            await AddPhone(newPhoneList);
+
         }
     }
 }

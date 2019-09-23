@@ -456,5 +456,25 @@ namespace InformationServiceTest.RepositoriesTest
             Assert.Equal(3, registrant.RegistrantPhone.Count);
         }
 
+        [Theory]
+        [InlineData(2, false)]
+        public void ModifyPhone_When_executed_modify_records_When_remove_and_new(int registrantId, bool canText)
+
+        {
+            // Insert seed data into the database using one instance of the context
+            InitializeRegistrants();
+            LoadRegistrants();
+            List<RegistrantPhone> phoneList = new List<RegistrantPhone>();
+            RegistrantPhone phoneB = new RegistrantPhone() { Id = 3, RegistrantId = 2, CanText = true, PhoneTypeId = 1, CarrierId = 1, Phone = "3105551212" };
+            RegistrantPhone phoneC = new RegistrantPhone() { Id = 0, RegistrantId = 2, CanText = false, PhoneTypeId = 1, CarrierId = 1, Phone = "4125551212" };
+            phoneList.Add(phoneB);
+            phoneList.Add(phoneC);
+
+            var repository = new TrainingRepository(_context);
+            repository.ModifyPhone(phoneList);
+            var registrant = _context.Registrant.FirstOrDefault(r => r.Id == registrantId);
+            Assert.Equal(2, registrant.RegistrantPhone.Count);
+        }
+
     }
 }
