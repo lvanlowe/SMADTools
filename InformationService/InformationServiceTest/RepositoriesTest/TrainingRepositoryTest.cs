@@ -443,7 +443,7 @@ namespace InformationServiceTest.RepositoriesTest
             InitializeRegistrants();
             LoadRegistrants();
             List<RegistrantPhone> phoneList = new List<RegistrantPhone>();
-            RegistrantPhone phoneA = new RegistrantPhone() { Id = 2, RegistrantId = 2, CanText = true, PhoneTypeId = 1, CarrierId = 1, Phone = "3015551212" };
+            RegistrantPhone phoneA = new RegistrantPhone() { Id = 2, RegistrantId = 2, CanText = false, PhoneTypeId = 1, CarrierId = 1, Phone = "3015551212" };
             RegistrantPhone phoneB = new RegistrantPhone() { Id = 3, RegistrantId = 2, CanText = true, PhoneTypeId = 1, CarrierId = 1, Phone = "3105551212" };
             RegistrantPhone phoneC = new RegistrantPhone() { Id = 0, RegistrantId = 2, CanText = false, PhoneTypeId = 1, CarrierId = 1, Phone = "4125551212" };
             phoneList.Add(phoneA);
@@ -454,6 +454,9 @@ namespace InformationServiceTest.RepositoriesTest
             repository.ModifyPhone(phoneList);
             var registrant = _context.Registrant.FirstOrDefault(r => r.Id == registrantId);
             Assert.Equal(3, registrant.RegistrantPhone.Count);
+            var phone = registrant.RegistrantPhone.Where(p => p.Id == 2).FirstOrDefault();
+            Assert.Equal(false, phone.CanText);
+
         }
 
         [Theory]

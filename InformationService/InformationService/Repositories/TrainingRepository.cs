@@ -125,6 +125,7 @@ namespace InformationService.Repositories
                 .Where(r => r.Id == phoneList[0].RegistrantId).FirstOrDefaultAsync();
             List<RegistrantPhone> deletedPhone = new List<RegistrantPhone>();
             var newPhoneList = phoneList.Where(p => p.Id == 0).ToList();
+            var oldPhoneList = phoneList.Where(p => p.Id != 0).ToList();
             foreach (var phone in registrant.RegistrantPhone)
             {
                 var exsistingPhone = phoneList.Where(p => p.Id == phone.Id).FirstOrDefault();
@@ -133,6 +134,7 @@ namespace InformationService.Repositories
                     deletedPhone.Add(phone);
                 }
             }
+            await UpdatePhone(oldPhoneList);
             await RemovePhone(deletedPhone);
             await AddPhone(newPhoneList);
 
