@@ -139,5 +139,38 @@ namespace InformationService.Repositories
             await AddPhone(newPhoneList);
 
         }
+
+        public async Task AddEmail(List<RegistrantEmail> emailList)
+        {
+            var registrant = await _context.Registrant
+                .Where(r => r.Id == emailList[0].RegistrantId).FirstOrDefaultAsync();
+            foreach (var email in emailList)
+            {
+                registrant?.RegistrantEmail.Add(email);
+            }
+            _context.SaveChanges();
+        }
+
+        public async Task RemoveEmail(List<RegistrantEmail> emailList)
+        {
+            foreach (var email in emailList.Where(email => email != null))
+            {
+                _context.RegistrantEmail.Remove(email);
+            }
+
+            _context.SaveChanges();
+        }
+
+        public async Task UpdateEmail(List<RegistrantEmail> emailList)
+        {
+            foreach (var email in emailList.Where(email => email != null))
+            {
+                var originalEmail = _context.RegistrantEmail.FirstOrDefault(r => r.Id == email.Id);
+                if (originalEmail == null) continue;
+                originalEmail.Email = email.Email;
+            }
+
+            _context.SaveChanges();
+        }
     }
 }

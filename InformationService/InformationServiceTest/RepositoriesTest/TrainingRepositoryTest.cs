@@ -479,5 +479,126 @@ namespace InformationServiceTest.RepositoriesTest
             Assert.Equal(2, registrant.RegistrantPhone.Count);
         }
 
+        [Theory]
+        [InlineData(1, 3)]
+        [InlineData(2, 4)]
+        [InlineData(3, 2)]
+        public void AddEmail_When_executed_add_record(int registrantId, int expected)
+
+        {
+            // Insert seed data into the database using one instance of the context
+            InitializeRegistrants();
+            LoadRegistrants();
+
+            RegistrantEmail email1 = new RegistrantEmail() { RegistrantId = registrantId,  Email = "arrow@dc.com" };
+            RegistrantEmail email2 = new RegistrantEmail() { RegistrantId = registrantId, Email = "speddy@dc.com" };
+
+            List<RegistrantEmail> emailList = new List<RegistrantEmail> { email1, email2 };
+
+            var repository = new TrainingRepository(_context);
+            repository.AddEmail(emailList);
+            Registrant registrant = _context.Registrant.FirstOrDefault(r => r.Id == registrantId);
+
+            if (registrant != null) Assert.Equal(expected, registrant.RegistrantEmail.Count);
+        }
+
+        [Theory]
+        [InlineData(1, 1, 0)]
+        [InlineData(2, 1, 1)]
+        [InlineData(4, 2, 0)]
+        public void RemoveEmail_When_executed_remove_records(int registrantId, int count, int expected)
+
+        {
+            // Insert seed data into the database using one instance of the context
+            InitializeRegistrants();
+            LoadRegistrants();
+            List<RegistrantEmail> emailList = new List<RegistrantEmail>();
+
+            Registrant beginRegistrant = _context.Registrant.FirstOrDefault(r => r.Id == registrantId);
+
+            int i = 0;
+            foreach (var phone in beginRegistrant.RegistrantEmail)
+            {
+                if (i < count)
+                {
+                    emailList.Add(phone);
+                }
+
+                i++;
+            }
+
+
+            var repository = new TrainingRepository(_context);
+            repository.RemoveEmail(emailList);
+            Registrant registrant = _context.Registrant.FirstOrDefault(r => r.Id == registrantId);
+
+            if (registrant != null) Assert.Equal(expected, registrant.RegistrantEmail.Count);
+        }
+
+        [Theory]
+        [InlineData(2, "atom@dc.com")]
+        public void UpdateEmail_When_executed_update_records_1(int registrantId, string address)
+
+        {
+            // Insert seed data into the database using one instance of the context
+            InitializeRegistrants();
+            LoadRegistrants();
+            List<RegistrantEmail> emailList = new List<RegistrantEmail>();
+            RegistrantEmail email = new RegistrantEmail() { Id = 2, RegistrantId = 2, Email = address};
+            emailList.Add(email);
+
+            var repository = new TrainingRepository(_context);
+            repository.UpdateEmail(emailList);
+            var registrant = _context.Registrant.FirstOrDefault(r => r.Id == registrantId);
+            var email1 = registrant.RegistrantEmail.FirstOrDefault(r => r.Id == 2);
+            var email2 = registrant.RegistrantEmail.FirstOrDefault(r => r.Id == 3);
+            Assert.Equal(address, email1.Email);
+            Assert.NotEqual(address, email2.Email);
+        }
+
+        [Theory]
+        [InlineData(2, "atom@dc.com")]
+        public void UpdateEmail_When_executed_update_records_1_2(int registrantId, string address)
+
+        {
+            // Insert seed data into the database using one instance of the context
+            InitializeRegistrants();
+            LoadRegistrants();
+            List<RegistrantEmail> emailList = new List<RegistrantEmail>();
+            RegistrantEmail emailA = new RegistrantEmail() { Id = 2, RegistrantId = 2,  Email= address };
+            RegistrantEmail emailB = new RegistrantEmail() { Id = 3, RegistrantId = 2, Email = address };
+            emailList.Add(emailA);
+            emailList.Add(emailB);
+
+            var repository = new TrainingRepository(_context);
+            repository.UpdateEmail(emailList);
+            var registrant = _context.Registrant.FirstOrDefault(r => r.Id == registrantId);
+            var email1 = registrant.RegistrantEmail.FirstOrDefault(r => r.Id == 2);
+            var email2 = registrant.RegistrantEmail.FirstOrDefault(r => r.Id == 3);
+            Assert.Equal(address, email1.Email);
+            Assert.Equal(address, email2.Email);
+        }
+
+        [Theory]
+        [InlineData(2, "atom@dc.com")]
+        public void UpdateEmail_When_executed_update_records_2(int registrantId, string address)
+
+        {
+            // Insert seed data into the database using one instance of the context
+            InitializeRegistrants();
+            LoadRegistrants();
+            List<RegistrantEmail> emailList = new List<RegistrantEmail>();
+            RegistrantEmail email = new RegistrantEmail() { Id = 3, RegistrantId = 2, Email = address };
+            emailList.Add(email);
+
+            var repository = new TrainingRepository(_context);
+            repository.UpdateEmail(emailList);
+            var registrant = _context.Registrant.FirstOrDefault(r => r.Id == registrantId);
+            var email1 = registrant.RegistrantEmail.FirstOrDefault(r => r.Id == 2);
+            var email2 = registrant.RegistrantEmail.FirstOrDefault(r => r.Id == 3);
+            Assert.Equal(address, email2.Email);
+            Assert.NotEqual(address, email1.Email);
+        }
+
     }
 }
