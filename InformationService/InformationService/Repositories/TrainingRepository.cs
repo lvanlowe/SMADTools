@@ -90,7 +90,7 @@ namespace InformationService.Repositories
             {
                 registrant?.RegistrantPhone.Add(phone);
             }
-            _context.SaveChanges();
+            //_context.SaveChanges();
 
         }
 
@@ -101,7 +101,7 @@ namespace InformationService.Repositories
                 _context.RegistrantPhone.Remove(phone);
             }
 
-            _context.SaveChanges();
+            //_context.SaveChanges();
         }
 
         public async Task UpdatePhone(List<RegistrantPhone> phoneList)
@@ -116,7 +116,7 @@ namespace InformationService.Repositories
                 originalPhone.CanText = phone.CanText;
             }
 
-            _context.SaveChanges();
+            //_context.SaveChanges();
         }
 
         public async Task ModifyPhone(List<RegistrantPhone> phoneList)
@@ -148,7 +148,7 @@ namespace InformationService.Repositories
             {
                 registrant?.RegistrantEmail.Add(email);
             }
-            _context.SaveChanges();
+            //_context.SaveChanges();
         }
 
         public async Task RemoveEmail(List<RegistrantEmail> emailList)
@@ -158,7 +158,7 @@ namespace InformationService.Repositories
                 _context.RegistrantEmail.Remove(email);
             }
 
-            _context.SaveChanges();
+            //_context.SaveChanges();
         }
 
         public async Task UpdateEmail(List<RegistrantEmail> emailList)
@@ -170,7 +170,44 @@ namespace InformationService.Repositories
                 originalEmail.Email = email.Email;
             }
 
-            _context.SaveChanges();
+            //_context.SaveChanges();
+        }
+
+        public async Task UpdateRegistrant(Registrant registrant)
+        {
+            var originalRegistrant = _context.Registrant.FirstOrDefaultAsync(r => r.Id == registrant.Id);
+            if (originalRegistrant != null)
+            {
+                originalRegistrant.Result.Selected = registrant.Selected;
+                originalRegistrant.Result.SportTypeId = registrant.SportTypeId;
+                originalRegistrant.Result.Size = registrant.Size;
+                originalRegistrant.Result.TeamId = registrant.TeamId;
+
+                await ModifyPhone(registrant.RegistrantPhone.ToList());
+                await ModifyEmail(registrant.RegistrantEmail.ToList());
+                await _context.SaveChangesAsync();
+            }
+        }
+
+        public async Task ModifyEmail(List<RegistrantEmail> emailList)
+        {
+            var registrant = await _context.Registrant
+                .Where(r => r.Id == emailList[0].RegistrantId).FirstOrDefaultAsync();
+            List<RegistrantEmail> deletedEmail = new List<RegistrantEmail>();
+            var newEmailList = emailList.Where(p => p.Id == 0).ToList();
+            var oldEmailList = emailList.Where(p => p.Id != 0).ToList();
+            foreach (var phone in registrant.RegistrantEmail)
+            {
+                var exsistingEmail = emailList.Where(p => p.Id == phone.Id).FirstOrDefault();
+                if (exsistingEmail == null)
+                {
+                    deletedEmail.Add(phone);
+                }
+            }
+            await UpdateEmail(oldEmailList);
+            await RemoveEmail(deletedEmail);
+            await AddEmail(newEmailList);
+
         }
     }
 }
