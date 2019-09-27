@@ -82,33 +82,31 @@ namespace InformationService.Repositories
 
         }
 
-        public async Task AddPhone(List<RegistrantPhone> phoneList)
+        public void AddPhone(List<RegistrantPhone> phoneList, List<RegistrantPhone> originalPhoneList)
         {
-            var registrant = await _context.Registrant
-                .Where(r => r.Id == phoneList[0].RegistrantId).FirstOrDefaultAsync();
             foreach (var phone in phoneList)
             {
-                registrant?.RegistrantPhone.Add(phone);
+                originalPhoneList.Add(phone);
             }
             //_context.SaveChanges();
 
         }
 
-        public async Task RemovePhone(List<RegistrantPhone> phoneList)
+        public void RemovePhone(List<RegistrantPhone> phoneList, List<RegistrantPhone> originalPhoneList)
         {
-            foreach (var phone in phoneList.Where(phone => phone != null))
+            foreach (var phone in phoneList)
             {
-                _context.RegistrantPhone.Remove(phone);
+                originalPhoneList.RemoveAll(p => p.Id == phone.Id);
             }
 
             //_context.SaveChanges();
         }
 
-        public async Task UpdatePhone(List<RegistrantPhone> phoneList)
+        public void UpdatePhone(List<RegistrantPhone> phoneList, List<RegistrantPhone> originalPhoneList)
         {
             foreach (var phone in phoneList.Where(phone => phone != null))
             {
-                var originalPhone = _context.RegistrantPhone.FirstOrDefault(r => r.Id == phone.Id);
+                var originalPhone = originalPhoneList.FirstOrDefault(r => r.Id == phone.Id);
                 if (originalPhone == null) continue;
                 originalPhone.Phone = phone.Phone;
                 originalPhone.PhoneType = phone.PhoneType;
@@ -119,53 +117,44 @@ namespace InformationService.Repositories
             //_context.SaveChanges();
         }
 
-        public async Task ModifyPhone(List<RegistrantPhone> phoneList)
+        public void ModifyPhone(List<RegistrantPhone> phoneList, List<RegistrantPhone> originalPhoneList)
         {
-            var registrant = await _context.Registrant
-                .Where(r => r.Id == phoneList[0].RegistrantId).FirstOrDefaultAsync();
-            List<RegistrantPhone> deletedPhone = new List<RegistrantPhone>();
             var newPhoneList = phoneList.Where(p => p.Id == 0).ToList();
             var oldPhoneList = phoneList.Where(p => p.Id != 0).ToList();
-            foreach (var phone in registrant.RegistrantPhone)
-            {
-                var exsistingPhone = phoneList.Where(p => p.Id == phone.Id).FirstOrDefault();
-                if (exsistingPhone == null)
-                {
-                    deletedPhone.Add(phone);
-                }
-            }
-            await UpdatePhone(oldPhoneList);
-            await RemovePhone(deletedPhone);
-            await AddPhone(newPhoneList);
-
+            var deletedPhone = (from phone in originalPhoneList let existingPhone = phoneList.FirstOrDefault(p => p.Id == phone.Id) where existingPhone == null select phone).ToList();
+            UpdatePhone(oldPhoneList, originalPhoneList);
+            RemovePhone(deletedPhone, originalPhoneList);
+            AddPhone(newPhoneList, originalPhoneList);
         }
 
-        public async Task AddEmail(List<RegistrantEmail> emailList)
+        public void AddEmail(List<RegistrantEmail> emailList, List<RegistrantEmail> originalEmailList)
         {
-            var registrant = await _context.Registrant
-                .Where(r => r.Id == emailList[0].RegistrantId).FirstOrDefaultAsync();
+            //var registrant = await _context.Registrant
+            //    .Where(r => r.Id == emailList[0].RegistrantId).FirstOrDefaultAsync();
             foreach (var email in emailList)
             {
-                registrant?.RegistrantEmail.Add(email);
+                originalEmailList.Add(email);
             }
             //_context.SaveChanges();
         }
 
-        public async Task RemoveEmail(List<RegistrantEmail> emailList)
+        public void RemoveEmail(List<RegistrantEmail> emailList, List<RegistrantEmail> originalEmailList)
         {
             foreach (var email in emailList.Where(email => email != null))
             {
+                originalEmailList.RemoveAll(e => e.Id == email.Id);
+
                 _context.RegistrantEmail.Remove(email);
             }
 
             //_context.SaveChanges();
         }
 
-        public async Task UpdateEmail(List<RegistrantEmail> emailList)
+        public void UpdateEmail(List<RegistrantEmail> emailList, List<RegistrantEmail> originalEmailList)
         {
             foreach (var email in emailList.Where(email => email != null))
             {
-                var originalEmail = _context.RegistrantEmail.FirstOrDefault(r => r.Id == email.Id);
+                var originalEmail = originalEmailList.FirstOrDefault(r => r.Id == email.Id);
                 if (originalEmail == null) continue;
                 originalEmail.Email = email.Email;
             }
@@ -183,30 +172,30 @@ namespace InformationService.Repositories
                 originalRegistrant.Result.Size = registrant.Size;
                 originalRegistrant.Result.TeamId = registrant.TeamId;
 
-                await ModifyPhone(registrant.RegistrantPhone.ToList());
-                await ModifyEmail(registrant.RegistrantEmail.ToList());
+                ModifyPhone(registrant.RegistrantPhone.ToList(), originalRegistrant.Result.RegistrantPhone.ToList());
+                ModifyEmail(registrant.RegistrantEmail.ToList(), originalRegistrant.Result.RegistrantEmail.ToList());
                 await _context.SaveChangesAsync();
             }
         }
 
-        public async Task ModifyEmail(List<RegistrantEmail> emailList)
+        public void ModifyEmail(List<RegistrantEmail> emailList, List<RegistrantEmail> originalEmailList)
         {
-            var registrant = await _context.Registrant
-                .Where(r => r.Id == emailList[0].RegistrantId).FirstOrDefaultAsync();
+            //var registrant = await _context.Registrant
+            //    .Where(r => r.Id == emailList[0].RegistrantId).FirstOrDefaultAsync();
             List<RegistrantEmail> deletedEmail = new List<RegistrantEmail>();
             var newEmailList = emailList.Where(p => p.Id == 0).ToList();
             var oldEmailList = emailList.Where(p => p.Id != 0).ToList();
-            foreach (var phone in registrant.RegistrantEmail)
+            foreach (var email in originalEmailList)
             {
-                var exsistingEmail = emailList.Where(p => p.Id == phone.Id).FirstOrDefault();
+                var exsistingEmail = emailList.Where(p => p.Id == email.Id).FirstOrDefault();
                 if (exsistingEmail == null)
                 {
-                    deletedEmail.Add(phone);
+                    deletedEmail.Add(email);
                 }
             }
-            await UpdateEmail(oldEmailList);
-            await RemoveEmail(deletedEmail);
-            await AddEmail(newEmailList);
+            UpdateEmail(oldEmailList, originalEmailList);
+            RemoveEmail(deletedEmail, originalEmailList);
+            AddEmail(newEmailList, originalEmailList);
 
         }
     }
