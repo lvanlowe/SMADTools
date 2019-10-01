@@ -117,7 +117,7 @@ namespace InformationService.Repositories
             //_context.SaveChanges();
         }
 
-        public void ModifyPhone(List<RegistrantPhone> phoneList, List<RegistrantPhone> originalPhoneList)
+        public List<RegistrantPhone> ModifyPhone(List<RegistrantPhone> phoneList, List<RegistrantPhone> originalPhoneList)
         {
             var newPhoneList = phoneList.Where(p => p.Id == 0).ToList();
             var oldPhoneList = phoneList.Where(p => p.Id != 0).ToList();
@@ -125,6 +125,7 @@ namespace InformationService.Repositories
             UpdatePhone(oldPhoneList, originalPhoneList);
             RemovePhone(deletedPhone, originalPhoneList);
             AddPhone(newPhoneList, originalPhoneList);
+            return originalPhoneList;
         }
 
         public void AddEmail(List<RegistrantEmail> emailList, List<RegistrantEmail> originalEmailList)
@@ -167,21 +168,22 @@ namespace InformationService.Repositories
             var originalRegistrant = _context.Registrant.FirstOrDefaultAsync(r => r.Id == registrant.Id);
             if (originalRegistrant != null)
             {
+                var phoneList = ModifyPhone(registrant.RegistrantPhone.ToList(), originalRegistrant.Result.RegistrantPhone.ToList());
+                var emailList = ModifyEmail(registrant.RegistrantEmail.ToList(), originalRegistrant.Result.RegistrantEmail.ToList());
+                originalRegistrant.Result.RegistrantPhone = phoneList;
+                originalRegistrant.Result.RegistrantEmail = emailList;
                 originalRegistrant.Result.Selected = registrant.Selected;
                 originalRegistrant.Result.SportTypeId = registrant.SportTypeId;
                 originalRegistrant.Result.Size = registrant.Size;
                 originalRegistrant.Result.TeamId = registrant.TeamId;
 
-                ModifyPhone(registrant.RegistrantPhone.ToList(), originalRegistrant.Result.RegistrantPhone.ToList());
-                ModifyEmail(registrant.RegistrantEmail.ToList(), originalRegistrant.Result.RegistrantEmail.ToList());
+
                 await _context.SaveChangesAsync();
             }
         }
 
-        public void ModifyEmail(List<RegistrantEmail> emailList, List<RegistrantEmail> originalEmailList)
+        public List<RegistrantEmail> ModifyEmail(List<RegistrantEmail> emailList, List<RegistrantEmail> originalEmailList)
         {
-            //var registrant = await _context.Registrant
-            //    .Where(r => r.Id == emailList[0].RegistrantId).FirstOrDefaultAsync();
             List<RegistrantEmail> deletedEmail = new List<RegistrantEmail>();
             var newEmailList = emailList.Where(p => p.Id == 0).ToList();
             var oldEmailList = emailList.Where(p => p.Id != 0).ToList();
@@ -196,7 +198,7 @@ namespace InformationService.Repositories
             UpdateEmail(oldEmailList, originalEmailList);
             RemoveEmail(deletedEmail, originalEmailList);
             AddEmail(newEmailList, originalEmailList);
-
+            return originalEmailList;
         }
     }
 }
