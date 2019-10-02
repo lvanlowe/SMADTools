@@ -316,7 +316,7 @@ namespace InformationServiceTest.RepositoriesTest
         //[InlineData(3, 3)]
         [InlineData(2, 4)]
         //[InlineData(10, 2)]
-        public void AddPhone_When_executed_add_record(int registrantId, int expected)
+        public void AddPhone_When_executed_add_record_when_2_existing(int registrantId, int expected)
 
         {
             // Insert seed data into the database using one instance of the context
@@ -336,7 +336,56 @@ namespace InformationServiceTest.RepositoriesTest
 
             var repository = new TrainingRepository(_context);
             repository.AddPhone(phoneList, originalPhoneList);
-            //Registrant registrant = _context.Registrant.FirstOrDefault(r => r.Id == registrantId);
+
+            Assert.Equal(expected, originalPhoneList.Count);
+        }
+
+        [Theory]
+        [InlineData(3, 3)]
+        //[InlineData(2, 4)]
+        //[InlineData(10, 2)]
+        public void AddPhone_When_executed_add_record_when_1_existing(int registrantId, int expected)
+
+        {
+            // Insert seed data into the database using one instance of the context
+            InitializeRegistrants();
+            LoadRegistrants();
+
+            RegistrantPhone phone1 = new RegistrantPhone() { RegistrantId = registrantId, CanText = true, PhoneTypeId = 1, Phone = "5715551212" };
+
+            List<RegistrantPhone> phoneList = new List<RegistrantPhone> { phone1};
+
+            List<RegistrantPhone> originalPhoneList = new List<RegistrantPhone>();
+            RegistrantPhone phone21 = new RegistrantPhone() { Id = 2, RegistrantId = registrantId, CanText = true, PhoneTypeId = 1, CarrierId = 1, Phone = "3015551212" };
+            RegistrantPhone phone22 = new RegistrantPhone() { Id = 3, RegistrantId = registrantId, CanText = true, PhoneTypeId = 1, CarrierId = 1, Phone = "3105551212" };
+            originalPhoneList.Add(phone21);
+            originalPhoneList.Add(phone22);
+
+            var repository = new TrainingRepository(_context);
+            repository.AddPhone(phoneList, originalPhoneList);
+
+            Assert.Equal(expected, originalPhoneList.Count);
+        }
+
+        [Theory]
+        [InlineData(10, 2)]
+        public void AddPhone_When_executed_add_record_when_0_existing(int registrantId, int expected)
+
+        {
+            // Insert seed data into the database using one instance of the context
+            InitializeRegistrants();
+            LoadRegistrants();
+
+            List<RegistrantPhone> phoneList = new List<RegistrantPhone> {};
+
+            List<RegistrantPhone> originalPhoneList = new List<RegistrantPhone>();
+            RegistrantPhone phone21 = new RegistrantPhone() { Id = 2, RegistrantId = registrantId, CanText = true, PhoneTypeId = 1, CarrierId = 1, Phone = "3015551212" };
+            RegistrantPhone phone22 = new RegistrantPhone() { Id = 3, RegistrantId = registrantId, CanText = true, PhoneTypeId = 1, CarrierId = 1, Phone = "3105551212" };
+            originalPhoneList.Add(phone21);
+            originalPhoneList.Add(phone22);
+
+            var repository = new TrainingRepository(_context);
+            repository.AddPhone(phoneList, originalPhoneList);
 
             Assert.Equal(expected, originalPhoneList.Count);
         }
@@ -344,28 +393,14 @@ namespace InformationServiceTest.RepositoriesTest
 
         [Theory]
         //[InlineData(1, 1, 0)]
-        [InlineData(2, 1, 1)]
+        [InlineData(2, 1)]
         //[InlineData(4, 2, 0)]
-        public void RemovePhone_When_executed_remove_records(int registrantId, int count, int expected)
+        public void RemovePhone_When_executed_remove_records_1_of_2(int registrantId, int expected)
 
         {
             // Insert seed data into the database using one instance of the context
             InitializeRegistrants();
             LoadRegistrants();
-            //List<RegistrantPhone> phoneList = new List<RegistrantPhone>( );
-
-            //Registrant beginRegistrant = _context.Registrant.FirstOrDefault(r => r.Id == registrantId);
-
-            //int i = 0;
-            //foreach (var phone in beginRegistrant.RegistrantPhone)
-            //{
-            //    if (i < count)
-            //    {
-            //        phoneList.Add(phone);
-            //    }
-
-            //    i++;
-            //}
 
             RegistrantPhone phone1 = new RegistrantPhone() { Id = 2, RegistrantId = registrantId, CanText = true, PhoneTypeId = 1, CarrierId = 1, Phone = "3015551212" };
 
@@ -379,8 +414,59 @@ namespace InformationServiceTest.RepositoriesTest
 
             var repository = new TrainingRepository(_context);
             repository.RemovePhone(phoneList, originalPhoneList);
-            //Registrant registrant = _context.Registrant.FirstOrDefault(r => r.Id == registrantId);
-            //_context.SaveChanges();
+
+            Assert.Equal(expected, originalPhoneList.Count);
+        }
+
+        [Theory]
+        //[InlineData(1, 1, 0)]
+        //[InlineData(2, 1, 1)]
+        [InlineData(4, 0)]
+        public void RemovePhone_When_executed_remove_records_2_of_2(int registrantId, int expected)
+
+        {
+            // Insert seed data into the database using one instance of the context
+            InitializeRegistrants();
+            LoadRegistrants();
+
+            RegistrantPhone phone1 = new RegistrantPhone() { Id = 2, RegistrantId = registrantId, CanText = true, PhoneTypeId = 1, CarrierId = 1, Phone = "3015551212" };
+            RegistrantPhone phone2 = new RegistrantPhone() { Id = 3, RegistrantId = registrantId, CanText = true, PhoneTypeId = 1, CarrierId = 1, Phone = "3105551212" };
+
+            List<RegistrantPhone> phoneList = new List<RegistrantPhone> { phone1, phone2 };
+
+            List<RegistrantPhone> originalPhoneList = new List<RegistrantPhone>();
+            RegistrantPhone phone21 = new RegistrantPhone() { Id = 2, RegistrantId = registrantId, CanText = true, PhoneTypeId = 1, CarrierId = 1, Phone = "3015551212" };
+            RegistrantPhone phone22 = new RegistrantPhone() { Id = 3, RegistrantId = registrantId, CanText = true, PhoneTypeId = 1, CarrierId = 1, Phone = "3105551212" };
+            originalPhoneList.Add(phone21);
+            originalPhoneList.Add(phone22);
+
+            var repository = new TrainingRepository(_context);
+            repository.RemovePhone(phoneList, originalPhoneList);
+
+            Assert.Equal(expected, originalPhoneList.Count);
+        }
+
+        [Theory]
+        [InlineData(1, 0)]
+        //[InlineData(2, 1, 1)]
+        //[InlineData(4, 2, 0)]
+        public void RemovePhone_When_executed_remove_records_1_of_1(int registrantId, int expected)
+
+        {
+            // Insert seed data into the database using one instance of the context
+            InitializeRegistrants();
+            LoadRegistrants();
+
+            RegistrantPhone phone1 = new RegistrantPhone() { Id = 2, RegistrantId = registrantId, CanText = true, PhoneTypeId = 1, CarrierId = 1, Phone = "3015551212" };
+
+            List<RegistrantPhone> phoneList = new List<RegistrantPhone> { phone1 };
+
+            List<RegistrantPhone> originalPhoneList = new List<RegistrantPhone>();
+            RegistrantPhone phone21 = new RegistrantPhone() { Id = 2, RegistrantId = registrantId, CanText = true, PhoneTypeId = 1, CarrierId = 1, Phone = "3015551212" };
+            originalPhoneList.Add(phone21);
+
+            var repository = new TrainingRepository(_context);
+            repository.RemovePhone(phoneList, originalPhoneList);
 
             Assert.Equal(expected, originalPhoneList.Count);
         }
@@ -406,9 +492,6 @@ namespace InformationServiceTest.RepositoriesTest
 
             var repository = new TrainingRepository(_context);
             repository.UpdatePhone(phoneList, originalPhoneList);
-            //var registrant = _context.Registrant.FirstOrDefault(r => r.Id == registrantId);
-            //var phone1 = registrant.RegistrantPhone.FirstOrDefault(r => r.Id == 2);
-            //var phone2 = registrant.RegistrantPhone.FirstOrDefault(r => r.Id == 3);
             Assert.Equal(canText, phone21.CanText);
             Assert.Equal(!canText, phone22.CanText);
         }
@@ -425,13 +508,16 @@ namespace InformationServiceTest.RepositoriesTest
             RegistrantPhone phone = new RegistrantPhone() { Id = 3, RegistrantId = 2, CanText = canText, PhoneTypeId = 1, CarrierId = 1, Phone = "3015551212" };
             phoneList.Add(phone);
 
+            List<RegistrantPhone> originalPhoneList = new List<RegistrantPhone>();
+            RegistrantPhone phone21 = new RegistrantPhone() { Id = 2, RegistrantId = registrantId, CanText = true, PhoneTypeId = 1, CarrierId = 1, Phone = "3015551212" };
+            RegistrantPhone phone22 = new RegistrantPhone() { Id = 3, RegistrantId = registrantId, CanText = true, PhoneTypeId = 1, CarrierId = 1, Phone = "3105551212" };
+            originalPhoneList.Add(phone21);
+            originalPhoneList.Add(phone22);
+
             var repository = new TrainingRepository(_context);
-            //repository.UpdatePhone(phoneList);
-            //var registrant = _context.Registrant.FirstOrDefault(r => r.Id == registrantId);
-            //var phone1 = registrant.RegistrantPhone.FirstOrDefault(r => r.Id == 2);
-            //var phone2 = registrant.RegistrantPhone.FirstOrDefault(r => r.Id == 3);
-            //Assert.Equal(canText, phone2.CanText);
-            //Assert.Equal(!canText, phone1.CanText);
+            repository.UpdatePhone(phoneList, originalPhoneList);
+            Assert.Equal(!canText, phone21.CanText);
+            Assert.Equal(canText, phone22.CanText);
         }
 
         [Theory]
@@ -448,13 +534,17 @@ namespace InformationServiceTest.RepositoriesTest
             phoneList.Add(phoneA);
             phoneList.Add(phoneB);
 
+
+            List<RegistrantPhone> originalPhoneList = new List<RegistrantPhone>();
+            RegistrantPhone phone21 = new RegistrantPhone() { Id = 2, RegistrantId = registrantId, CanText = true, PhoneTypeId = 1, CarrierId = 1, Phone = "3015551212" };
+            RegistrantPhone phone22 = new RegistrantPhone() { Id = 3, RegistrantId = registrantId, CanText = true, PhoneTypeId = 1, CarrierId = 1, Phone = "3105551212" };
+            originalPhoneList.Add(phone21);
+            originalPhoneList.Add(phone22);
+
             var repository = new TrainingRepository(_context);
-            //repository.UpdatePhone(phoneList);
-            //var registrant = _context.Registrant.FirstOrDefault(r => r.Id == registrantId);
-            //var phone1 = registrant.RegistrantPhone.FirstOrDefault(r => r.Id == 2);
-            //var phone2 = registrant.RegistrantPhone.FirstOrDefault(r => r.Id == 3);
-            //Assert.Equal(canText, phone1.CanText);
-            //Assert.Equal(canText, phone2.CanText);
+            repository.UpdatePhone(phoneList, originalPhoneList);
+            Assert.Equal(canText, phone21.CanText);
+            Assert.Equal(canText, phone22.CanText);
         }
 
         [Theory]
@@ -510,18 +600,14 @@ namespace InformationServiceTest.RepositoriesTest
 
             var repository = new TrainingRepository(_context);
             repository.ModifyPhone(phoneList, originalPhoneList);
-
-            //var registrant = _context.Registrant.FirstOrDefault(r => r.Id == registrantId);
-            //_context.SaveChangesAsync();
-
             Assert.Equal(2, originalPhoneList.Count);
         }
 
         [Theory]
-        [InlineData(1, 3)]
+        //[InlineData(1, 3)]
         [InlineData(2, 4)]
-        [InlineData(3, 2)]
-        public void AddEmail_When_executed_add_record(int registrantId, int expected)
+        //[InlineData(3, 2)]
+        public void AddEmail_When_executed_add_record_when_2_existing(int registrantId, int expected)
 
         {
             // Insert seed data into the database using one instance of the context
@@ -533,11 +619,70 @@ namespace InformationServiceTest.RepositoriesTest
 
             List<RegistrantEmail> emailList = new List<RegistrantEmail> { email1, email2 };
 
-            var repository = new TrainingRepository(_context);
-            //repository.AddEmail(emailList);
-            //Registrant registrant = _context.Registrant.FirstOrDefault(r => r.Id == registrantId);
+            List<RegistrantEmail> originalEmailList = new List<RegistrantEmail>();
+            RegistrantEmail email21 = new RegistrantEmail() { Id = 2, Email = "bruce@batman.com", RegistrantId = 2 };
+            RegistrantEmail email22 = new RegistrantEmail() { Id = 3, Email = "alfred@batman.com", RegistrantId = 2 };
+            originalEmailList.Add(email21);
+            originalEmailList.Add(email22);
 
-            //if (registrant != null) Assert.Equal(expected, registrant.RegistrantEmail.Count);
+            var repository = new TrainingRepository(_context);
+            repository.AddEmail(emailList, originalEmailList);
+
+            Assert.Equal(expected, originalEmailList.Count);
+        }
+
+
+        [Theory]
+        [InlineData(1, 3)]
+        //[InlineData(2, 4)]
+        //[InlineData(3, 2)]
+        public void AddEmail_When_executed_add_record_when_1_existing(int registrantId, int expected)
+
+        {
+            // Insert seed data into the database using one instance of the context
+            InitializeRegistrants();
+            LoadRegistrants();
+
+            RegistrantEmail email1 = new RegistrantEmail() { RegistrantId = registrantId, Email = "arrow@dc.com" };
+
+            List<RegistrantEmail> emailList = new List<RegistrantEmail> { email1};
+
+            List<RegistrantEmail> originalEmailList = new List<RegistrantEmail>();
+            RegistrantEmail email21 = new RegistrantEmail() { Id = 2, Email = "bruce@batman.com", RegistrantId = 2 };
+            RegistrantEmail email22 = new RegistrantEmail() { Id = 3, Email = "alfred@batman.com", RegistrantId = 2 };
+            originalEmailList.Add(email21);
+            originalEmailList.Add(email22);
+
+            var repository = new TrainingRepository(_context);
+            repository.AddEmail(emailList, originalEmailList);
+
+            Assert.Equal(expected, originalEmailList.Count);
+        }
+
+
+        [Theory]
+        //[InlineData(1, 3)]
+        //[InlineData(2, 4)]
+        [InlineData(3, 2)]
+        public void AddEmail_When_executed_add_record_when_0_existing(int registrantId, int expected)
+
+        {
+            // Insert seed data into the database using one instance of the context
+            InitializeRegistrants();
+            LoadRegistrants();
+
+            List<RegistrantEmail> emailList = new List<RegistrantEmail> { };
+
+            List<RegistrantEmail> originalEmailList = new List<RegistrantEmail>();
+            RegistrantEmail email21 = new RegistrantEmail() { Id = 2, Email = "bruce@batman.com", RegistrantId = 2 };
+            RegistrantEmail email22 = new RegistrantEmail() { Id = 3, Email = "alfred@batman.com", RegistrantId = 2 };
+            originalEmailList.Add(email21);
+            originalEmailList.Add(email22);
+
+            var repository = new TrainingRepository(_context);
+            repository.AddEmail(emailList, originalEmailList);
+
+            Assert.Equal(expected, originalEmailList.Count);
         }
 
         [Theory]
