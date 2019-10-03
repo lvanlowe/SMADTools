@@ -686,36 +686,85 @@ namespace InformationServiceTest.RepositoriesTest
         }
 
         [Theory]
-        [InlineData(1, 1, 0)]
-        [InlineData(2, 1, 1)]
-        [InlineData(4, 2, 0)]
-        public void RemoveEmail_When_executed_remove_records(int registrantId, int count, int expected)
+        //[InlineData(1, 0)]
+        [InlineData(2, 1)]
+        //[InlineData(4, 2, 0)]
+        public void RemoveEmail_When_executed_remove_records_1_of_2(int registrantId, int expected)
 
         {
             // Insert seed data into the database using one instance of the context
             InitializeRegistrants();
             LoadRegistrants();
-            List<RegistrantEmail> emailList = new List<RegistrantEmail>();
 
-            Registrant beginRegistrant = _context.Registrant.FirstOrDefault(r => r.Id == registrantId);
+            RegistrantEmail email1 = new RegistrantEmail() { Id = 2, RegistrantId = registrantId, Email = "arrow@dc.com" };
 
-            int i = 0;
-            foreach (var phone in beginRegistrant.RegistrantEmail)
-            {
-                if (i < count)
-                {
-                    emailList.Add(phone);
-                }
+            List<RegistrantEmail> emailList = new List<RegistrantEmail> { email1 };
 
-                i++;
-            }
+            List<RegistrantEmail> originalEmailList = new List<RegistrantEmail>();
+            RegistrantEmail email21 = new RegistrantEmail() { Id = 2, Email = "bruce@batman.com", RegistrantId = registrantId };
+            RegistrantEmail email22 = new RegistrantEmail() { Id = 3, Email = "alfred@batman.com", RegistrantId = 2 };
+            originalEmailList.Add(email21);
+            originalEmailList.Add(email22);
 
 
             var repository = new TrainingRepository(_context);
-            //repository.RemoveEmail(emailList);
-            //Registrant registrant = _context.Registrant.FirstOrDefault(r => r.Id == registrantId);
-            //_context.SaveChanges();
-            //if (registrant != null) Assert.Equal(expected, registrant.RegistrantEmail.Count);
+            repository.RemoveEmail(emailList, originalEmailList);
+            Assert.Equal(expected, originalEmailList.Count);
+        }
+
+        [Theory]
+        //[InlineData(1, 0)]
+        //[InlineData(2, 1)]
+        [InlineData(4, 0)]
+        public void RemoveEmail_When_executed_remove_records_2_of_2(int registrantId, int expected)
+
+        {
+            // Insert seed data into the database using one instance of the context
+            InitializeRegistrants();
+            LoadRegistrants();
+
+            RegistrantEmail email1 = new RegistrantEmail() { Id = 2, RegistrantId = registrantId, Email = "arrow@dc.com" };
+            RegistrantEmail email2 = new RegistrantEmail() { Id = 3, RegistrantId = registrantId, Email = "speddy@dc.com" };
+
+            List<RegistrantEmail> emailList = new List<RegistrantEmail> { email1, email2 };
+
+            List<RegistrantEmail> originalEmailList = new List<RegistrantEmail>();
+            RegistrantEmail email21 = new RegistrantEmail() { Id = 2, Email = "bruce@batman.com", RegistrantId = registrantId };
+            RegistrantEmail email22 = new RegistrantEmail() { Id = 3, Email = "alfred@batman.com", RegistrantId = 2 };
+            originalEmailList.Add(email21);
+            originalEmailList.Add(email22);
+
+
+            var repository = new TrainingRepository(_context);
+            repository.RemoveEmail(emailList, originalEmailList);
+            Assert.Equal(expected, originalEmailList.Count);
+        }
+
+        [Theory]
+        [InlineData(1, 0)]
+        //[InlineData(2, 1, 1)]
+        //[InlineData(4, 2, 0)]
+        public void RemoveEmail_When_executed_remove_records_1_of_1(int registrantId, int expected)
+
+        {
+            // Insert seed data into the database using one instance of the context
+            InitializeRegistrants();
+            LoadRegistrants();
+
+            RegistrantEmail email1 = new RegistrantEmail() { Id = 2, RegistrantId = registrantId, Email = "arrow@dc.com" };
+
+            List<RegistrantEmail> emailList = new List<RegistrantEmail> { email1 };
+
+            List<RegistrantEmail> originalEmailList = new List<RegistrantEmail>();
+            RegistrantEmail email21 = new RegistrantEmail() { Id = 2, Email = "bruce@batman.com", RegistrantId = registrantId };
+            //RegistrantEmail email22 = new RegistrantEmail() { Id = 3, Email = "alfred@batman.com", RegistrantId = 2 };
+            originalEmailList.Add(email21);
+            //originalEmailList.Add(email22);
+
+
+            var repository = new TrainingRepository(_context);
+            repository.RemoveEmail(emailList, originalEmailList);
+            Assert.Equal(expected, originalEmailList.Count);
         }
 
         [Theory]
@@ -730,13 +779,16 @@ namespace InformationServiceTest.RepositoriesTest
             RegistrantEmail email = new RegistrantEmail() { Id = 2, RegistrantId = 2, Email = address};
             emailList.Add(email);
 
+            List<RegistrantEmail> originalEmailList = new List<RegistrantEmail>();
+            RegistrantEmail email21 = new RegistrantEmail() { Id = 2, Email = "bruce@batman.com", RegistrantId = registrantId };
+            RegistrantEmail email22 = new RegistrantEmail() { Id = 3, Email = "alfred@batman.com", RegistrantId = 2 };
+            originalEmailList.Add(email21);
+            originalEmailList.Add(email22);
+
             var repository = new TrainingRepository(_context);
-            //repository.UpdateEmail(emailList);
-            //var registrant = _context.Registrant.FirstOrDefault(r => r.Id == registrantId);
-            //var email1 = registrant.RegistrantEmail.FirstOrDefault(r => r.Id == 2);
-            //var email2 = registrant.RegistrantEmail.FirstOrDefault(r => r.Id == 3);
-            //Assert.Equal(address, email1.Email);
-            //Assert.NotEqual(address, email2.Email);
+            repository.UpdateEmail(emailList, originalEmailList);
+            Assert.Equal(address, email21.Email);
+            Assert.NotEqual(address, email22.Email);
         }
 
         [Theory]
@@ -753,13 +805,16 @@ namespace InformationServiceTest.RepositoriesTest
             emailList.Add(emailA);
             emailList.Add(emailB);
 
+            List<RegistrantEmail> originalEmailList = new List<RegistrantEmail>();
+            RegistrantEmail email21 = new RegistrantEmail() { Id = 2, Email = "bruce@batman.com", RegistrantId = registrantId };
+            RegistrantEmail email22 = new RegistrantEmail() { Id = 3, Email = "alfred@batman.com", RegistrantId = 2 };
+            originalEmailList.Add(email21);
+            originalEmailList.Add(email22);
+
             var repository = new TrainingRepository(_context);
-            //repository.UpdateEmail(emailList);
-            //var registrant = _context.Registrant.FirstOrDefault(r => r.Id == registrantId);
-            //var email1 = registrant.RegistrantEmail.FirstOrDefault(r => r.Id == 2);
-            //var email2 = registrant.RegistrantEmail.FirstOrDefault(r => r.Id == 3);
-            //Assert.Equal(address, email1.Email);
-            //Assert.Equal(address, email2.Email);
+            repository.UpdateEmail(emailList, originalEmailList);
+            Assert.Equal(address, email21.Email);
+            Assert.Equal(address, email22.Email);
         }
 
         [Theory]
@@ -774,13 +829,16 @@ namespace InformationServiceTest.RepositoriesTest
             RegistrantEmail email = new RegistrantEmail() { Id = 3, RegistrantId = 2, Email = address };
             emailList.Add(email);
 
+            List<RegistrantEmail> originalEmailList = new List<RegistrantEmail>();
+            RegistrantEmail email21 = new RegistrantEmail() { Id = 2, Email = "bruce@batman.com", RegistrantId = registrantId };
+            RegistrantEmail email22 = new RegistrantEmail() { Id = 3, Email = "alfred@batman.com", RegistrantId = 2 };
+            originalEmailList.Add(email21);
+            originalEmailList.Add(email22);
+
             var repository = new TrainingRepository(_context);
-            //repository.UpdateEmail(emailList);
-            //var registrant = _context.Registrant.FirstOrDefault(r => r.Id == registrantId);
-            //var email1 = registrant.RegistrantEmail.FirstOrDefault(r => r.Id == 2);
-            //var email2 = registrant.RegistrantEmail.FirstOrDefault(r => r.Id == 3);
-            //Assert.Equal(address, email2.Email);
-            //Assert.NotEqual(address, email1.Email);
+            repository.UpdateEmail(emailList, originalEmailList);
+            Assert.Equal(address, email22.Email);
+            Assert.NotEqual(address, email21.Email);
         }
 
         [Theory]
@@ -799,12 +857,18 @@ namespace InformationServiceTest.RepositoriesTest
             emailList.Add(emailB);
             emailList.Add(emailC);
 
+            List<RegistrantEmail> originalEmailList = new List<RegistrantEmail>();
+            RegistrantEmail email21 = new RegistrantEmail() { Id = 2, Email = "bruce@batman.com", RegistrantId = registrantId };
+            RegistrantEmail email22 = new RegistrantEmail() { Id = 3, Email = "alfred@batman.com", RegistrantId = 2 };
+            originalEmailList.Add(email21);
+            originalEmailList.Add(email22);
+
             var repository = new TrainingRepository(_context);
-            //repository.ModifyEmail(emailList);
+            repository.ModifyEmail(emailList, originalEmailList);
             //var registrant = _context.Registrant.FirstOrDefault(r => r.Id == registrantId);
-            //Assert.Equal(3, registrant.RegistrantEmail.Count);
-            //var email = registrant.RegistrantEmail.Where(p => p.Id == 2).FirstOrDefault();
-            //Assert.Equal(address, email.Email);
+            Assert.Equal(3, originalEmailList.Count);
+            var email = originalEmailList.Where(p => p.Id == 2).FirstOrDefault();
+            Assert.Equal(address, email.Email);
 
         }
 
@@ -822,12 +886,16 @@ namespace InformationServiceTest.RepositoriesTest
             emailList.Add(emailB);
             emailList.Add(emailC);
 
-            var repository = new TrainingRepository(_context);
-            //repository.ModifyEmail(emailList);
-            //var registrant = _context.Registrant.FirstOrDefault(r => r.Id == registrantId);
-            //_context.SaveChangesAsync();
+            List<RegistrantEmail> originalEmailList = new List<RegistrantEmail>();
+            RegistrantEmail email21 = new RegistrantEmail() { Id = 2, Email = "bruce@batman.com", RegistrantId = registrantId };
+            RegistrantEmail email22 = new RegistrantEmail() { Id = 3, Email = "alfred@batman.com", RegistrantId = 2 };
+            originalEmailList.Add(email21);
+            originalEmailList.Add(email22);
 
-            //Assert.Equal(2, registrant.RegistrantEmail.Count);
+            var repository = new TrainingRepository(_context);
+            repository.ModifyEmail(emailList, originalEmailList);
+            //var registrant = _context.Registrant.FirstOrDefault(r => r.Id == registrantId);
+            Assert.Equal(2, originalEmailList.Count);
         }
 
         [Theory]
@@ -870,7 +938,7 @@ namespace InformationServiceTest.RepositoriesTest
             var newRegistrant = _context.Registrant.FirstOrDefault(r => r.Id == registrantId);
             Assert.Equal(false, newRegistrant.Selected);
             Assert.Equal(3, newRegistrant.RegistrantPhone.Count);
-            //Assert.Equal(1, newRegistrant.RegistrantEmail.Count);
+            Assert.Equal(1, newRegistrant.RegistrantEmail.Count);
         }
 
     }

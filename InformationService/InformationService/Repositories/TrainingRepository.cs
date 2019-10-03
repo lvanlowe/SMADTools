@@ -141,14 +141,11 @@ namespace InformationService.Repositories
 
         public void RemoveEmail(List<RegistrantEmail> emailList, List<RegistrantEmail> originalEmailList)
         {
-            foreach (var email in emailList.Where(email => email != null))
+            foreach (var email in emailList)
             {
                 originalEmailList.RemoveAll(e => e.Id == email.Id);
 
-                _context.RegistrantEmail.Remove(email);
             }
-
-            //_context.SaveChanges();
         }
 
         public void UpdateEmail(List<RegistrantEmail> emailList, List<RegistrantEmail> originalEmailList)
@@ -184,17 +181,10 @@ namespace InformationService.Repositories
 
         public List<RegistrantEmail> ModifyEmail(List<RegistrantEmail> emailList, List<RegistrantEmail> originalEmailList)
         {
-            List<RegistrantEmail> deletedEmail = new List<RegistrantEmail>();
+            //List<RegistrantEmail> deletedEmail = new List<RegistrantEmail>();
             var newEmailList = emailList.Where(p => p.Id == 0).ToList();
             var oldEmailList = emailList.Where(p => p.Id != 0).ToList();
-            foreach (var email in originalEmailList)
-            {
-                var exsistingEmail = emailList.Where(p => p.Id == email.Id).FirstOrDefault();
-                if (exsistingEmail == null)
-                {
-                    deletedEmail.Add(email);
-                }
-            }
+            var deletedEmail = (from email in originalEmailList let existingEmail = emailList.FirstOrDefault(p => p.Id == email.Id) where existingEmail == null select email).ToList();
             UpdateEmail(oldEmailList, originalEmailList);
             RemoveEmail(deletedEmail, originalEmailList);
             AddEmail(newEmailList, originalEmailList);
