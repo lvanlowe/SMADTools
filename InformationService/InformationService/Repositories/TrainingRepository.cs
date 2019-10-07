@@ -69,7 +69,7 @@ namespace InformationService.Repositories
             return registrants;
         }
 
-        public async Task AddRegisteredAthlete(int registrantId, int athleteId)
+        public async Task<Registrant> AddRegisteredAthlete(int registrantId, int athleteId)
         {
             var athlete = new RegisteredAthlete() { AthletesId = athleteId, RegistrantId = registrantId };
             var registrant = await _context.Registrant
@@ -77,6 +77,7 @@ namespace InformationService.Repositories
             registrant?.RegisteredAthlete.Add(athlete);
             _context.SaveChanges();
 
+            return registrant;
         }
 
         public void AddPhone(List<RegistrantPhone> phoneList, List<RegistrantPhone> originalPhoneList)
