@@ -13,4 +13,10 @@
     </PackageReference>
   </ItemGroup>
 
+  <ItemGroup>
+    <ProjectReference Include="..\..\InformationService\InformationService\InformationService.csproj" />
+    <ProjectReference Include="..\..\InterfaceModels\InterfaceModels.csproj" />
+    <ProjectReference Include="..\TrainingManagingWorker\TrainingManagingWorker.csproj" />
+  </ItemGroup>
+
 </Project>
