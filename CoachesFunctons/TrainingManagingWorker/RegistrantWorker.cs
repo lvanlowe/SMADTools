@@ -37,6 +37,7 @@ namespace TrainingManagingWorker
             }
 
             PreparePhones(registrant, dto);
+            PrepareEmail(registrant, dto);
 
             return dto;
         }
@@ -72,6 +73,33 @@ namespace TrainingManagingWorker
                 }
             }
         }
+
+        private static void PrepareEmail(Registrant registrant, RegistrantDto dto)
+        {
+            var emailList = registrant.RegistrantEmail.ToList();
+            foreach (var email in emailList)
+            {
+                if (dto.RegistrantEmail1Id == 0)
+                {
+                    dto.Email1 = email.Email;
+                    dto.RegistrantEmail1Id = email.Id;
+                }
+                else
+                {
+                    if (dto.RegistrantEmail2Id == 0)
+                    {
+                        dto.Email2 = email.Email;
+                        dto.RegistrantEmail2Id = email.Id;
+                    }
+                    else
+                    {
+                        dto.Email3 = email.Email;
+                        dto.RegistrantEmail3Id = email.Id;
+                    }
+                }
+            }
+        }
+
     }
 }
 
