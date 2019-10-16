@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using InformationService.Interfaces;
 using InformationService.Models;
@@ -9,10 +10,15 @@ namespace TrainingManagingWorker
     public class RegistrantWorker
     {
         private ITrainingRepository _trainingRepository;
+        private List<Athletes> _athletes;
+        private IOrganizationRepository _organizationRepository;
 
-        public RegistrantWorker(ITrainingRepository trainingRepository)
+        public RegistrantWorker(ITrainingRepository trainingRepository, IOrganizationRepository organizationRepository)
         {
             _trainingRepository = trainingRepository;
+            _organizationRepository = organizationRepository;
+            var athletes = _organizationRepository.GetAllAthletes();
+            _athletes = athletes.Result;
         }
 
         public RegistrantDto PrepareRegistrantDataForClient(Registrant registrant)

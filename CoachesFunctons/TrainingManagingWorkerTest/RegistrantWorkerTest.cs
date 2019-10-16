@@ -12,12 +12,14 @@ namespace TrainingManagingWorkerTest
     public class RegistrantWorkerTest
     {
         private Mock<ITrainingRepository> _mockTrainingRepository;
+        private Mock<IOrganizationRepository> _mockOrganizationRepository;
         private RegistrantWorker _worker;
 
         public RegistrantWorkerTest()
         {
             _mockTrainingRepository = new Mock<ITrainingRepository>();
-            _worker = new RegistrantWorker(_mockTrainingRepository.Object);
+            _mockOrganizationRepository = new Mock<IOrganizationRepository>();
+            _worker = new RegistrantWorker(_mockTrainingRepository.Object, _mockOrganizationRepository.Object);
         }
 
         [Theory]
