@@ -40,6 +40,13 @@ namespace TrainingManagingWorker
             {
                 dto.RegisteredAthletesId = athlete.Id;
                 dto.AthletesId = athlete.AthletesId;
+                var selectedAthlete = _athletes.FirstOrDefault(a => a.Id == athlete.Id);
+                if (selectedAthlete != null)
+                {
+                    dto.BirthDate = selectedAthlete.BirthDate;
+                    dto.MedicalExpirationDate = selectedAthlete.MedicalExpirationDate;
+                    dto.Gender = selectedAthlete.MF;
+                }
             }
 
             PreparePhones(registrant, dto);

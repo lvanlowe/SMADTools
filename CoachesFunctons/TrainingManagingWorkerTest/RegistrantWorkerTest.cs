@@ -14,13 +14,22 @@ namespace TrainingManagingWorkerTest
         private Mock<ITrainingRepository> _mockTrainingRepository;
         private Mock<IOrganizationRepository> _mockOrganizationRepository;
         private RegistrantWorker _worker;
+        private Athletes _athlete1;
+        private Athletes _athlete2;
 
         public RegistrantWorkerTest()
         {
             _mockTrainingRepository = new Mock<ITrainingRepository>();
             _mockOrganizationRepository = new Mock<IOrganizationRepository>();
+            _athlete1 = new Athletes { Id = 67, BirthDate = new DateTime(1985, 1, 17), MF = "M", MedicalExpirationDate = new DateTime(2 / 22 / 2020) };
+            _athlete2 = new Athletes { Id = 219, BirthDate = new DateTime(1970, 10, 29), MF = "M", MedicalExpirationDate = new DateTime(8 / 5 / 2018) };
+            List<Athletes> athletes = new List<Athletes> { _athlete1, _athlete2 };
+
+            _mockOrganizationRepository.Setup(repository => repository.GetAllAthletes()).ReturnsAsync(athletes);
+
             _worker = new RegistrantWorker(_mockTrainingRepository.Object, _mockOrganizationRepository.Object);
         }
+
 
         [Theory]
         [InlineData(1, 1)]
@@ -81,6 +90,7 @@ namespace TrainingManagingWorkerTest
         public void PerpareRegistrantDataForClient_With_Athlete_When_executed_return_dto(int sportId, int expected)
 
         {
+
             RegisteredAthlete athlete = new RegisteredAthlete{AthletesId = 219, Id = 67};
             Registrant registrant = new Registrant
             {
@@ -100,6 +110,9 @@ namespace TrainingManagingWorkerTest
             RegistrantDto actual = _worker.PrepareRegistrantDataForClient(registrant);
             Assert.Equal(athlete.Id, actual.RegisteredAthletesId);
             Assert.Equal(athlete.AthletesId, actual.AthletesId);
+            Assert.Equal(_athlete1.BirthDate, actual.BirthDate);
+            Assert.Equal(_athlete1.MedicalExpirationDate, actual.MedicalExpirationDate);
+            Assert.Equal(_athlete1.MF, actual.Gender);
 
         }
 
