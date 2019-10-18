@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading.Tasks;
 using InformationService.Interfaces;
 using InformationService.Models;
 using InterfaceModels;
@@ -19,6 +20,18 @@ namespace TrainingManagingWorker
             _organizationRepository = organizationRepository;
             var athletes = _organizationRepository.GetAllAthletes();
             _athletes = athletes.Result;
+        }
+
+        public async Task<List<RegistrantDto>> GetRegistrantsForSport(int sportId)
+        {
+            List<RegistrantDto> registrantsList = new List<RegistrantDto>();
+
+            var registrants = await _trainingRepository.GetRegistrantsBySport(sportId);
+            foreach (var registrant in registrants)
+            {
+                registrantsList.Add(PrepareRegistrantDataForClient(registrant));
+            }
+            return registrantsList;
         }
 
         public RegistrantDto PrepareRegistrantDataForClient(Registrant registrant)

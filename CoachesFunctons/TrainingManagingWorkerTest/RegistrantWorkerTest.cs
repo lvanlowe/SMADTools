@@ -2,7 +2,10 @@
 using System.Collections.Generic;
 using InformationService.Interfaces;
 using InformationService.Models;
+using InformationService.Repositories;
 using InterfaceModels;
+using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Configuration;
 using Moq;
 using TrainingManagingWorker;
 using Xunit;
@@ -323,6 +326,46 @@ namespace TrainingManagingWorkerTest
             Assert.Equal(email2.Email, actual.Email2);
             Assert.Equal(email3.Id, actual.RegistrantEmail3Id);
             Assert.Equal(email3.Email, actual.Email3);
+
+        }
+
+        [Theory]
+        [InlineData(6, null, null, null, null, null, 1)]
+        public void SendEmailsForSport_WithoutMock(int sportId, int? locationId, int? categoryId, int? teamId, bool? selected, bool? volunteerOnly, int expected)
+
+        {
+
+            //IConfiguration config = new ConfigurationBuilder().AddJsonFile("appsettings.test.json").Build();
+            //var connectionString = config["TrainingDatabase"];
+            //var options = new DbContextOptionsBuilder<PwsodbContext>().UseSqlServer(connectionString).Options;
+
+            //PwsodbContext context = new PwsodbContext(options);
+
+            //var fromEmail = config["FromEmail"];
+            //const string subject = "Sending with SendGrid is Fun";
+            //const string plainTextContent = "and easy to do anywhere, even with C#";
+            //const string htmlContent = "<br>Hi {{deacon}}<br><br>&nbsp;&nbsp;&nbsp;&nbsp;Just a reminder you are the Deacon on Duty for {{month}},<br><br>&nbsp;&nbsp;&nbsp;&nbsp;You will responsible to lock up the church on Sundays after worship. If you are not going to be there then it is your responsibility to get another Deacon to close up for you. You are responsible for taking out the trash. Also make sure the offering baskets are out for the next week.<br><br>&nbsp;&nbsp;&nbsp;&nbsp;If you are going to miss more than one Sunday in {{month}} please change with another deacon";
+            //CoachEmailDto message = new CoachEmailDto
+            //{
+            //    SportId = sportId,
+            //    From = fromEmail,
+            //    HtmlContent = htmlContent,
+            //    PlainTextContent = plainTextContent,
+            //    Subject = subject,
+            //    IsVolunteer = volunteerOnly,
+            //    Selected = selected,
+            //    ProgramId = locationId,
+            //    SportTypeId = categoryId,
+            //    TeamId = teamId
+            //};
+            //ITrainingRepository trainingRepository = new TrainingRepository(context);
+            //var apiKey = config["ApiKey"];
+            ////IEmailRepository emailRepository = new EmailRepository(apiKey);
+            ////EmailWorker worker = new EmailWorker(trainingRepository, emailRepository);
+
+
+            ////var actual = worker.SendEmailsForSport(message);
+            ////Assert.Equal(expected, actual.Result);
 
         }
 
