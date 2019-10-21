@@ -64,7 +64,11 @@ namespace InformationService.Repositories
         public async Task<List<Registrant>> GetRegistrantsBySport(int sportId)
         {
             var registrants = await _context.Registrant
-                .Where(c => c.SportId == sportId && c.Year != "1999").ToListAsync();
+                .Where(c => c.SportId == sportId && c.Year != "1999")
+                .Include(e => e.RegistrantEmail).ThenInclude(er => er.Registrant)
+                .Include(p => p.RegistrantPhone).ThenInclude(pr => pr.Registrant)
+                .Include(a => a.RegisteredAthlete).ThenInclude(ar => ar.Registrant)
+                .ToListAsync();
 
             return registrants;
         }
