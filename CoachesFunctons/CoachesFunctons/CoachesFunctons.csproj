@@ -11,6 +11,7 @@
     <ProjectReference Include="..\..\InterfaceModels\InterfaceModels.csproj" />
     <ProjectReference Include="..\..\NotificationService\NotificationService\NotificationService.csproj" />
     <ProjectReference Include="..\..\TrainingNotificationWorker\TrainingNotificationWorker.csproj" />
+    <ProjectReference Include="..\TrainingManagingWorker\TrainingManagingWorker.csproj" />
   </ItemGroup>
   <ItemGroup>
     <None Update="host.json">

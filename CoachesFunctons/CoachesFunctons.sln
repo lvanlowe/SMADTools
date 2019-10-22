@@ -15,9 +15,9 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "InterfaceModels", "..\Inter
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "TrainingNotificationWorkerTest", "TrainingNotificationWorkerTest\TrainingNotificationWorkerTest.csproj", "{07592BF9-B12E-4E07-B99F-584BDC4D41AE}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TrainingManagingWorker", "TrainingManagingWorker\TrainingManagingWorker.csproj", "{7F352EF2-E259-45C5-A6F7-790A48EA32F1}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "TrainingManagingWorker", "TrainingManagingWorker\TrainingManagingWorker.csproj", "{7F352EF2-E259-45C5-A6F7-790A48EA32F1}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TrainingManagingWorkerTest", "TrainingManagingWorkerTest\TrainingManagingWorkerTest.csproj", "{F3344429-1A42-4383-A4C0-4B232804D7D0}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "TrainingManagingWorkerTest", "TrainingManagingWorkerTest\TrainingManagingWorkerTest.csproj", "{F3344429-1A42-4383-A4C0-4B232804D7D0}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
