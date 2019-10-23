@@ -34,7 +34,7 @@ namespace CoachesFunctons
             {
 
                 var trainingConnectionString = System.Environment.GetEnvironmentVariable("SQLAZURECONNSTR_TrainingModel");
-                var organizationConnectionString = System.Environment.GetEnvironmentVariable("OrganizationModel");
+                var organizationConnectionString = System.Environment.GetEnvironmentVariable("SQLCONNSTR_OrganizationModel");
                 var trainingOptions = new DbContextOptionsBuilder<PwsodbContext>().UseSqlServer(trainingConnectionString ?? throw new InvalidOperationException()).Options;
                 var organizationOptions = new DbContextOptionsBuilder<PwsoContext>().UseSqlServer(organizationConnectionString ?? throw new InvalidOperationException()).Options;
 
