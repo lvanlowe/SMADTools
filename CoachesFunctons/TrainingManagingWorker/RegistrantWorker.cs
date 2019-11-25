@@ -53,7 +53,7 @@ namespace TrainingManagingWorker
             {
                 dto.RegisteredAthletesId = athlete.Id;
                 dto.AthletesId = athlete.AthletesId;
-                var selectedAthlete = _athletes.FirstOrDefault(a => a.Id == athlete.Id);
+                var selectedAthlete = _athletes.FirstOrDefault(a => a.Id == athlete.AthletesId);
                 if (selectedAthlete != null)
                 {
                     dto.BirthDate = selectedAthlete.BirthDate;
