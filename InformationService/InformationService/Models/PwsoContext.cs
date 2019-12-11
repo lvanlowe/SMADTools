@@ -21,6 +21,7 @@ namespace InformationService.Models
         public virtual DbSet<Athletes> Athletes { get; set; }
         public virtual DbSet<Event> Event { get; set; }
         public virtual DbSet<Teams> Team { get; set; }
+        public virtual DbSet<Newsletter> Newsletter { get; set; }
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {

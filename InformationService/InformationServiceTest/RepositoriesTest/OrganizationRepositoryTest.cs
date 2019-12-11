@@ -27,6 +27,13 @@ namespace InformationServiceTest.RepositoriesTest
             _context.SaveChanges();
         }
 
+        private void InitializeEmails()
+        {
+            var emails = _context.Newsletter.ToListAsync();
+            _context.RemoveRange(emails.Result);
+            _context.SaveChanges();
+        }
+
         private void InsertAthletes()
         {
             _context.Athletes.Add(new Athletes { Id = 1, FirstName = "Clark", LastName = "Kent" });
@@ -39,6 +46,16 @@ namespace InformationServiceTest.RepositoriesTest
             _context.SaveChanges();
         }
 
+        private void InsertEmails()
+        {
+            _context.Newsletter.Add(new Newsletter { Id = 1, FirstName = "Clark", LastName = "Kent", Email = "superman@dc.com",IsAthlete = true, IsVolunteer = false});
+            _context.Newsletter.Add(new Newsletter { Id = 2, FirstName = "Bruce", LastName = "Wayne", Email = "superman@dc.com", IsAthlete = true, IsVolunteer = true });
+            _context.Newsletter.Add(new Newsletter { Id = 3, FirstName = "Diana", LastName = "Prince", Email = "superman@dc.com", IsAthlete = false, IsVolunteer = true });
+            _context.Newsletter.Add(new Newsletter { Id = 4, FirstName = "Barry", LastName = "Allen", Email = "superman@dc.com", IsAthlete = true, IsVolunteer = false });
+            _context.Newsletter.Add(new Newsletter { Id = 5, FirstName = "Hal", LastName = "Jordon", Email = "superman@dc.com", IsAthlete = true, IsVolunteer = true });
+
+            _context.SaveChanges();
+        }
 
         [Theory]
         [InlineData(3)]
@@ -131,6 +148,24 @@ namespace InformationServiceTest.RepositoriesTest
 
             Assert.Equal(firstName, actual.Result.FirstName);
             Assert.Equal(lastName, actual.Result.LastName);
+
+        }
+
+        [Theory]
+        [InlineData(true, false, 4)]
+        //[InlineData("Diana", "Prince", 3)]
+        //[InlineData("Hal", "Jordon", 5)]
+        public void GetEmails_When_found_Then_emails(bool isAthlete, bool isVolunteer, int count)
+
+        {
+            // Insert seed data into the database using one instance of the context
+            InitializeEmails();
+            InsertEmails();
+
+            var repository = new OrganizationRepository(_context);
+            var actual = repository.GetEmails(isAthlete, isVolunteer);
+
+            Assert.Equal(count, actual.Result.Count);
 
         }
 

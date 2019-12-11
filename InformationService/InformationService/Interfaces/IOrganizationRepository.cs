@@ -12,5 +12,7 @@ namespace InformationService.Interfaces
         Task<List<Athletes>> FindAthletesByFirstLetter(char letter);
         Task<Athletes> FindAthleteByName(string firstName, string lastName);
         Task<Athletes> FindAthleteById(int id);
+        Task<List<string>> GetEmails(bool isVolunteer, bool isAthlete);
+
     }
 }

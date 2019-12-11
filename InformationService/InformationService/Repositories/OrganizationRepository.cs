@@ -41,5 +41,10 @@ namespace InformationService.Repositories
                 .FirstOrDefaultAsync();
             return athlete;
         }
+
+        public Task<List<string>> GetEmails(bool isVolunteer, bool isAthlete)
+        {
+            throw new System.NotImplementedException();
+        }
     }
 }
