@@ -42,9 +42,11 @@ namespace InformationService.Repositories
             return athlete;
         }
 
-        public Task<List<string>> GetEmails(bool isVolunteer, bool isAthlete)
+        public async Task<List<string>> GetEmails(bool isVolunteer, bool isAthlete)
         {
-            throw new System.NotImplementedException();
+            var emails = await _context.Newsletter.Where(n => n.IsVolunteer == isVolunteer || n.IsAthlete == isAthlete)
+                .Select(  n => n.Email).ToListAsync();
+            return emails;
         }
     }
 }

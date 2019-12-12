@@ -152,9 +152,9 @@ namespace InformationServiceTest.RepositoriesTest
         }
 
         [Theory]
-        [InlineData(true, false, 4)]
-        //[InlineData("Diana", "Prince", 3)]
-        //[InlineData("Hal", "Jordon", 5)]
+        [InlineData(true, false, 3)]
+        [InlineData(false, true, 4)]
+        [InlineData(true, true, 5)]
         public void GetEmails_When_found_Then_emails(bool isAthlete, bool isVolunteer, int count)
 
         {
