@@ -11,6 +11,8 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "InformationService", "..\In
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "TrainingNotificationWorker", "..\TrainingNotificationWorker\TrainingNotificationWorker.csproj", "{D028E0B0-68E2-480A-B58F-684498F72EB9}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AdministrativeManagingWorker", "..\AdministrativeManagingWorker\AdministrativeManagingWorker.csproj", "{041D2961-01F9-4581-B927-AA6C3BD2A4FB}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -33,6 +35,10 @@ Global
 		{D028E0B0-68E2-480A-B58F-684498F72EB9}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{D028E0B0-68E2-480A-B58F-684498F72EB9}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{D028E0B0-68E2-480A-B58F-684498F72EB9}.Release|Any CPU.Build.0 = Release|Any CPU
+		{041D2961-01F9-4581-B927-AA6C3BD2A4FB}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{041D2961-01F9-4581-B927-AA6C3BD2A4FB}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{041D2961-01F9-4581-B927-AA6C3BD2A4FB}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{041D2961-01F9-4581-B927-AA6C3BD2A4FB}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
