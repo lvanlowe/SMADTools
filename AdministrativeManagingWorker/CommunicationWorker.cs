@@ -2,7 +2,7 @@
 
 namespace AdministrativeManagingWorker
 {
-    public class Class1
+    public class CommunicationWorker
     {
     }
 }

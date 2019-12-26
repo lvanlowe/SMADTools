@@ -3,7 +3,7 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 16
 VisualStudioVersion = 16.0.29418.71
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "OrganizationalFunctions", "OrganizationalFunctions\OrganizationalFunctions.csproj", "{71C0D20A-5D2E-48C7-9A36-163BC76E3AB2}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "OrganizationalFunctions", "OrganizationalFunctions\OrganizationalFunctions.csproj", "{71C0D20A-5D2E-48C7-9A36-163BC76E3AB2}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "NotificationService", "..\NotificationService\NotificationService\NotificationService.csproj", "{DACB6676-8223-4C7C-BF38-C49B51139F8F}"
 EndProject
@@ -11,7 +11,9 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "InformationService", "..\In
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "TrainingNotificationWorker", "..\TrainingNotificationWorker\TrainingNotificationWorker.csproj", "{D028E0B0-68E2-480A-B58F-684498F72EB9}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AdministrativeManagingWorker", "..\AdministrativeManagingWorker\AdministrativeManagingWorker.csproj", "{041D2961-01F9-4581-B927-AA6C3BD2A4FB}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "AdministrativeManagingWorker", "..\AdministrativeManagingWorker\AdministrativeManagingWorker.csproj", "{041D2961-01F9-4581-B927-AA6C3BD2A4FB}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AdministrativeManagingWorkerTest", "..\AdministrativeManagingWorkerTest\AdministrativeManagingWorkerTest.csproj", "{65467230-8CA9-40A7-800B-FF5CDED33D9D}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -39,6 +41,10 @@ Global
 		{041D2961-01F9-4581-B927-AA6C3BD2A4FB}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{041D2961-01F9-4581-B927-AA6C3BD2A4FB}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{041D2961-01F9-4581-B927-AA6C3BD2A4FB}.Release|Any CPU.Build.0 = Release|Any CPU
+		{65467230-8CA9-40A7-800B-FF5CDED33D9D}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{65467230-8CA9-40A7-800B-FF5CDED33D9D}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{65467230-8CA9-40A7-800B-FF5CDED33D9D}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{65467230-8CA9-40A7-800B-FF5CDED33D9D}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
