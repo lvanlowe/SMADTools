@@ -23,7 +23,11 @@ namespace TrainingNotificationWorkerTest
     public class EmailWorkerTest
     {
         private List<List<SportEmails>> _emailList;
+        private List<string> _volunteerList;
+        private List<string> _athleteList;
+        private List<string> _jointList;
         private Mock<ITrainingRepository> _mockTrainingRepository;
+        private Mock<IOrganizationRepository> _mockIOrganizationRepository;
         private Mock<IEmailRepository> _mockEmailRepository;
         private EmailWorker _worker;
         public EmailWorkerTest()
@@ -36,6 +40,7 @@ namespace TrainingNotificationWorkerTest
 
         private void LoadEmails()
         {
+
             _emailList = new List<List<SportEmails>>();
             List<SportEmails> emails1 = new List<SportEmails>();
             emails1.Add(new SportEmails { FirstName = "Bruce", Email = "Batman@dc.com", LastName = "Wayne", NickName = "Batman", IsVolunteer = true});
@@ -176,6 +181,32 @@ namespace TrainingNotificationWorkerTest
             emails5.Add(new SportEmails { FirstName = "Bruce", Email = "batman@dc.com", LastName = "Wayne", NickName = "Batman", ProgramId = 8, SportTypeId = 8, TeamId = 11 });
             emails5.Add(new SportEmails { FirstName = "Bruce", Email = "batman@dc.com", LastName = "Wayne", NickName = "Batman", ProgramId = 8, SportTypeId = 8, TeamId = 11 });
             _emailList.Add(emails5);
+
+
+            _volunteerList = new List<string>();
+            _volunteerList.Add("batman@dc.com");
+            _volunteerList.Add("superman@dc.com");
+            _volunteerList.Add("wonderwoman@dc.com");
+            _volunteerList.Add("robin@dc.com");
+
+            _athleteList = new List<string>();
+            _athleteList.Add("robin@dc.com");
+            _athleteList.Add("raven@dc.com");
+            _athleteList.Add("cyclops@dc.com");
+            _athleteList.Add("starfire@dc.com");
+            _athleteList.Add("wondergirl@dc.com");
+            _athleteList.Add("beastboy@dc.com");
+
+            _jointList = new List<string>();
+            _jointList.Add("batman@dc.com");
+            _jointList.Add("superman@dc.com");
+            _jointList.Add("wonderwoman@dc.com");
+            _jointList.Add("robin@dc.com");
+            _jointList.Add("raven@dc.com");
+            _jointList.Add("cyclops@dc.com");
+            _jointList.Add("starfire@dc.com");
+            _jointList.Add("wondergirl@dc.com");
+            _jointList.Add("beastboy@dc.com");
 
         }
 
@@ -384,5 +415,42 @@ namespace TrainingNotificationWorkerTest
             //Assert.Equal(expected, actual.Result);
 
         }
+
+
+        [Theory]
+        [InlineData(true, false, 4)]
+        //[InlineData(false, true, 6)]
+        //[InlineData(true, true, 9)]
+        public void SendAdminEmails_When_executed_x_emails_sent(bool isAthlete, bool isVolunteer, int expected)
+
+        {
+            LoadEmails();
+            _mockIOrganizationRepository = new Mock<IOrganizationRepository>();
+            _worker = new EmailWorker(_mockIOrganizationRepository.Object, _mockEmailRepository.Object);
+
+            _mockIOrganizationRepository.Setup(repository => repository.GetEmails(true, false)).ReturnsAsync(_volunteerList);
+            _mockIOrganizationRepository.Setup(repository => repository.GetEmails(false, true)).ReturnsAsync(_athleteList);
+            _mockIOrganizationRepository.Setup(repository => repository.GetEmails(true, true)).ReturnsAsync(_jointList);
+
+            const string fromEmail = "superman@dc.com";
+            const string subject = "Sending with SendGrid is Fun";
+            const string plainTextContent = "and easy to do anywhere, even with C#";
+            const string htmlContent = "<br>Hi {{deacon}}<br><br>&nbsp;&nbsp;&nbsp;&nbsp;Just a reminder you are the Deacon on Duty for {{month}},<br><br>&nbsp;&nbsp;&nbsp;&nbsp;You will responsible to lock up the church on Sundays after worship. If you are not going to be there then it is your responsibility to get another Deacon to close up for you. You are responsible for taking out the trash. Also make sure the offering baskets are out for the next week.<br><br>&nbsp;&nbsp;&nbsp;&nbsp;If you are going to miss more than one Sunday in {{month}} please change with another deacon";
+            OrganizationEmailDto message = new OrganizationEmailDto
+            {
+                From = fromEmail,
+                HtmlContent = htmlContent,
+                PlainTextContent = plainTextContent,
+                Subject = subject,
+                IsVolunteer = isVolunteer,
+                IsAthlete = isAthlete,
+            };
+
+            var actual = _worker.SendAdminEmails(message);
+            _mockEmailRepository.Verify(mock => mock.SendEmailString(fromEmail, It.IsAny<string>(), subject, plainTextContent, htmlContent), Times.Exactly(expected));
+            Assert.Equal(expected, actual.Result);
+
+        }
+
     }
 }

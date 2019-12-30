@@ -18,11 +18,18 @@ namespace TrainingNotificationWorker
     {
 
         private ITrainingRepository _trainingRepository;
+        private IOrganizationRepository _organizationRepository;
         private IEmailRepository _emailRepository;
 
         public EmailWorker(ITrainingRepository trainingRepository, IEmailRepository emailRepository)
         {
             _trainingRepository = trainingRepository;
+            _emailRepository = emailRepository;
+        }
+
+        public EmailWorker(IOrganizationRepository organizationRepository, IEmailRepository emailRepository)
+        {
+            _organizationRepository = organizationRepository;
             _emailRepository = emailRepository;
         }
 
@@ -58,5 +65,9 @@ namespace TrainingNotificationWorker
         }
 
 
+        public async Task<int> SendAdminEmails(OrganizationEmailDto message)
+        {
+            throw new NotImplementedException();
+        }
     }
 }
