@@ -67,7 +67,18 @@ namespace TrainingNotificationWorker
 
         public async Task<int> SendAdminEmails(OrganizationEmailDto message)
         {
-            throw new NotImplementedException();
+            var emailList = await GetEmailsForOrganization(message.IsVolunteer, message.IsAthlete);
+            emailList = emailList.ConvertAll(d => d.ToLower());
+            emailList = emailList.Distinct().ToList();
+            await SendEmailsAsync(emailList, message.From, message.Subject, message.PlainTextContent, message.HtmlContent);
+            return emailList.Count;
+
+        }
+
+        public async Task<List<string>> GetEmailsForOrganization(bool isVolunteer, bool isAthlete)
+        {
+            var emails = await _organizationRepository.GetEmails(isVolunteer, isAthlete);
+            return emails;
         }
     }
 }

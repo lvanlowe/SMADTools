@@ -11,8 +11,8 @@ namespace InterfaceModels
         public string Subject { get; set; }
         public string PlainTextContent { get; set; }
         public string HtmlContent { get; set; }
-        public bool? IsAthlete { get; set; }
-        public bool? IsVolunteer { get; set; }
+        public bool IsAthlete { get; set; }
+        public bool IsVolunteer { get; set; }
 
     }
 }

@@ -207,6 +207,7 @@ namespace TrainingNotificationWorkerTest
             _jointList.Add("starfire@dc.com");
             _jointList.Add("wondergirl@dc.com");
             _jointList.Add("beastboy@dc.com");
+            _jointList.Add("Robin@dc.com");
 
         }
 
@@ -418,9 +419,9 @@ namespace TrainingNotificationWorkerTest
 
 
         [Theory]
-        [InlineData(true, false, 4)]
-        //[InlineData(false, true, 6)]
-        //[InlineData(true, true, 9)]
+        [InlineData(true, false, 6)]
+        [InlineData(false, true, 4)]
+        [InlineData(true, true, 9)]
         public void SendAdminEmails_When_executed_x_emails_sent(bool isAthlete, bool isVolunteer, int expected)
 
         {
@@ -452,5 +453,23 @@ namespace TrainingNotificationWorkerTest
 
         }
 
+        [Theory]
+        [InlineData(true, false, 6)]
+        [InlineData(false, true, 4)]
+        [InlineData(true, true, 10)]
+        public void GetEmailsForOrganization_When_executed_create_list_of_SportEmails(bool isAthlete, bool isVolunteer, int expected)
+
+        {
+            LoadEmails();
+            _mockIOrganizationRepository = new Mock<IOrganizationRepository>();
+            _worker = new EmailWorker(_mockIOrganizationRepository.Object, _mockEmailRepository.Object);
+
+            _mockIOrganizationRepository.Setup(repository => repository.GetEmails(true, false)).ReturnsAsync(_volunteerList);
+            _mockIOrganizationRepository.Setup(repository => repository.GetEmails(false, true)).ReturnsAsync(_athleteList);
+            _mockIOrganizationRepository.Setup(repository => repository.GetEmails(true, true)).ReturnsAsync(_jointList);
+            var actual = _worker.GetEmailsForOrganization(isVolunteer, isAthlete);
+            Assert.Equal(expected, actual.Result.Count);
+
+        }
     }
 }
