@@ -11,6 +11,7 @@ using InformationService.Repositories;
 using InterfaceModels;
 using Microsoft.EntityFrameworkCore;
 using NotificationService.Interfaces;
+using Remotion.Linq.Parsing.ExpressionVisitors.Transformation.PredefinedTransformations;
 
 namespace TrainingNotificationWorker
 {
@@ -68,6 +69,14 @@ namespace TrainingNotificationWorker
         public async Task<int> SendAdminEmails(OrganizationEmailDto message)
         {
             var emailList = await GetEmailsForOrganization(message.IsVolunteer, message.IsAthlete);
+            if (message.IsTesting)
+            {
+                var testEmails = new List<string>
+                {
+                    "van@nuttin-but.net", "lvanlowe@comcast.net", "webmaster@pwsova.org"
+                };
+                emailList = testEmails;
+            }
             emailList = emailList.ConvertAll(d => d.ToLower());
             emailList = emailList.Distinct().ToList();
             await SendEmailsAsync(emailList, message.From, message.Subject, message.PlainTextContent, message.HtmlContent);

@@ -13,6 +13,7 @@ namespace InterfaceModels
         public string HtmlContent { get; set; }
         public bool IsAthlete { get; set; }
         public bool IsVolunteer { get; set; }
+        public bool IsTesting { get; set; }
 
     }
 }
