@@ -77,6 +77,7 @@ namespace TrainingNotificationWorker
                 };
                 emailList = testEmails;
             }
+            emailList.Add(message.From);
             emailList = emailList.ConvertAll(d => d.ToLower());
             emailList = emailList.Distinct().ToList();
             await SendEmailsAsync(emailList, message.From, message.Subject, message.PlainTextContent, message.HtmlContent);
