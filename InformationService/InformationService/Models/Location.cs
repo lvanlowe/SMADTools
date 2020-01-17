@@ -7,15 +7,21 @@ namespace InformationService.Models
     {
         public Location()
         {
-            Coach = new HashSet<Coach>();
+            CalendarItems = new HashSet<CalendarItem>();
         }
 
-        public int Id { get; set; }
-        public string Name { get; set; }
-        public int Year { get; set; }
-        public int SportId { get; set; }
+        public long id { get; set; }
 
-        public virtual Sports Sport { get; set; }
-        public virtual ICollection<Coach> Coach { get; set; }
+        public string Name { get; set; }
+
+        public string Street { get; set; }
+
+        public string City { get; set; }
+
+        public string State { get; set; }
+
+        public string Zip { get; set; }
+
+        public virtual ICollection<CalendarItem> CalendarItems { get; set; }
     }
 }

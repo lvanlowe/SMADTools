@@ -28,6 +28,13 @@ namespace InformationService.Models
         public virtual DbSet<SportTypes> SportTypes { get; set; }
         public virtual DbSet<Teams> Teams { get; set; }
         public virtual DbSet<Uniforms> Uniforms { get; set; }
+        public virtual DbSet<CalendarItem> CalendarItems { get; set; }
+        public virtual DbSet<CalendarLength> CalendarLengths { get; set; }
+        public virtual DbSet<CalendarTime> CalendarTimes { get; set; }
+        public virtual DbSet<PracticeCalendarItem> PracticeCalendarItems { get; set; }
+        public virtual DbSet<StateGameCalendarItem> StateGameCalendarItems { get; set; }
+        public virtual DbSet<TournamentCalendarItem> TournamentCalendarItems { get; set; }
+        public virtual DbSet<TournamentGame> TournamentGames { get; set; }
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
@@ -71,11 +78,11 @@ namespace InformationService.Models
                     .HasMaxLength(50)
                     .IsUnicode(false);
 
-                entity.HasOne(d => d.Location)
-                    .WithMany(p => p.Coach)
-                    .HasForeignKey(d => d.LocationId)
-                    .OnDelete(DeleteBehavior.ClientSetNull)
-                    .HasConstraintName("FK_Coach_Location");
+                //entity.HasOne(d => d.Location)
+                //    //.WithMany(p => p.Coach)
+                //    //.HasForeignKey(d => d.LocationId)
+                //    .OnDelete(DeleteBehavior.ClientSetNull)
+                //    .HasConstraintName("FK_Coach_Location");
             });
 
             //modelBuilder.Entity<Location>(entity =>
@@ -295,6 +302,31 @@ namespace InformationService.Models
                     .WithMany(p => p.Teams)
                     .HasForeignKey(d => d.SportType)
                     .HasConstraintName("FK_Teams_SportType");
+            });
+
+            modelBuilder.Entity<CalendarItem>(entity =>
+            {
+                entity.ToTable("CalendarItem", "pwso");
+
+                entity.Property(e => e.ItemName)
+                    .HasMaxLength(50)
+                    .IsUnicode(false);
+
+                entity.Property(e => e.Comments)
+                    .HasMaxLength(250)
+                    .IsUnicode(false);
+
+                entity.Property(e => e.ItemTime)
+                    .HasMaxLength(11)
+                    .IsUnicode(false);
+
+                entity.Property(e => e.CancelReason)
+                    .HasMaxLength(1)
+                    .IsUnicode(false);
+
+                entity.Property(e => e.ItemDate).HasColumnType("date");
+
+
             });
         }
     }
