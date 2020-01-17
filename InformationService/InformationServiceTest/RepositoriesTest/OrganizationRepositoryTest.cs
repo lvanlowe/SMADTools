@@ -11,6 +11,8 @@ namespace InformationServiceTest.RepositoriesTest
     public class OrganizationRepositoryTest
     {
         private PwsoContext _context;
+        private PwsodbContext _calendarContext;
+
 
         public OrganizationRepositoryTest()
         {
@@ -18,6 +20,11 @@ namespace InformationServiceTest.RepositoriesTest
                 UseInMemoryDatabase(databaseName: "OrganizationRepository")
                 .Options;
             _context = new PwsoContext(options);
+
+            var calendarOptions = new DbContextOptionsBuilder<PwsodbContext>().
+                UseInMemoryDatabase(databaseName: "CalendarRepository")
+                .Options;
+            _calendarContext = new PwsodbContext(calendarOptions);
         }
 
         private void InitializeAthletes()
@@ -55,6 +62,18 @@ namespace InformationServiceTest.RepositoriesTest
             _context.Newsletter.Add(new Newsletter { Id = 5, FirstName = "Hal", LastName = "Jordon", Email = "superman@dc.com", IsAthlete = true, IsVolunteer = true });
 
             _context.SaveChanges();
+        }
+
+        private void InsertCalendarEvents()
+        {
+            //_context.Athletes.Add(new Athletes { Id = 1, FirstName = "Clark", LastName = "Kent" });
+            //_context.Athletes.Add(new Athletes { Id = 2, FirstName = "Bruce", LastName = "Wayne" });
+            //_context.Athletes.Add(new Athletes { Id = 3, FirstName = "Diana", LastName = "Prince" });
+            //_context.Athletes.Add(new Athletes { Id = 4, FirstName = "Barry", LastName = "Allen" });
+            //_context.Athletes.Add(new Athletes { Id = 5, FirstName = "Hal", LastName = "Jordon" });
+
+
+            //_context.SaveChanges();
         }
 
         [Theory]

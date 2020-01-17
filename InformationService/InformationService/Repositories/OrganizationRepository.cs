@@ -10,11 +10,19 @@ namespace InformationService.Repositories
     public class OrganizationRepository : IOrganizationRepository
     {
         private readonly PwsoContext _context;
+        private PwsodbContext _calendarContext;
+
 
         public OrganizationRepository(PwsoContext context)
         {
             _context = context;
         }
+
+        public OrganizationRepository(PwsodbContext context)
+        {
+            _calendarContext = context;
+        }
+
 
         public async Task<List<Athletes>> GetAllAthletes()
         {
