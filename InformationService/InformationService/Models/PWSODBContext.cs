@@ -28,13 +28,14 @@ namespace InformationService.Models
         public virtual DbSet<SportTypes> SportTypes { get; set; }
         public virtual DbSet<Teams> Teams { get; set; }
         public virtual DbSet<Uniforms> Uniforms { get; set; }
-        public virtual DbSet<CalendarItem> CalendarItems { get; set; }
-        public virtual DbSet<CalendarLength> CalendarLengths { get; set; }
-        public virtual DbSet<CalendarTime> CalendarTimes { get; set; }
-        public virtual DbSet<PracticeCalendarItem> PracticeCalendarItems { get; set; }
-        public virtual DbSet<StateGameCalendarItem> StateGameCalendarItems { get; set; }
-        public virtual DbSet<TournamentCalendarItem> TournamentCalendarItems { get; set; }
-        public virtual DbSet<TournamentGame> TournamentGames { get; set; }
+        public virtual DbSet<CalendarItems> CalendarItems { get; set; }
+        public virtual DbSet<CalendarLengths> CalendarLengths { get; set; }
+        public virtual DbSet<CalendarTimes> CalendarTimes { get; set; }
+        public virtual DbSet<Locations> Locations { get; set; }
+        public virtual DbSet<PracticeCalendarItems> PracticeCalendarItems { get; set; }
+        public virtual DbSet<StateGameCalendarItems> StateGameCalendarItems { get; set; }
+        public virtual DbSet<TournamentCalendarItems> TournamentCalendarItems { get; set; }
+        public virtual DbSet<TournamentGames> TournamentGames { get; set; }
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
@@ -153,6 +154,18 @@ namespace InformationService.Models
                 entity.Property(e => e.Year)
                     .HasMaxLength(4)
                     .IsUnicode(false);
+
+                entity.HasOne(d => d.Sport)
+                    .WithMany(p => p.Registrant)
+                    .HasForeignKey(d => d.SportId)
+                    .OnDelete(DeleteBehavior.ClientSetNull)
+                    .HasConstraintName("FK_Registrant_Sports");
+
+                entity.HasOne(d => d.Team)
+                    .WithMany(p => p.Registrant)
+                    .HasForeignKey(d => d.TeamId)
+                    .HasConstraintName("FK_Registrant_Teams");
+
             });
 
             modelBuilder.Entity<RegistrantEmail>(entity =>
@@ -202,6 +215,7 @@ namespace InformationService.Models
                     .HasForeignKey(d => d.RegistrantId)
                     .OnDelete(DeleteBehavior.ClientSetNull)
                     .HasConstraintName("FK_RegistrantPhone_Registrant");
+
             });
 
 
@@ -304,30 +318,191 @@ namespace InformationService.Models
                     .HasConstraintName("FK_Teams_SportType");
             });
 
-            modelBuilder.Entity<CalendarItem>(entity =>
+            modelBuilder.Entity<CalendarItems>(entity =>
             {
-                entity.ToTable("CalendarItem", "pwso");
+                entity.ToTable("CalendarItems", "pwso");
 
-                entity.Property(e => e.ItemName)
-                    .HasMaxLength(50)
+                entity.HasIndex(e => e.ItemDate);
+
+                entity.Property(e => e.Id).HasColumnName("id");
+
+                entity.Property(e => e.CancelReason)
+                    .HasMaxLength(11)
                     .IsUnicode(false);
 
                 entity.Property(e => e.Comments)
                     .HasMaxLength(250)
                     .IsUnicode(false);
 
-                entity.Property(e => e.ItemTime)
-                    .HasMaxLength(11)
-                    .IsUnicode(false);
-
-                entity.Property(e => e.CancelReason)
-                    .HasMaxLength(1)
-                    .IsUnicode(false);
-
                 entity.Property(e => e.ItemDate).HasColumnType("date");
 
+                entity.Property(e => e.ItemName)
+                    .HasMaxLength(50)
+                    .IsUnicode(false);
+
+                entity.Property(e => e.ItemTime)
+                    .HasMaxLength(10)
+                    .IsUnicode(false);
+
+                entity.HasOne(d => d.CalendarTime)
+                    .WithMany(p => p.CalendarItems)
+                    .HasForeignKey(d => d.CalendarTimeId)
+                    .HasConstraintName("FK_CalendarItems_0");
+
+                entity.HasOne(d => d.Location)
+                    .WithMany(p => p.CalendarItems)
+                    .HasForeignKey(d => d.LocationId)
+                    .OnDelete(DeleteBehavior.ClientSetNull)
+                    .HasConstraintName("FK_CalendarItems_Location");
+            });
+
+            modelBuilder.Entity<CalendarLengths>(entity =>
+            {
+                entity.ToTable("CalendarLengths", "pwso");
+
+                entity.Property(e => e.Id).HasColumnName("id");
+
+                entity.Property(e => e.TimeLength)
+                    .IsRequired()
+                    .HasMaxLength(10)
+                    .IsUnicode(false)
+                    .IsFixedLength();
+            });
+
+            modelBuilder.Entity<CalendarTimes>(entity =>
+            {
+                entity.ToTable("CalendarTimes", "pwso");
+
+                entity.Property(e => e.Id).HasColumnName("id");
+
+                entity.Property(e => e.TimeHour)
+                    .IsRequired()
+                    .HasMaxLength(10)
+                    .IsUnicode(false)
+                    .IsFixedLength();
+            });
+
+            modelBuilder.Entity<Locations>(entity =>
+            {
+                entity.ToTable("Locations", "pwso");
+
+                entity.Property(e => e.Id).HasColumnName("id");
+
+                entity.Property(e => e.City)
+                    .HasMaxLength(25)
+                    .IsUnicode(false);
+
+                entity.Property(e => e.Name)
+                    .IsRequired()
+                    .HasMaxLength(50)
+                    .IsUnicode(false);
+
+                entity.Property(e => e.State)
+                    .HasMaxLength(2)
+                    .IsUnicode(false)
+                    .IsFixedLength();
+
+                entity.Property(e => e.Street)
+                    .HasMaxLength(50)
+                    .IsUnicode(false);
+
+                entity.Property(e => e.Zip)
+                    .HasMaxLength(10)
+                    .IsUnicode(false)
+                    .IsFixedLength();
+            });
+
+            modelBuilder.Entity<PracticeCalendarItems>(entity =>
+            {
+                entity.ToTable("PracticeCalendarItems", "pwso");
+
+                entity.Property(e => e.Id).HasColumnName("id");
+
+                entity.HasOne(d => d.CalendarItem)
+                    .WithMany(p => p.PracticeCalendarItems)
+                    .HasForeignKey(d => d.CalendarItemId)
+                    .OnDelete(DeleteBehavior.ClientSetNull)
+                    .HasConstraintName("FK_PracticeCalendarItems_CalendarItem");
+
+                entity.HasOne(d => d.CalendarLength)
+                    .WithMany(p => p.PracticeCalendarItems)
+                    .HasForeignKey(d => d.CalendarLengthId)
+                    .HasConstraintName("FK_PracticeCalendarItems_0");
+
+                entity.HasOne(d => d.Program)
+                    .WithMany(p => p.PracticeCalendarItems)
+                    .HasForeignKey(d => d.ProgramId)
+                    .OnDelete(DeleteBehavior.ClientSetNull)
+                    .HasConstraintName("FK_PracticeCalendarItems_Program");
 
             });
+
+            modelBuilder.Entity<StateGameCalendarItems>(entity =>
+            {
+                entity.ToTable("StateGameCalendarItems", "pwso");
+
+                entity.Property(e => e.Id).HasColumnName("id");
+
+                entity.HasOne(d => d.CalendarItem)
+                    .WithMany(p => p.StateGameCalendarItems)
+                    .HasForeignKey(d => d.CalendarItemId)
+                    .OnDelete(DeleteBehavior.ClientSetNull)
+                    .HasConstraintName("FK_StateGameCalendarItems_CalendarItem");
+
+            });
+
+            modelBuilder.Entity<TournamentCalendarItems>(entity =>
+            {
+                entity.ToTable("TournamentCalendarItems", "pwso");
+
+                entity.Property(e => e.Id).HasColumnName("id");
+
+                entity.HasOne(d => d.CalendarItem)
+                    .WithMany(p => p.TournamentCalendarItems)
+                    .HasForeignKey(d => d.CalendarItemId)
+                    .OnDelete(DeleteBehavior.ClientSetNull)
+                    .HasConstraintName("FK_TournamentCalendarItems_CalendarItem");
+
+                entity.HasOne(d => d.Sport)
+                    .WithMany(p => p.TournamentCalendarItems)
+                    .HasForeignKey(d => d.SportId)
+                    .OnDelete(DeleteBehavior.ClientSetNull)
+                    .HasConstraintName("FK_TournamentCalendarItems_Sport");
+
+                entity.HasOne(d => d.SportType)
+                    .WithMany(p => p.TournamentCalendarItems)
+                    .HasForeignKey(d => d.SportTypeId)
+                    .HasConstraintName("FK_TournamentCalendarItems_SportType");
+
+                entity.HasOne(d => d.Team)
+                    .WithMany(p => p.TournamentCalendarItems)
+                    .HasForeignKey(d => d.TeamId)
+                    .HasConstraintName("FK_TournamentCalendarItems_Team");
+            });
+
+            modelBuilder.Entity<TournamentGames>(entity =>
+            {
+                entity.ToTable("TournamentGames", "pwso");
+
+                entity.Property(e => e.Id).HasColumnName("id");
+
+                entity.Property(e => e.Field)
+                    .HasMaxLength(20)
+                    .IsUnicode(false);
+
+                entity.HasOne(d => d.CalendarTime)
+                    .WithMany(p => p.TournamentGames)
+                    .HasForeignKey(d => d.CalendarTimeId)
+                    .OnDelete(DeleteBehavior.ClientSetNull)
+                    .HasConstraintName("FK_TournamentGames_CalendarTime");
+
+                entity.HasOne(d => d.TournamentCalendarItemNavigation)
+                    .WithMany(p => p.TournamentGames)
+                    .HasForeignKey(d => d.TournamentCalendarItem)
+                    .OnDelete(DeleteBehavior.ClientSetNull)
+                    .HasConstraintName("FK_TournamentGames_TournamentCalendarItem");
+            });
+
         }
     }
 }

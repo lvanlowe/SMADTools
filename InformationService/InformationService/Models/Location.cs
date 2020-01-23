@@ -5,10 +5,6 @@ namespace InformationService.Models
 {
     public partial class Location
     {
-        public Location()
-        {
-            CalendarItems = new HashSet<CalendarItem>();
-        }
 
         public long id { get; set; }
 
@@ -22,6 +18,5 @@ namespace InformationService.Models
 
         public string Zip { get; set; }
 
-        public virtual ICollection<CalendarItem> CalendarItems { get; set; }
     }
 }

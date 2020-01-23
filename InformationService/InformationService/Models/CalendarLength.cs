@@ -4,17 +4,16 @@ using System.Text;
 
 namespace InformationService.Models
 {
-    public partial class CalendarLength
+    public partial class CalendarLengths
     {
-        public CalendarLength()
+        public CalendarLengths()
         {
-            PracticeCalendarItems = new HashSet<PracticeCalendarItem>();
+            PracticeCalendarItems = new HashSet<PracticeCalendarItems>();
         }
 
-        public long id { get; set; }
-
+        public long Id { get; set; }
         public string TimeLength { get; set; }
 
-        public virtual ICollection<PracticeCalendarItem> PracticeCalendarItems { get; set; }
+        public virtual ICollection<PracticeCalendarItems> PracticeCalendarItems { get; set; }
     }
 }

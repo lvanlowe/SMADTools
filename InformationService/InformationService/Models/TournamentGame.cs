@@ -4,18 +4,14 @@ using System.Text;
 
 namespace InformationService.Models
 {
-    public partial class TournamentGame
+    public partial class TournamentGames
     {
-        public long id { get; set; }
-
+        public long Id { get; set; }
         public string Field { get; set; }
-
         public long CalendarTimeId { get; set; }
-
         public long TournamentCalendarItem { get; set; }
 
-        public virtual CalendarTime CalendarTime { get; set; }
-
-        public virtual TournamentCalendarItem TournamentCalendarItem1 { get; set; }
+        public virtual CalendarTimes CalendarTime { get; set; }
+        public virtual TournamentCalendarItems TournamentCalendarItemNavigation { get; set; }
     }
 }

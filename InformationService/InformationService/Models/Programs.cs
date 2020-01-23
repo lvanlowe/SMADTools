@@ -8,6 +8,7 @@ namespace InformationService.Models
     {
         public Programs()
         {
+            PracticeCalendarItems = new HashSet<PracticeCalendarItems>();
             Teams = new HashSet<Teams>();
         }
 
@@ -17,6 +18,8 @@ namespace InformationService.Models
         public long Sport { get; set; }
 
         public virtual Sports SportNavigation { get; set; }
+        public virtual ICollection<PracticeCalendarItems> PracticeCalendarItems { get; set; }
+
         public virtual ICollection<Teams> Teams { get; set; }
     }
 }

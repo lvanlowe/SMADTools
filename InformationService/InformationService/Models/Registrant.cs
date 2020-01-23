@@ -25,7 +25,8 @@ namespace InformationService.Models
         public string Year { get; set; }
         public int? SizeId { get; set; }
         public bool? IsVolunteer { get; set; }
-
+        public virtual Sports Sport { get; set; }
+        public virtual Teams Team { get; set; }
         public virtual ICollection<RegisteredAthlete> RegisteredAthlete { get; set; }
         public virtual ICollection<RegistrantEmail> RegistrantEmail { get; set; }
         public virtual ICollection<RegistrantPhone> RegistrantPhone { get; set; }

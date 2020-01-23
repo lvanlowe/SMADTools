@@ -10,6 +10,9 @@ namespace InformationService.Models
         {
             Programs = new HashSet<Programs>();
             SportTypes = new HashSet<SportTypes>();
+            Registrant = new HashSet<Registrant>();
+            TournamentCalendarItems = new HashSet<TournamentCalendarItems>();
+
         }
 
         public long Id { get; set; }
@@ -21,5 +24,8 @@ namespace InformationService.Models
 
         public virtual ICollection<Programs> Programs { get; set; }
         public virtual ICollection<SportTypes> SportTypes { get; set; }
+        public virtual ICollection<Registrant> Registrant { get; set; }
+        public virtual ICollection<TournamentCalendarItems> TournamentCalendarItems { get; set; }
+
     }
 }

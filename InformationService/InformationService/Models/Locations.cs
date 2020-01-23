@@ -4,18 +4,20 @@ using System.Text;
 
 namespace InformationService.Models
 {
-    public partial class CalendarTimes
+    public partial class Locations
     {
-        public CalendarTimes()
+        public Locations()
         {
             CalendarItems = new HashSet<CalendarItems>();
-            TournamentGames = new HashSet<TournamentGames>();
         }
 
         public long Id { get; set; }
-        public string TimeHour { get; set; }
+        public string Name { get; set; }
+        public string Street { get; set; }
+        public string City { get; set; }
+        public string State { get; set; }
+        public string Zip { get; set; }
 
         public virtual ICollection<CalendarItems> CalendarItems { get; set; }
-        public virtual ICollection<TournamentGames> TournamentGames { get; set; }
     }
 }
