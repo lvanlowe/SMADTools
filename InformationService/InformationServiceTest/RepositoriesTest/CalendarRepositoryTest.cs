@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Text;
 using InformationService.Models;
 using InformationService.Repositories;
@@ -82,6 +83,25 @@ namespace InformationServiceTest.RepositoriesTest
             var actual = repository.GetPracticesForLocation(locationId, startDate);
 
             Assert.Equal(expected, actual.Result.Count);
+
+        }
+
+        [Fact]
+        public void CancelEvent_When_executed_set_cancel_reason()
+
+        {
+            // Insert seed data into the database using one instance of the context
+            InitializeCalendar();
+            LoadCalendar();
+
+            var reason = "snow";
+            var calendarId = 1;
+            var repository = new CalendarRepository(_context);
+            repository.CancelEvent(calendarId, reason);
+
+            var calendar = _context.CalendarItems.Where(c => c.Id == calendarId).FirstOrDefaultAsync();
+
+            Assert.Equal(reason, calendar.Result.CancelReason);
 
         }
 

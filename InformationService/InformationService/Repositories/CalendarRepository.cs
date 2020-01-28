@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 using InformationService.Interfaces;
 using InformationService.Models;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Logging;
 
 namespace InformationService.Repositories
 {
@@ -25,6 +26,13 @@ namespace InformationService.Repositories
                 .Where(p => p.ProgramId == programId && p.CalendarItem.ItemDate.Date >= startDate.Date)
                 .ToListAsync();
             return practice;
+        }
+
+        public async void CancelEvent(long calendarId, string reason)
+        {
+            var calendar = await _context.CalendarItems.Where(c => c.Id == calendarId).FirstOrDefaultAsync();
+            calendar.CancelReason = reason;
+            await _context.SaveChangesAsync();
         }
     }
 }
