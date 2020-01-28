@@ -1,9 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using InformationService.Interfaces;
 using InformationService.Models;
+using Microsoft.EntityFrameworkCore;
 
 namespace InformationService.Repositories
 {
@@ -16,9 +18,13 @@ namespace InformationService.Repositories
             _context = context;
         }
 
-        public Task<List<PracticeCalendarItems>> GetPracticesForLocation(long programId, in DateTime startDate)
+        public async Task<List<PracticeCalendarItems>> GetPracticesForLocation(long programId, DateTime startDate)
         {
-            throw new NotImplementedException();
+            var practice = await _context.PracticeCalendarItems
+                .Include(p => p.CalendarItem)
+                .Where(p => p.ProgramId == programId && p.CalendarItem.ItemDate.Date >= startDate.Date)
+                .ToListAsync();
+            return practice;
         }
     }
 }

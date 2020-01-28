@@ -8,7 +8,7 @@ namespace InformationService.Interfaces
 {
     public interface ICalendarRepository
     {
-        Task<List<PracticeCalendarItems>> GetPracticesForLocation(long programId, in DateTime startDate);
+        Task<List<PracticeCalendarItems>> GetPracticesForLocation(long programId, DateTime startDate);
 
     }
 }

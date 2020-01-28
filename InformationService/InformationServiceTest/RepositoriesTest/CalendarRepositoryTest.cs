@@ -69,7 +69,7 @@ namespace InformationServiceTest.RepositoriesTest
 
         [Theory]
         [InlineData(1, 3)]
-        //[InlineData(2, 2)]
+        [InlineData(2, 2)]
         public void GetPracticesForLocation_When_executed_create_list_of_Practice_Events(int locationId, int expected)
 
         {
