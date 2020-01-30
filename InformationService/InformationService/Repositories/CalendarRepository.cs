@@ -34,5 +34,15 @@ namespace InformationService.Repositories
             calendar.CancelReason = reason;
             await _context.SaveChangesAsync();
         }
+
+        public async Task<PracticeCalendarItems> GetPracticeEvent(long practiceId)
+        {
+            var practice = await _context.PracticeCalendarItems
+                .Include(p => p.CalendarItem)
+                .Where(p => p.Id == practiceId)
+                .FirstOrDefaultAsync();
+
+            return practice;
+        }
     }
 }

@@ -105,6 +105,24 @@ namespace InformationServiceTest.RepositoriesTest
 
         }
 
+        [Theory]
+        [InlineData(5, 1, 7)]
+        [InlineData(4, 2, 5)]
+        public void GetPracticeEvent_When_executed_return_Practice_Event(int practiceId, int locationId, int calendarId)
+
+        {
+            // Insert seed data into the database using one instance of the context
+            InitializeCalendar();
+            LoadCalendar();
+
+            DateTime startDate = DateTime.Now;
+            var repository = new CalendarRepository(_context);
+            var actual = repository.GetPracticeEvent(practiceId);
+
+            Assert.Equal(locationId, actual.Result.ProgramId);
+            Assert.Equal(calendarId, actual.Result.CalendarItemId);
+
+        }
     }
 
 

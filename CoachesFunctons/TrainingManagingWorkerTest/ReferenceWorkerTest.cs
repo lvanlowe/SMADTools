@@ -6,6 +6,7 @@ using InformationService.Models;
 using InterfaceModels;
 using Moq;
 using TrainingManagingWorker;
+using Xunit;
 
 namespace TrainingManagingWorkerTest
 {
@@ -110,6 +111,34 @@ namespace TrainingManagingWorkerTest
 
             _mockReferenceRepository.Setup(repository => repository.GetSports()).ReturnsAsync(sports);
             _worker = new ReferenceWorker(_mockReferenceRepository.Object);
+
+        }
+
+        [Fact]
+        public void PrepareSportsDataForClient_When_executed_return_dto()
+
+        {
+            var sport = new Sports()
+            {
+                Id = 1,
+                Name = "BasketBall",
+                Email = "superman@dc.com",
+            };
+            var location = new Programs()
+            {
+                Id = 2,
+                Name = "Stonewall",
+                SportNavigation = sport
+            };
+            sport.Programs.Add(location);
+
+
+            SportLocationDto actual = _worker.PrepareSportsDataForClient(location);
+            Assert.Equal(sport.Email, actual.Email);
+            Assert.Equal(sport.Name, actual.SportName);
+            Assert.Equal(sport.Id, actual.SportId);
+            Assert.Equal(location.Id, actual.ProgramId);
+            Assert.Equal(location.Name, actual.ProgramName);
 
         }
     }

@@ -10,6 +10,7 @@ namespace InformationService.Interfaces
     {
         Task<List<PracticeCalendarItems>> GetPracticesForLocation(long programId, DateTime startDate);
         void CancelEvent(long calendarId, string reason);
+        Task<PracticeCalendarItems> GetPracticeEvent(long practiceId);
 
     }
 }
