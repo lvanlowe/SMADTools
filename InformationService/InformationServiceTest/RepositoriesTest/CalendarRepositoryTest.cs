@@ -108,9 +108,9 @@ namespace InformationServiceTest.RepositoriesTest
         }
 
         [Theory]
-        [InlineData(5, 1, 7)]
-        [InlineData(4, 2, 5)]
-        public void GetPracticeEvent_When_executed_return_Practice_Event(int practiceId, int locationId, int calendarId)
+        [InlineData(5, 1, 7, 7)]
+        [InlineData(4, 2, 5, 4)]
+        public void GetPracticeEvent_When_executed_return_Practice_Event(int practiceId, int locationId, int calendarId, int days)
 
         {
             // Insert seed data into the database using one instance of the context
@@ -123,6 +123,7 @@ namespace InformationServiceTest.RepositoriesTest
 
             Assert.Equal(locationId, actual.Result.ProgramId);
             Assert.Equal(calendarId, actual.Result.CalendarItemId);
+            Assert.Equal(startDate.AddDays(days).ToShortDateString(), actual.Result.CalendarItem.ItemDate.ToShortDateString());
 
         }
     }

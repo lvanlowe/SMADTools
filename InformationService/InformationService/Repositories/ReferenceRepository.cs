@@ -49,5 +49,11 @@ namespace InformationService.Repositories
                 .ThenInclude(p => p.Teams).ToListAsync();
             return sports;
         }
+
+        public async Task<Programs> GetLocationByProgramId(int programId)
+        {
+            var location = await _context.Programs.Where(p => p.Id == programId).FirstOrDefaultAsync();
+            return location;
+        }
     }
 }

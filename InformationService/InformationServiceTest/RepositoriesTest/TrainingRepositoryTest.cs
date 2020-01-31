@@ -272,7 +272,7 @@ namespace InformationServiceTest.RepositoriesTest
         [Theory]
         [InlineData(1, 4, 1, 1, 1)]
         [InlineData(2, 3, 0, 1, 0)]
-        [InlineData(3, 2, 2, 0, 1)]
+        [InlineData(3, 2, 1, 3, 0)]
         public void GetRegistrantsBySport_When_executed_create_list_of_SportRegistrants(int sportId, int count, int emails, int phones, int hasMedical)
 
         {

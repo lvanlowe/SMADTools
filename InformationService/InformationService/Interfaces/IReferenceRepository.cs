@@ -13,5 +13,6 @@ namespace InformationService.Interfaces
         Task<List<SportTypes>> GetCategoryBySport(int sportId);
         Task<List<Teams>> GetTeamBySport(int sportId);
         Task<List<Sports>> GetSports();
+        Task<Programs> GetLocationByProgramId(int programId);
     }
 }

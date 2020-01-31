@@ -56,7 +56,6 @@ namespace InformationServiceTest.RepositoriesTest
             _context.Teams.Add(new Teams() { Id = 5, ProgramId = 2, Name = "Liberty", SportType = 2 });
             _context.Teams.Add(new Teams() { Id = 6, ProgramId = 3, Name = "Ravens", SportType = 5 });
 
-
             _context.SaveChanges();
         }
 
@@ -158,5 +157,23 @@ namespace InformationServiceTest.RepositoriesTest
 
         }
 
+        [Theory]
+        [InlineData(1, "Woodbridge", "Basketball")]
+        [InlineData(3, null, "Soccer")]
+        [InlineData(5, "Montclair", "Track")]
+        public void GetLocationByProgramId_When_executed_return_Programs_for_id(int programId, string locationName, string sportName)
+
+        {
+            // Insert seed data into the database using one instance of the context
+            InitializeSports();
+            LoadSports();
+
+            var repository = new ReferenceRepository(_context);
+            var actual = repository.GetLocationByProgramId(programId);
+
+            Assert.Equal(locationName, actual.Result.Name);
+            Assert.Equal(sportName, actual.Result.SportNavigation.Name);
+
+        }
     }
 }
