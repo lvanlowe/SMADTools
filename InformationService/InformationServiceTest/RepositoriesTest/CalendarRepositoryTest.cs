@@ -96,12 +96,14 @@ namespace InformationServiceTest.RepositoriesTest
 
             var reason = "snow";
             var calendarId = 1;
+            var note = "The schools are closed";
             var repository = new CalendarRepository(_context);
-            repository.CancelEvent(calendarId, reason);
+            repository.CancelEvent(calendarId, reason, note);
 
             var calendar = _context.CalendarItems.Where(c => c.Id == calendarId).FirstOrDefaultAsync();
 
             Assert.Equal(reason, calendar.Result.CancelReason);
+            Assert.Equal(note, calendar.Result.Comments);
 
         }
 

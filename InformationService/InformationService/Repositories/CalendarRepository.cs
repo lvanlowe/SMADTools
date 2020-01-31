@@ -28,10 +28,11 @@ namespace InformationService.Repositories
             return practice;
         }
 
-        public async void CancelEvent(long calendarId, string reason)
+        public async void CancelEvent(long calendarId, string reason, string note)
         {
             var calendar = await _context.CalendarItems.Where(c => c.Id == calendarId).FirstOrDefaultAsync();
             calendar.CancelReason = reason;
+            calendar.Comments = note;
             await _context.SaveChangesAsync();
         }
 

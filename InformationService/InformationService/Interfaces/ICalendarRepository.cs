@@ -9,7 +9,7 @@ namespace InformationService.Interfaces
     public interface ICalendarRepository
     {
         Task<List<PracticeCalendarItems>> GetPracticesForLocation(long programId, DateTime startDate);
-        void CancelEvent(long calendarId, string reason);
+        void CancelEvent(long calendarId, string reason, string note);
         Task<PracticeCalendarItems> GetPracticeEvent(long practiceId);
 
     }
