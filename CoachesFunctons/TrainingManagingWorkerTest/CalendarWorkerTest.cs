@@ -253,5 +253,78 @@ namespace TrainingManagingWorkerTest
 
         }
 
+        [Fact]
+        public void ProcessEventCancelation_When_executed_creat_email_dto()
+
+        {
+
+            CancelEventDto cancelEvent = new CancelEventDto
+            {
+                CancelNote = "practice is cancel due to snow",
+                CancelReason = "weather",
+                PracticeId = 67,
+            };
+
+            CalendarItems calendarItem = new CalendarItems
+            {
+                Id = 89,
+                ItemDate = DateTime.Now.AddDays(7),
+            };
+
+            PracticeCalendarItems practiceCalendarItem = new PracticeCalendarItems
+            {
+                Id = 67,
+                CalendarItem = calendarItem,
+                ProgramId = 10,
+            };
+
+            Sports sport = new Sports
+            {
+                Id = 4,
+                Name = "Basketball",
+                Email = "superman@dc.com"
+            };
+
+            Programs program = new Programs
+            {
+                Id = 10,
+                Name = "Woodbridge",
+                SportNavigation = sport
+            };
+
+            sport.Programs.Add(program);
+
+            //SportLocationDto sport = new SportLocationDto
+            //{
+            //    ProgramId = 10,
+            //    SportId = 4,
+            //    Email = "superman@dc.com",
+            //    SportName = "Basketball",
+            //    ProgramName = "Woodbridge",
+            //};
+
+            PracticeCalendarItems practice = new PracticeCalendarItems
+            {
+                Id = 67,
+                CalendarItem = new CalendarItems { Id = 89, ItemDate = DateTime.Now.AddDays(7) }
+            };
+
+            _mockCalendarRepository.Setup(repository => repository.GetPracticeEvent(cancelEvent.PracticeId)).ReturnsAsync(practiceCalendarItem);
+            _mockReferenceRepository.Setup(repository => repository.GetLocationByProgramId(practiceCalendarItem.ProgramId)).ReturnsAsync(program);
+
+            string expected = sport.Name + " " + program.Name + " " +
+                              DateTime.Now.AddDays(7).ToShortDateString() + " practice canceled " +
+                              cancelEvent.CancelReason;
+
+            var actual = _worker.ProcessEventCancelation(cancelEvent);
+            Assert.Equal(sport.Email, actual.Result.From);
+            Assert.Equal(sport.Id, actual.Result.SportId);
+            Assert.Equal(program.Id, actual.Result.ProgramId);
+            Assert.Equal(cancelEvent.CancelNote, actual.Result.HtmlContent);
+            Assert.Equal(expected, actual.Result.Subject);
+
+
+        }
+
     }
 }

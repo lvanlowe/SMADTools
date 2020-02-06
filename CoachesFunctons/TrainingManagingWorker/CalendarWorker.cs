@@ -26,13 +26,26 @@ namespace TrainingManagingWorker
             return message;
         }
 
-        public async Task<int> ProcessEventCancelation(CancelEventDto cancelEvent)
+        public async Task<CoachEmailDto> ProcessEventCancelation(CancelEventDto cancelEvent)
         {
             var practice = await _calendarRepository.GetPracticeEvent(cancelEvent.PracticeId);
             var location = await _referenceRepository.GetLocationByProgramId(practice.ProgramId);
             _calendarRepository.CancelEvent(practice.CalendarItem.Id, cancelEvent.CancelReason,
                 cancelEvent.CancelNote);
-            return practice.Length;
+            SportLocationDto sport = new SportLocationDto
+            {
+                SportName = location.SportNavigation.Name,
+                ProgramName = location.Name,
+            };
+            var dto = new CoachEmailDto
+            {
+                From = location.SportNavigation.Email,
+                SportId = location.SportNavigation.Id,
+                ProgramId = location.Id,
+                HtmlContent = cancelEvent.CancelNote,
+                Subject = BuildCancelEmailSubject(sport, cancelEvent, practice),
+            };
+            return dto;
         }
     }
 }
