@@ -30,6 +30,8 @@ namespace TrainingManagingWorker
         {
             var practice = await _calendarRepository.GetPracticeEvent(cancelEvent.PracticeId);
             var location = await _referenceRepository.GetLocationByProgramId(practice.ProgramId);
+            _calendarRepository.CancelEvent(practice.CalendarItem.Id, cancelEvent.CancelReason,
+                cancelEvent.CancelNote);
             return practice.Length;
         }
     }
