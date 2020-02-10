@@ -326,5 +326,33 @@ namespace TrainingManagingWorkerTest
 
         }
 
+
+        [Fact]
+        public void ProcessEventCancelation_without_mock()
+
+        {
+
+            IConfiguration config = new ConfigurationBuilder().AddJsonFile("appsettings.test.json").Build();
+            var trainingConnectionString = config["TrainingDatabase"];
+            var trainingOptions = new DbContextOptionsBuilder<PwsodbContext>().UseSqlServer(trainingConnectionString).Options;
+
+            PwsodbContext trainingContext = new PwsodbContext(trainingOptions);
+            ICalendarRepository calendarRepository = new CalendarRepository(trainingContext);
+            IReferenceRepository referenceRepository = new ReferenceRepository(trainingContext);
+            CalendarWorker worker = new CalendarWorker(calendarRepository, referenceRepository);
+
+            CancelEventDto cancelEvent = new CancelEventDto
+            {
+                CancelNote = "practice is cancel due to snow",
+                CancelReason = "weather",
+                PracticeId = 41598,
+            };
+
+
+            //var actual = worker.ProcessEventCancelation(cancelEvent);
+            //Assert.Equal("AreaCoordinator@pwsova.org", actual.Result.From);
+
+        }
+
     }
 }

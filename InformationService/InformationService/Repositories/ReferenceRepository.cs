@@ -52,7 +52,9 @@ namespace InformationService.Repositories
 
         public async Task<Programs> GetLocationByProgramId(long programId)
         {
-            var location = await _context.Programs.Where(p => p.Id == programId).FirstOrDefaultAsync();
+            var location = await _context.Programs.Where(p => p.Id == programId)
+                .Include(p => p.SportNavigation)
+                .FirstOrDefaultAsync();
             return location;
         }
     }
