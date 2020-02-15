@@ -67,7 +67,9 @@ namespace InformationService.Repositories
 
         public async Task<CalendarTimes> GetTimeByTimeId(long timeId)
         {
-            throw new NotImplementedException();
+            var calendarTimes = await _context.CalendarTimes.Where(c => c.Id == timeId)
+                .FirstOrDefaultAsync();
+            return calendarTimes;
         }
     }
 }

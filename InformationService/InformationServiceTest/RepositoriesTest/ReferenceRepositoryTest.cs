@@ -222,5 +222,22 @@ namespace InformationServiceTest.RepositoriesTest
 
         }
 
+        [Theory]
+        [InlineData(1, "12 Noon")]
+        //[InlineData(2, "6:30 AM")]
+        //[InlineData(3, "1:00 PM")]
+        public void GetTimeByTimeId_When_executed_return_Programs_for_id(int timeId, string timeData)
+        {
+            // Insert seed data into the database using one instance of the context
+            InitializeSports();
+            LoadSports();
+
+            var repository = new ReferenceRepository(_context);
+            var actual = repository.GetTimeByTimeId(timeId);
+
+            Assert.Equal(timeData, actual.Result.TimeHour);
+
+        }
+
     }
 }
