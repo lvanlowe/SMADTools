@@ -32,6 +32,8 @@ namespace InformationServiceTest.RepositoriesTest
             _context.RemoveRange(sports.Result);
             var places = _context.Location.ToListAsync();
             _context.RemoveRange(places.Result);
+            var times = _context.CalendarTimes.ToListAsync();
+            _context.RemoveRange(times.Result);
             _context.SaveChanges();
         }
 
@@ -224,8 +226,8 @@ namespace InformationServiceTest.RepositoriesTest
 
         [Theory]
         [InlineData(1, "12 Noon")]
-        //[InlineData(2, "6:30 AM")]
-        //[InlineData(3, "1:00 PM")]
+        [InlineData(2, "6:30 AM")]
+        [InlineData(3, "1:00 PM")]
         public void GetTimeByTimeId_When_executed_return_Programs_for_id(int timeId, string timeData)
         {
             // Insert seed data into the database using one instance of the context
