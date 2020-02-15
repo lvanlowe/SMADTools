@@ -30,6 +30,8 @@ namespace InformationServiceTest.RepositoriesTest
             _context.RemoveRange(locations.Result);
             var sports = _context.Sports.ToListAsync();
             _context.RemoveRange(sports.Result);
+            var places = _context.Location.ToListAsync();
+            _context.RemoveRange(places.Result);
             _context.SaveChanges();
         }
 
@@ -55,7 +57,32 @@ namespace InformationServiceTest.RepositoriesTest
             _context.Teams.Add(new Teams() { Id = 4, ProgramId = 2, Name = "Dominators", SportType = 1 });
             _context.Teams.Add(new Teams() { Id = 5, ProgramId = 2, Name = "Liberty", SportType = 2 });
             _context.Teams.Add(new Teams() { Id = 6, ProgramId = 3, Name = "Ravens", SportType = 5 });
-
+            _context.Location.Add(new Location()
+            {
+                id = 1, Name = "Potomac High School", Street = "123 Main Street", City = "Woodbridge", State = "VA",
+                Zip = "22193"
+            });
+            _context.Location.Add(new Location()
+            {
+                id = 2,
+                Name = "Potomac Middle School",
+                Street = "129 Main Street",
+                City = "Woodbridge",
+                State = "VA",
+                Zip = "22193"
+            });
+            _context.Location.Add(new Location()
+            {
+                id = 3,
+                Name = "Saunders Middle School",
+                Street = "129 Dale Bvld",
+                City = "Dale City",
+                State = "VA",
+                Zip = "22192"
+            });
+            _context.CalendarTimes.Add(new CalendarTimes {Id = 1, TimeHour = "12 Noon"});
+            _context.CalendarTimes.Add(new CalendarTimes {Id = 2, TimeHour = "6:30 AM"});
+            _context.CalendarTimes.Add(new CalendarTimes {Id = 3, TimeHour = "1:00 PM"});
             _context.SaveChanges();
         }
 
@@ -159,8 +186,8 @@ namespace InformationServiceTest.RepositoriesTest
 
         [Theory]
         [InlineData(1, "Woodbridge", "Basketball")]
-        [InlineData(3, null, "Soccer")]
-        [InlineData(5, "Montclair", "Track")]
+        [InlineData(2, null, "Soccer")]
+        [InlineData(3, "Montclair", "Track")]
         public void GetLocationByProgramId_When_executed_return_Programs_for_id(int programId, string locationName, string sportName)
 
         {
@@ -175,5 +202,25 @@ namespace InformationServiceTest.RepositoriesTest
             Assert.Equal(sportName, actual.Result.SportNavigation.Name);
 
         }
+
+        [Theory]
+        [InlineData(1, "Potomac High School", "123 Main Street")]
+        [InlineData(2, "Potomac Middle School", "129 Main Street")]
+        [InlineData(3, "Saunders Middle School", "129 Dale Bvld")]
+        public void GetLocationByLocationId_When_executed_return_Programs_for_id(int locationId, string locationName, string address)
+
+        {
+            // Insert seed data into the database using one instance of the context
+            InitializeSports();
+            LoadSports();
+
+            var repository = new ReferenceRepository(_context);
+            var actual = repository.GetLocationByLocationId(locationId);
+            
+            Assert.Equal(locationName, actual.Result.Name);
+            Assert.Equal(address, actual.Result.Street);
+
+        }
+
     }
 }

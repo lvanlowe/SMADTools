@@ -47,5 +47,23 @@ namespace TrainingManagingWorker
             };
             return dto;
         }
+
+        public class TournamentData
+        {
+            public string TeamName { get; set; }
+            public DateTime TournamentDate { get; set; }
+            public string LocationName { get; set; }
+            public string LocationAddress { get; set; }
+            public string LocationCity { get; set; }
+            public string LocationState { get; set; }
+            public string LocationZip { get; set; }
+            public string StartTime { get; set; }
+            public string Game1Time { get; set; }
+            public string Game1Note { get; set; }
+            public string Game2Time { get; set; }
+            public string Game2Note { get; set; }
+            public string TournamentMessage { get; set; }
+
+        }
     }
 }

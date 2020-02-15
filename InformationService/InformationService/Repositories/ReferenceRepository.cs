@@ -57,5 +57,17 @@ namespace InformationService.Repositories
                 .FirstOrDefaultAsync();
             return location;
         }
+
+        public async Task<Location> GetLocationByLocationId(long locationId)
+        {
+            var location = await _context.Location.Where(l => l.id == locationId)
+                .FirstOrDefaultAsync();
+            return location;
+        }
+
+        public async Task<CalendarTimes> GetTimeByTimeId(long timeId)
+        {
+            throw new NotImplementedException();
+        }
     }
 }
