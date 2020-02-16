@@ -12,6 +12,7 @@ namespace InformationService.Repositories
     public class ReferenceRepository : IReferenceRepository
     {
         private PwsodbContext _context;
+        private IReferenceRepository _referenceRepositoryImplementation;
 
         public ReferenceRepository(PwsodbContext context)
         {
@@ -70,6 +71,13 @@ namespace InformationService.Repositories
             var calendarTimes = await _context.CalendarTimes.Where(c => c.Id == timeId)
                 .FirstOrDefaultAsync();
             return calendarTimes;
+        }
+
+        public async Task<Teams> GetTeamByTeamId(long teamId)
+        {
+            var teams = await _context.Teams.Where(t => t.Id == teamId)
+                .FirstOrDefaultAsync();
+            return teams;
         }
     }
 }

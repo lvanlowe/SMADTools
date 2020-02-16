@@ -241,5 +241,22 @@ namespace InformationServiceTest.RepositoriesTest
 
         }
 
+        [Theory]
+        [InlineData(1, "Gladiators")]
+        [InlineData(3, "Vikings")]
+        [InlineData(5, "Liberty")]
+        public void GetTeamByTeamId_When_executed_return_Teams_for_id(int teamId, string teamName)
+        {
+            // Insert seed data into the database using one instance of the context
+            InitializeSports();
+            LoadSports();
+
+            var repository = new ReferenceRepository(_context);
+            var actual = repository.GetTeamByTeamId(teamId);
+
+            Assert.Equal(teamName, actual.Result.Name);
+
+        }
+
     }
 }

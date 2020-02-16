@@ -16,5 +16,6 @@ namespace InformationService.Interfaces
         Task<Programs> GetLocationByProgramId(long programId);
         Task<Location> GetLocationByLocationId(long locationId);
         Task<CalendarTimes> GetTimeByTimeId(long timeId);
+        Task<Teams> GetTeamByTeamId(long teamId);
     }
 }
