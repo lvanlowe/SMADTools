@@ -29,5 +29,16 @@ namespace TrainingManagingWorker
             };
             return dto;
         }
+
+        public string PrepareChampionshipText(string teamName, string locationName, string arrivalTime)
+        {
+            string message = "{{teamName}} completion will be at {{locationName}}, everyone should arrive at {{arrivalTime}} ";
+            message = message
+                .Replace("{{teamName}}", teamName)
+                .Replace("{{locationName}}", locationName)
+                .Replace("{{arrivalTime}}", arrivalTime);
+
+            return message;
+        }
     }
 }

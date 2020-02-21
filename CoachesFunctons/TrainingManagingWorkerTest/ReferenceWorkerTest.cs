@@ -115,6 +115,21 @@ namespace TrainingManagingWorkerTest
         }
 
         [Fact]
+        public void PrepareChampionshipText_When_executed_return_message()
+
+        {
+            var teamName = "Bulls";
+            var locationName = "Rodney E. Thompson Middle School";
+            var arrivalTime = "10:30 AM";
+            var expected =
+                "Bulls completion will be at Rodney E. Thompson Middle School, everyone should arrive at 10:30 AM ";
+
+            string actual = _worker.PrepareChampionshipText(teamName, locationName, arrivalTime );
+            Assert.Equal(expected, actual);
+
+        }
+
+        [Fact]
         public void PrepareSportsDataForClient_When_executed_return_dto()
 
         {
@@ -141,5 +156,6 @@ namespace TrainingManagingWorkerTest
             Assert.Equal(location.Name, actual.ProgramName);
 
         }
+
     }
 }
