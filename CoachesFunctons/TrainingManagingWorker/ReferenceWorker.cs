@@ -40,5 +40,24 @@ namespace TrainingManagingWorker
 
             return message;
         }
+
+        public class TournamentDetails
+        {
+            public string TeamName { get; set; }
+            public string StartTime { get; set; }
+            public string FirstGameTime { get; set; }
+            public string SecondGameTime { get; set; }
+            public string OrGameTime { get; set; }
+            public string LocationName { get; set; }
+            public string LocationAddress { get; set; }
+            public string LocationCity { get; set; }
+            public string LocationState { get; set; }
+            public string LocationZip { get; set; }
+        }
+
+        public string PrepareChampionshipEmail(TournamentDetails details)
+        {
+            throw new NotImplementedException();
+        }
     }
 }
