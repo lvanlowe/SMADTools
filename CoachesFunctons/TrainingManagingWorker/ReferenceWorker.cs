@@ -70,5 +70,10 @@ namespace TrainingManagingWorker
             message = message.Replace("{{LocationZip}}", details.LocationZip);
             return message;
         }
+
+        public TournamentDetails PrepareChampionshipDetails(TournamentTeamDto dto)
+        {
+            throw new NotImplementedException();
+        }
     }
 }

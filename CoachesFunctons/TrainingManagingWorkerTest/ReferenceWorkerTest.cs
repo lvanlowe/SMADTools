@@ -137,7 +137,7 @@ namespace TrainingManagingWorkerTest
             {
                 TeamName = "Bulls",
                 FirstGameTime = "9:00 AM",
-           SecondGameTime = "1:00 PM",
+                SecondGameTime = "1:00 PM",
                 StartTime = "8:30 AM",
                 LocationName = "H. H. Poole Middle School",
                 LocationAddress = "800 Eustace Road",
@@ -154,6 +154,60 @@ namespace TrainingManagingWorkerTest
             Assert.Equal(expected, actual);
 
         }
+
+        [Fact]
+        public void PrepareChampionshipDetails_When_executed_return_message()
+        {
+            TournamentTeamDto dto = new TournamentTeamDto
+            {
+                TeamId = 25,
+                Game1TimeId = 7,
+                Game2TimeId = 15,
+                LocationId = 50
+            };
+
+            Teams team = new Teams{Id = 25, Name = "Bulls" };
+            CalendarTimes startTime = new CalendarTimes { Id = 6, TimeHour = "8:30 AM" };
+            CalendarTimes firstTime = new CalendarTimes { Id = 7, TimeHour = "9:00 AM" };
+            CalendarTimes secondTime = new CalendarTimes { Id = 15, TimeHour = "1:00 PM" };
+            Location location = new Location
+            {
+                id = 50,
+                Name = "H. H. Poole Middle School",
+                 Street = "800 Eustace Road",
+                 City = "Stafford",
+                 State = "VA",
+                 Zip = "22554"
+            };
+
+            ReferenceWorker.TournamentDetails expected = new ReferenceWorker.TournamentDetails
+            {
+                TeamName = "Bulls",
+                FirstGameTime = "9:00 AM",
+                SecondGameTime = "1:00 PM",
+                StartTime = "8:30 AM",
+                LocationName = "H. H. Poole Middle School",
+                LocationAddress = "800 Eustace Road",
+                LocationCity = "Stafford",
+                LocationState = "VA",
+                LocationZip = "22554"
+            };
+
+            _mockReferenceRepository.Setup(repository => repository.GetTeamByTeamId(25)).ReturnsAsync(team);
+            _mockReferenceRepository.Setup(repository => repository.GetTimeByTimeId(6)).ReturnsAsync(startTime);
+            _mockReferenceRepository.Setup(repository => repository.GetTimeByTimeId(7)).ReturnsAsync(firstTime);
+            _mockReferenceRepository.Setup(repository => repository.GetTimeByTimeId(15)).ReturnsAsync(secondTime);
+            _mockReferenceRepository.Setup(repository => repository.GetLocationByLocationId(50)).ReturnsAsync(location);
+
+
+            //var expected =
+            //    "<p>Hi Bulls Athletes, Athletes family, Coaches and Volunteers:<br /></p><p style=\"margin-left:30px;\"><strong>Everyone should be there at 8:30 AM.</strong><br /><br />The first game is at 9:00 AM.<br /><br />The second game is at 1:00 PM.<br /><br /><br />The completion will be at  H. H. Poole Middle School (800 Eustace Road, Stafford, VA 22554 )<br /><br /><br /><p style=\"margin-left:30px;\">You must return your uniform to your coach RIGHT AFTER SATURDAY’S COMPETITION. Remember bring a change of clothes. Failure to return your uniform may reflect on your athlete being selected for future Basketball Championships. There will also be a charge of $30 for jersey and $20 for shorts for all uniforms not returned at that time.<br /><br /><em>Remember no food or drinks are allowed in the Gymnasiums, only water.</em><br /><br /><br />Let me know if you have any questions.<br /><br /><br /></p><p>Van&nbsp;<br /><br /><br />L. A. Van Lowe&nbsp;<br /><br />Basketball Coordinator&nbsp;<br /><br /><br />P. O. 1073&nbsp;<br /><br />Woodbridge, VA 22195-1073&nbsp;<br /><br />Fax: (866) 558-8780&nbsp;<br /></p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;";
+
+            ReferenceWorker.TournamentDetails actual = _worker.PrepareChampionshipDetails(dto);
+            Assert.Equal(expected, actual);
+
+        }
+
         [Fact]
         public void PrepareSportsDataForClient_When_executed_return_dto()
 
