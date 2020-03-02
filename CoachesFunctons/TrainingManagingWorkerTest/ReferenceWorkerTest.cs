@@ -200,11 +200,17 @@ namespace TrainingManagingWorkerTest
             _mockReferenceRepository.Setup(repository => repository.GetLocationByLocationId(50)).ReturnsAsync(location);
 
 
-            //var expected =
-            //    "<p>Hi Bulls Athletes, Athletes family, Coaches and Volunteers:<br /></p><p style=\"margin-left:30px;\"><strong>Everyone should be there at 8:30 AM.</strong><br /><br />The first game is at 9:00 AM.<br /><br />The second game is at 1:00 PM.<br /><br /><br />The completion will be at  H. H. Poole Middle School (800 Eustace Road, Stafford, VA 22554 )<br /><br /><br /><p style=\"margin-left:30px;\">You must return your uniform to your coach RIGHT AFTER SATURDAY’S COMPETITION. Remember bring a change of clothes. Failure to return your uniform may reflect on your athlete being selected for future Basketball Championships. There will also be a charge of $30 for jersey and $20 for shorts for all uniforms not returned at that time.<br /><br /><em>Remember no food or drinks are allowed in the Gymnasiums, only water.</em><br /><br /><br />Let me know if you have any questions.<br /><br /><br /></p><p>Van&nbsp;<br /><br /><br />L. A. Van Lowe&nbsp;<br /><br />Basketball Coordinator&nbsp;<br /><br /><br />P. O. 1073&nbsp;<br /><br />Woodbridge, VA 22195-1073&nbsp;<br /><br />Fax: (866) 558-8780&nbsp;<br /></p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;";
 
             ReferenceWorker.TournamentDetails actual = _worker.PrepareChampionshipDetails(dto);
-            Assert.Equal(expected, actual);
+            Assert.Equal(expected.TeamName, actual.TeamName);
+            Assert.Equal(expected.SecondGameTime, actual.SecondGameTime);
+            Assert.Equal(expected.StartTime, actual.StartTime);
+            Assert.Equal(expected.LocationZip, actual.LocationZip);
+            Assert.Equal(expected.LocationAddress, actual.LocationAddress);
+            Assert.Equal(expected.FirstGameTime, actual.FirstGameTime);
+            Assert.Equal(expected.LocationCity, actual.LocationCity);
+            Assert.Equal(expected.LocationName, actual.LocationName);
+            Assert.Equal(expected.LocationState, actual.LocationState);
 
         }
 

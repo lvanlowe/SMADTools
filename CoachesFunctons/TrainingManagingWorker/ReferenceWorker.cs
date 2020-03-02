@@ -10,11 +10,11 @@ namespace TrainingManagingWorker
     public class ReferenceWorker
     {
 
-        private IReferenceRepository _referenceRepository_;
+        private IReferenceRepository _referenceRepository;
 
         public ReferenceWorker(IReferenceRepository referenceRepository)
         {
-            _referenceRepository_ = referenceRepository;
+            _referenceRepository = referenceRepository;
         }
 
         public SportLocationDto PrepareSportsDataForClient(Programs location)
@@ -73,7 +73,21 @@ namespace TrainingManagingWorker
 
         public TournamentDetails PrepareChampionshipDetails(TournamentTeamDto dto)
         {
-            throw new NotImplementedException();
+            var location = _referenceRepository.GetLocationByLocationId(dto.LocationId);
+            TournamentDetails details = new TournamentDetails
+            {
+                FirstGameTime = _referenceRepository.GetTimeByTimeId(dto.Game1TimeId).Result.TimeHour,
+                LocationAddress = location.Result.Street,
+                LocationCity = location.Result.City,
+                LocationName = location.Result.Name,
+                LocationState = location.Result.State,
+                LocationZip = location.Result.Zip,
+                TeamName = _referenceRepository.GetTeamByTeamId(dto.TeamId).Result.Name,
+                SecondGameTime = _referenceRepository.GetTimeByTimeId(dto.Game2TimeId).Result.TimeHour,
+                StartTime = _referenceRepository.GetTimeByTimeId(dto.Game1TimeId - 1).Result.TimeHour,
+            };
+
+            return details;
         }
     }
 }
