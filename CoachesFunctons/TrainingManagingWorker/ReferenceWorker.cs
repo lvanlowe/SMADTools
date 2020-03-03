@@ -58,11 +58,16 @@ namespace TrainingManagingWorker
         public string PrepareChampionshipEmail(TournamentDetails details)
         {
             var message = "<p>Hi {{TeamName}} Athletes, Athletes family, Coaches and Volunteers:<br /></p><p style=\"margin-left:30px;\"><strong>Everyone should be there at {{StartTime}}.</strong><br /><br />The first game is at {{FirstGame}}.<br /><br />The second game is at {{SecondGame}}.<br /><br /><br />The completion will be at  {{LocationName}} ({{LocationAddress}}, {{LocationCity}}, {{LocationState}} {{LocationZip}} )<br /><br /><br /><p style=\"margin-left:30px;\">You must return your uniform to your coach RIGHT AFTER SATURDAY’S COMPETITION. Remember bring a change of clothes. Failure to return your uniform may reflect on your athlete being selected for future Basketball Championships. There will also be a charge of $30 for jersey and $20 for shorts for all uniforms not returned at that time.<br /><br /><em>Remember no food or drinks are allowed in the Gymnasiums, only water.</em><br /><br /><br />Let me know if you have any questions.<br /><br /><br /></p><p>Van&nbsp;<br /><br /><br />L. A. Van Lowe&nbsp;<br /><br />Basketball Coordinator&nbsp;<br /><br /><br />P. O. 1073&nbsp;<br /><br />Woodbridge, VA 22195-1073&nbsp;<br /><br />Fax: (866) 558-8780&nbsp;<br /></p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;";
-
+            string secondGame = details.SecondGameTime;
+            if (details.OrGameTime != null)
+            {
+                secondGame +=  " or " + details.OrGameTime;
+            }
+            
             message = message.Replace("{{TeamName}}", details.TeamName);
             message = message.Replace("{{StartTime}}", details.StartTime);
             message = message.Replace("{{FirstGame}}", details.FirstGameTime);
-            message = message.Replace("{{SecondGame}}", details.SecondGameTime);
+            message = message.Replace("{{SecondGame}}", secondGame);
             message = message.Replace("{{LocationName}}", details.LocationName);
             message = message.Replace("{{LocationAddress}}", details.LocationAddress);
             message = message.Replace("{{LocationCity}}", details.LocationCity);
@@ -86,6 +91,10 @@ namespace TrainingManagingWorker
                 SecondGameTime = _referenceRepository.GetTimeByTimeId(dto.Game2TimeId).Result.TimeHour,
                 StartTime = _referenceRepository.GetTimeByTimeId(dto.Game1TimeId - 1).Result.TimeHour,
             };
+            if (dto.OrTimeId != 0)
+            {
+                details.OrGameTime = _referenceRepository.GetTimeByTimeId(dto.OrTimeId).Result.TimeHour;
+            }
 
             return details;
         }
