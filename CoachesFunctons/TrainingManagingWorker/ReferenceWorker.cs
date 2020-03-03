@@ -79,7 +79,7 @@ namespace TrainingManagingWorker
         public TournamentDetails PrepareChampionshipDetails(TournamentTeamDto dto)
         {
             var location = _referenceRepository.GetLocationByLocationId(dto.LocationId);
-            TournamentDetails details = new TournamentDetails
+            var details = new TournamentDetails
             {
                 FirstGameTime = _referenceRepository.GetTimeByTimeId(dto.Game1TimeId).Result.TimeHour,
                 LocationAddress = location.Result.Street,
@@ -97,6 +97,17 @@ namespace TrainingManagingWorker
             }
 
             return details;
+        }
+
+        public string PrepareChampionshipText(TournamentDetails details)
+        {
+            string message = "{{teamName}} completion will be at {{locationName}}, everyone should arrive at {{arrivalTime}} ";
+            message = message
+                .Replace("{{teamName}}", details.TeamName)
+                .Replace("{{locationName}}", details.LocationName)
+                .Replace("{{arrivalTime}}", details.StartTime);
+
+            return message;
         }
     }
 }

@@ -118,13 +118,27 @@ namespace TrainingManagingWorkerTest
         public void PrepareChampionshipText_When_executed_return_message()
 
         {
+            ReferenceWorker.TournamentDetails details = new ReferenceWorker.TournamentDetails
+            {
+                TeamName = "Bulls",
+                FirstGameTime = "9:00 AM",
+                SecondGameTime = "1:00 PM",
+                OrGameTime = "12:00 noon",
+                StartTime = "8:30 AM",
+                LocationName = "Rodney E. Thompson Middle School",
+                LocationAddress = "800 Eustace Road",
+                LocationCity = "Stafford",
+                LocationState = "VA",
+                LocationZip = "22554"
+            };
+
             var teamName = "Bulls";
             var locationName = "Rodney E. Thompson Middle School";
-            var arrivalTime = "10:30 AM";
+            var arrivalTime = "8:30 AM";
             var expected =
-                "Bulls completion will be at Rodney E. Thompson Middle School, everyone should arrive at 10:30 AM ";
+                "Bulls completion will be at Rodney E. Thompson Middle School, everyone should arrive at 8:30 AM ";
 
-            string actual = _worker.PrepareChampionshipText(teamName, locationName, arrivalTime );
+            string actual = _worker.PrepareChampionshipText(details);
             Assert.Equal(expected, actual);
 
         }
