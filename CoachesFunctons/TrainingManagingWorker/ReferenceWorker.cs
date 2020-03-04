@@ -109,5 +109,38 @@ namespace TrainingManagingWorker
 
             return message;
         }
+
+        public CoachTextDto ChampionshipTextPreparation(TournamentTeamDto dto)
+        {
+            var details = PrepareChampionshipDetails(dto);
+
+            CoachTextDto textdto = new CoachTextDto
+            {
+                SportId = 4,
+                TeamId = dto.TeamId,
+                Selected = true,
+                Message = PrepareChampionshipText(details)
+            };
+
+
+            return textdto;
+        }
+
+        public CoachEmailDto ChampionshipEmailPreparation(TournamentTeamDto dto)
+        {
+            var details = PrepareChampionshipDetails(dto);
+
+            CoachEmailDto emailDto = new CoachEmailDto
+            {
+                SportId = 4,
+                TeamId = dto.TeamId,
+                Selected = true,
+                From = "basketballCoordinator@pwsova.org",
+                Subject = "Basketball Tournament Information",
+                HtmlContent = PrepareChampionshipEmail(details)
+            };
+
+            return emailDto;
+        }
     }
 }
