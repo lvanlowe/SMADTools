@@ -136,7 +136,7 @@ namespace TrainingManagingWorkerTest
             var locationName = "Rodney E. Thompson Middle School";
             var arrivalTime = "8:30 AM";
             var expected =
-                "Bulls completion will be at Rodney E. Thompson Middle School, everyone should arrive at 8:30 AM ";
+                "Bulls competition will be at Rodney E. Thompson Middle School, everyone should arrive at 8:30 AM ";
 
             string actual = _worker.PrepareChampionshipText(details);
             Assert.Equal(expected, actual);
@@ -162,7 +162,7 @@ namespace TrainingManagingWorkerTest
 
 
             var expected =
-                "<p>Hi Bulls Athletes, Athletes family, Coaches and Volunteers:<br /></p><p style=\"margin-left:30px;\"><strong>Everyone should be there at 8:30 AM.</strong><br /><br />The first game is at 9:00 AM.<br /><br />The second game is at 1:00 PM.<br /><br /><br />The completion will be at  H. H. Poole Middle School (800 Eustace Road, Stafford, VA 22554 )<br /><br /><br /><p style=\"margin-left:30px;\">You must return your uniform to your coach RIGHT AFTER SATURDAY’S COMPETITION. Remember bring a change of clothes. Failure to return your uniform may reflect on your athlete being selected for future Basketball Championships. There will also be a charge of $30 for jersey and $20 for shorts for all uniforms not returned at that time.<br /><br /><em>Remember no food or drinks are allowed in the Gymnasiums, only water.</em><br /><br /><br />Let me know if you have any questions.<br /><br /><br /></p><p>Van&nbsp;<br /><br /><br />L. A. Van Lowe&nbsp;<br /><br />Basketball Coordinator&nbsp;<br /><br /><br />P. O. 1073&nbsp;<br /><br />Woodbridge, VA 22195-1073&nbsp;<br /><br />Fax: (866) 558-8780&nbsp;<br /></p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;";
+                "<p>Hi Bulls Athletes, Athletes family, Coaches and Volunteers:<br /></p><p style=\"margin-left:30px;\"><strong>Everyone should be there at 8:30 AM.</strong><br /><br />The first game is at 9:00 AM.<br /><br />The second game is at 1:00 PM.<br /><br /><br />The competition will be at  H. H. Poole Middle School (800 Eustace Road, Stafford, VA 22554 )<br /><br /><br /><p style=\"margin-left:30px;\">You must return your uniform to your coach RIGHT AFTER SATURDAY’S COMPETITION. Remember bring a change of clothes. Failure to return your uniform may reflect on your athlete being selected for future Basketball Championships. There will also be a charge of $30 for jersey and $20 for shorts for all uniforms not returned at that time.<br /><br /><em>Remember no food or drinks are allowed in the Gymnasiums, only water.</em><br /><br /><br />Let me know if you have any questions.<br /><br /><br /></p><p>Van&nbsp;<br /><br /><br />L. A. Van Lowe&nbsp;<br /><br />Basketball Coordinator&nbsp;<br /><br /><br />P. O. 1073&nbsp;<br /><br />Woodbridge, VA 22195-1073&nbsp;<br /><br />Fax: (866) 558-8780&nbsp;<br /></p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;";
 
             string actual = _worker.PrepareChampionshipEmail(details);
             Assert.Equal(expected, actual);
@@ -189,7 +189,7 @@ namespace TrainingManagingWorkerTest
 
 
             var expected =
-                "<p>Hi Bulls Athletes, Athletes family, Coaches and Volunteers:<br /></p><p style=\"margin-left:30px;\"><strong>Everyone should be there at 8:30 AM.</strong><br /><br />The first game is at 9:00 AM.<br /><br />The second game is at 1:00 PM or 12:00 noon.<br /><br /><br />The completion will be at  H. H. Poole Middle School (800 Eustace Road, Stafford, VA 22554 )<br /><br /><br /><p style=\"margin-left:30px;\">You must return your uniform to your coach RIGHT AFTER SATURDAY’S COMPETITION. Remember bring a change of clothes. Failure to return your uniform may reflect on your athlete being selected for future Basketball Championships. There will also be a charge of $30 for jersey and $20 for shorts for all uniforms not returned at that time.<br /><br /><em>Remember no food or drinks are allowed in the Gymnasiums, only water.</em><br /><br /><br />Let me know if you have any questions.<br /><br /><br /></p><p>Van&nbsp;<br /><br /><br />L. A. Van Lowe&nbsp;<br /><br />Basketball Coordinator&nbsp;<br /><br /><br />P. O. 1073&nbsp;<br /><br />Woodbridge, VA 22195-1073&nbsp;<br /><br />Fax: (866) 558-8780&nbsp;<br /></p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;";
+                "<p>Hi Bulls Athletes, Athletes family, Coaches and Volunteers:<br /></p><p style=\"margin-left:30px;\"><strong>Everyone should be there at 8:30 AM.</strong><br /><br />The first game is at 9:00 AM.<br /><br />The second game is at 1:00 PM or 12:00 noon.<br /><br /><br />The competition will be at  H. H. Poole Middle School (800 Eustace Road, Stafford, VA 22554 )<br /><br /><br /><p style=\"margin-left:30px;\">You must return your uniform to your coach RIGHT AFTER SATURDAY’S COMPETITION. Remember bring a change of clothes. Failure to return your uniform may reflect on your athlete being selected for future Basketball Championships. There will also be a charge of $30 for jersey and $20 for shorts for all uniforms not returned at that time.<br /><br /><em>Remember no food or drinks are allowed in the Gymnasiums, only water.</em><br /><br /><br />Let me know if you have any questions.<br /><br /><br /></p><p>Van&nbsp;<br /><br /><br />L. A. Van Lowe&nbsp;<br /><br />Basketball Coordinator&nbsp;<br /><br /><br />P. O. 1073&nbsp;<br /><br />Woodbridge, VA 22195-1073&nbsp;<br /><br />Fax: (866) 558-8780&nbsp;<br /></p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;";
 
             string actual = _worker.PrepareChampionshipEmail(details);
             Assert.Equal(expected, actual);
@@ -211,9 +211,9 @@ namespace TrainingManagingWorkerTest
             CalendarTimes startTime = new CalendarTimes { Id = 6, TimeHour = "8:30 AM" };
             CalendarTimes firstTime = new CalendarTimes { Id = 7, TimeHour = "9:00 AM" };
             CalendarTimes secondTime = new CalendarTimes { Id = 15, TimeHour = "1:00 PM" };
-            Location location = new Location
+            Locations location = new Locations
             {
-                id = 50,
+                Id = 50,
                 Name = "H. H. Poole Middle School",
                  Street = "800 Eustace Road",
                  City = "Stafford",
@@ -270,9 +270,9 @@ namespace TrainingManagingWorkerTest
             CalendarTimes startTime = new CalendarTimes { Id = 6, TimeHour = "8:30 AM" };
             CalendarTimes firstTime = new CalendarTimes { Id = 7, TimeHour = "9:00 AM" };
             CalendarTimes secondTime = new CalendarTimes { Id = 15, TimeHour = "1:00 PM" };
-            Location location = new Location
+            Locations location = new Locations
             {
-                id = 50,
+                Id = 50,
                 Name = "H. H. Poole Middle School",
                 Street = "800 Eustace Road",
                 City = "Stafford",
@@ -300,7 +300,7 @@ namespace TrainingManagingWorkerTest
             _mockReferenceRepository.Setup(repository => repository.GetLocationByLocationId(50)).ReturnsAsync(location);
 
             var message =
-                "Bulls completion will be at H. H. Poole Middle School, everyone should arrive at 8:30 AM ";
+                "Bulls competition will be at H. H. Poole Middle School, everyone should arrive at 8:30 AM ";
 
 
             CoachTextDto actual = _worker.ChampionshipTextPreparation(dto);
@@ -325,9 +325,9 @@ namespace TrainingManagingWorkerTest
             CalendarTimes startTime = new CalendarTimes { Id = 6, TimeHour = "8:30 AM" };
             CalendarTimes firstTime = new CalendarTimes { Id = 7, TimeHour = "9:00 AM" };
             CalendarTimes secondTime = new CalendarTimes { Id = 15, TimeHour = "1:00 PM" };
-            Location location = new Location
+            Locations location = new Locations
             {
-                id = 50,
+                Id = 50,
                 Name = "H. H. Poole Middle School",
                 Street = "800 Eustace Road",
                 City = "Stafford",
@@ -355,7 +355,7 @@ namespace TrainingManagingWorkerTest
             _mockReferenceRepository.Setup(repository => repository.GetLocationByLocationId(50)).ReturnsAsync(location);
 
             var message =
-                "<p>Hi Bulls Athletes, Athletes family, Coaches and Volunteers:<br /></p><p style=\"margin-left:30px;\"><strong>Everyone should be there at 8:30 AM.</strong><br /><br />The first game is at 9:00 AM.<br /><br />The second game is at 1:00 PM.<br /><br /><br />The completion will be at  H. H. Poole Middle School (800 Eustace Road, Stafford, VA 22554 )<br /><br /><br /><p style=\"margin-left:30px;\">You must return your uniform to your coach RIGHT AFTER SATURDAY’S COMPETITION. Remember bring a change of clothes. Failure to return your uniform may reflect on your athlete being selected for future Basketball Championships. There will also be a charge of $30 for jersey and $20 for shorts for all uniforms not returned at that time.<br /><br /><em>Remember no food or drinks are allowed in the Gymnasiums, only water.</em><br /><br /><br />Let me know if you have any questions.<br /><br /><br /></p><p>Van&nbsp;<br /><br /><br />L. A. Van Lowe&nbsp;<br /><br />Basketball Coordinator&nbsp;<br /><br /><br />P. O. 1073&nbsp;<br /><br />Woodbridge, VA 22195-1073&nbsp;<br /><br />Fax: (866) 558-8780&nbsp;<br /></p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;";
+                "<p>Hi Bulls Athletes, Athletes family, Coaches and Volunteers:<br /></p><p style=\"margin-left:30px;\"><strong>Everyone should be there at 8:30 AM.</strong><br /><br />The first game is at 9:00 AM.<br /><br />The second game is at 1:00 PM.<br /><br /><br />The competition will be at  H. H. Poole Middle School (800 Eustace Road, Stafford, VA 22554 )<br /><br /><br /><p style=\"margin-left:30px;\">You must return your uniform to your coach RIGHT AFTER SATURDAY’S COMPETITION. Remember bring a change of clothes. Failure to return your uniform may reflect on your athlete being selected for future Basketball Championships. There will also be a charge of $30 for jersey and $20 for shorts for all uniforms not returned at that time.<br /><br /><em>Remember no food or drinks are allowed in the Gymnasiums, only water.</em><br /><br /><br />Let me know if you have any questions.<br /><br /><br /></p><p>Van&nbsp;<br /><br /><br />L. A. Van Lowe&nbsp;<br /><br />Basketball Coordinator&nbsp;<br /><br /><br />P. O. 1073&nbsp;<br /><br />Woodbridge, VA 22195-1073&nbsp;<br /><br />Fax: (866) 558-8780&nbsp;<br /></p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;";
 
 
             CoachEmailDto actual = _worker.ChampionshipEmailPreparation(dto);

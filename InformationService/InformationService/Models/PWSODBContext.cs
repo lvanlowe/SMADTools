@@ -17,7 +17,7 @@ namespace InformationService.Models
 
         public virtual DbSet<Carrier> Carrier { get; set; }
         public virtual DbSet<Coach> Coach { get; set; }
-        public virtual DbSet<Location> Location { get; set; }
+        //public virtual DbSet<Location> Locations { get; set; }
         public virtual DbSet<PhoneTypes> PhoneTypes { get; set; }
         public virtual DbSet<RegisteredAthlete> RegisteredAthlete { get; set; }
         public virtual DbSet<Registrant> Registrant { get; set; }

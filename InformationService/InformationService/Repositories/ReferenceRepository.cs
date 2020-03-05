@@ -59,9 +59,9 @@ namespace InformationService.Repositories
             return location;
         }
 
-        public async Task<Location> GetLocationByLocationId(long locationId)
+        public async Task<Locations> GetLocationByLocationId(long locationId)
         {
-            var location = await _context.Location.Where(l => l.id == locationId)
+            var location = await _context.Locations.Where(l => l.Id == locationId)
                 .FirstOrDefaultAsync();
             return location;
         }

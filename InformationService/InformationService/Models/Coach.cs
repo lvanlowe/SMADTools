@@ -10,6 +10,6 @@ namespace InformationService.Models
         public string LastName { get; set; }
         public int LocationId { get; set; }
 
-        public virtual Location Location { get; set; }
+        public virtual Locations Location { get; set; }
     }
 }

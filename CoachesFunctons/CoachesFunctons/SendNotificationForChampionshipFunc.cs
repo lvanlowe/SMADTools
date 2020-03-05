@@ -51,12 +51,10 @@ namespace CoachesFunctons
 
                 foreach (var team in teams.Teams)
                 {
-                    var details = refWorker.PrepareChampionshipDetails(team);
-                    var emailMessage = refWorker.PrepareChampionshipEmail(details);
+                    var emailMessage = refWorker.ChampionshipEmailPreparation(team);
+                    var textMessage = refWorker.ChampionshipTextPreparation(team);
                     var numOfEmails = await emailWorker.SendEmailsForSport(emailMessage);
-                    string textMessage = refWorker.PrepareChampionshipText(details);
-
-                    //var numOfSms = await textWorker.SendSmsForSport(textMessage);
+                    var numOfSms = await textWorker.SendSmsForSport(textMessage);
 
                 }
 
