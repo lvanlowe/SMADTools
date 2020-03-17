@@ -30,7 +30,7 @@ namespace InformationServiceTest.RepositoriesTest
             _context.RemoveRange(locations.Result);
             var sports = _context.Sports.ToListAsync();
             _context.RemoveRange(sports.Result);
-            var places = _context.Location.ToListAsync();
+            var places = _context.Locations.ToListAsync();
             _context.RemoveRange(places.Result);
             var times = _context.CalendarTimes.ToListAsync();
             _context.RemoveRange(times.Result);
@@ -59,23 +59,23 @@ namespace InformationServiceTest.RepositoriesTest
             _context.Teams.Add(new Teams() { Id = 4, ProgramId = 2, Name = "Dominators", SportType = 1 });
             _context.Teams.Add(new Teams() { Id = 5, ProgramId = 2, Name = "Liberty", SportType = 2 });
             _context.Teams.Add(new Teams() { Id = 6, ProgramId = 3, Name = "Ravens", SportType = 5 });
-            _context.Location.Add(new Location()
+            _context.Locations.Add(new Locations()
             {
-                id = 1, Name = "Potomac High School", Street = "123 Main Street", City = "Woodbridge", State = "VA",
+                Id = 1, Name = "Potomac High School", Street = "123 Main Street", City = "Woodbridge", State = "VA",
                 Zip = "22193"
             });
-            _context.Location.Add(new Location()
+            _context.Locations.Add(new Locations()
             {
-                id = 2,
+                Id = 2,
                 Name = "Potomac Middle School",
                 Street = "129 Main Street",
                 City = "Woodbridge",
                 State = "VA",
                 Zip = "22193"
             });
-            _context.Location.Add(new Location()
+            _context.Locations.Add(new Locations()
             {
-                id = 3,
+                Id = 3,
                 Name = "Saunders Middle School",
                 Street = "129 Dale Bvld",
                 City = "Dale City",
