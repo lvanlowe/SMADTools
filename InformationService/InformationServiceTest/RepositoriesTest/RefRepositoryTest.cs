@@ -36,7 +36,18 @@ namespace InformationServiceTest.RepositoriesTest
 
             var actual =_repository.GetEventByName(eventName);
 
-            Assert.Equal("You have sigh up for notifications for the Hylton Track Meet", actual.Result.Message);
+            Assert.Equal("You have signed up for notifications for the Hylton Track Meet", actual.Result.Message);
         }
+
+        [Fact]
+        public void GetEventByNameTest_When_id_not_found_Then_error_message()
+        {
+            const string eventName = "track";
+
+            var actual = _repository.GetEventByName(eventName);
+
+            Assert.Equal("You text track", actual.Result.Message);
+        }
+
     }
 }

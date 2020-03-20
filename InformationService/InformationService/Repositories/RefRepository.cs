@@ -28,6 +28,10 @@ namespace InformationService.Repositories
             var retrievedResult = await notificationTable.ExecuteAsync(retrieveOperation);
             if (retrievedResult.Result != null)
                 notification = (NotificationEntity)retrievedResult.Result;
+            else
+            {
+                notification.Message = "You text " + eventName;
+            }
             return notification;
         }
     }
