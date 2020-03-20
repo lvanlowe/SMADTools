@@ -18,5 +18,8 @@ namespace InformationService.Models
         }
 
         public string Message { get; set; }
+        public string Year { get; set; }
+        public long SportId { get; set; }
+        public long ProgramId { get; set; }
     }
 }
