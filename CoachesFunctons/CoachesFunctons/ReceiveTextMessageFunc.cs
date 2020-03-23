@@ -39,7 +39,7 @@ namespace CoachesFunctons
             //string smsinfo = data.ToString();
             //log.LogInformation(smsinfo);
 
-            string responseMessage = $"Hello, {formValues["Body"]}. This HTTP triggered function executed successfully.";
+            string responseMessage = $"Hello, {formValues["Body"]}. This message is from the PWSO Notification System.";
 
             //var data = await req.Content.ReadAsStringAsync();
             //var formValues = data.Split('&')

@@ -13,6 +13,7 @@ namespace TrainingManagingWorker
         private ITrainingRepository _trainingRepository;
         private List<Athletes> _athletes;
         private IOrganizationRepository _organizationRepository;
+        private IRefRepository _refRepository;
 
         public RegistrantWorker(ITrainingRepository trainingRepository, IOrganizationRepository organizationRepository)
         {
@@ -20,6 +21,12 @@ namespace TrainingManagingWorker
             _organizationRepository = organizationRepository;
             var athletes = _organizationRepository.GetAllAthletes();
             _athletes = athletes.Result;
+        }
+
+        public RegistrantWorker(ITrainingRepository trainingRepository, IRefRepository refRepository)
+        {
+            _trainingRepository = trainingRepository;
+            _refRepository = refRepository;
         }
 
         public async Task<List<RegistrantDto>> GetRegistrantsForSport(int sportId)
@@ -126,6 +133,13 @@ namespace TrainingManagingWorker
             }
         }
 
+        public async Task<NotificationEntity> AddNumberForEvent(EventTextDto dto)
+        {
+            NotificationEntity entity = new NotificationEntity();
+            entity = await _refRepository.GetEventByName(dto.Message);
+
+            return entity;
+        }
     }
 }
 

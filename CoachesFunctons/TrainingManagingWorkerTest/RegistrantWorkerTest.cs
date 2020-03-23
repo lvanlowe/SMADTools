@@ -354,5 +354,29 @@ namespace TrainingManagingWorkerTest
 
         }
 
+        [Theory]
+        [InlineData(1)]
+        public void AddNumberForEvent_With_event_found_return_message(int eventId)
+
+        {
+            List<NotificationEntity> notificationEntities = new List<NotificationEntity>();
+            notificationEntities.Add(new NotificationEntity { RowKey = "track", ProgramId = 1, SportId = 1, Message = "this track event" });
+            notificationEntities.Add(new NotificationEntity { RowKey = "polar", ProgramId = 2, SportId = 2, Message = "this polar plunge event" });
+            Mock<IRefRepository> mockRefRepository = new Mock<IRefRepository>();
+            mockRefRepository.Setup(repository => repository.GetEventByName(notificationEntities[0].RowKey)).ReturnsAsync(notificationEntities[0]);
+            mockRefRepository.Setup(repository => repository.GetEventByName(notificationEntities[1].RowKey)).ReturnsAsync(notificationEntities[1]);
+            RegistrantWorker worker = new RegistrantWorker(_mockTrainingRepository.Object, mockRefRepository.Object);
+            EventTextDto dto = new EventTextDto{Zip = "22193", City = "Dale City", From = "17035551212", Message = notificationEntities[eventId].RowKey};
+
+            var actual = worker.AddNumberForEvent(dto);
+            Assert.Equal(notificationEntities[eventId].Message, actual.Result.Message);
+            //Assert.Equal(email1.Email, actual.Email1);
+            //Assert.Equal(email2.Id, actual.RegistrantEmail2Id);
+            //Assert.Equal(email2.Email, actual.Email2);
+            //Assert.Equal(email3.Id, actual.RegistrantEmail3Id);
+            //Assert.Equal(email3.Email, actual.Email3);
+
+        }
+
     }
 }
