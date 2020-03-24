@@ -135,9 +135,7 @@ namespace TrainingManagingWorker
 
         public async Task<NotificationEntity> AddNumberForEvent(EventTextDto dto)
         {
-            NotificationEntity entity = new NotificationEntity();
-            entity = await _refRepository.GetEventByName(dto.Message);
-
+            var entity = await _refRepository.GetEventByName(dto.Message) ?? new NotificationEntity {Message = "You text " + dto.Message };
             return entity;
         }
     }
