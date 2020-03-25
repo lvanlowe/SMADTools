@@ -194,9 +194,16 @@ namespace InformationService.Repositories
                 LastName = eventInformation.Zip,
                 SportId = eventInformation.SportId,
                 ProgramId = eventInformation.ProgramId,
+                RegistrantPhone = new List<RegistrantPhone>
+                {
+                    new RegistrantPhone
+                    {
+                        CanText = true, Phone = eventInformation.Message, PhoneType = "cell", PhoneTypeId = 1
+                    }
+                },
             };
 
-            var x = await _context.Registrant.AddAsync(registrant);
+            await _context.Registrant.AddAsync(registrant);
             _context.SaveChanges();
         }
     }
