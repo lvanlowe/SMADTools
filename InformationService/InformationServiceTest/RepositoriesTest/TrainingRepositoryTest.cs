@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using InformationService.DataModels;
 using InformationService.Models;
 using InformationService.Repositories;
 using Microsoft.EntityFrameworkCore;
@@ -939,6 +940,45 @@ namespace InformationServiceTest.RepositoriesTest
             Assert.Equal(false, newRegistrant.Selected);
             Assert.Equal(3, newRegistrant.RegistrantPhone.Count);
             Assert.Equal(1, newRegistrant.RegistrantEmail.Count);
+        }
+
+        [Theory]
+        //[InlineData(3, 3)]
+        [InlineData(2, 4)]
+        //[InlineData(10, 2)]
+        public void AddEvent_When_executed_add_records(int registrantId, int expected)
+
+        {
+            // Insert seed data into the database using one instance of the context
+            //InitializeRegistrants();
+            //LoadRegistrants();
+
+            //RegistrantPhone phone1 = new RegistrantPhone() { RegistrantId = registrantId, CanText = true, PhoneTypeId = 1, Phone = "5715551212" };
+            //RegistrantPhone phone2 = new RegistrantPhone() { RegistrantId = registrantId, CanText = false, PhoneTypeId = 2, Phone = "4045551212" };
+
+            //List<RegistrantPhone> phoneList = new List<RegistrantPhone> { phone1, phone2 };
+
+            //List<RegistrantPhone> originalPhoneList = new List<RegistrantPhone>();
+            //RegistrantPhone phone21 = new RegistrantPhone() { Id = 2, RegistrantId = registrantId, CanText = true, PhoneTypeId = 1, CarrierId = 1, Phone = "3015551212" };
+            //RegistrantPhone phone22 = new RegistrantPhone() { Id = 3, RegistrantId = registrantId, CanText = true, PhoneTypeId = 1, CarrierId = 1, Phone = "3105551212" };
+            //originalPhoneList.Add(phone21);
+            //originalPhoneList.Add(phone22);
+
+            EventInformation eventInformation = new EventInformation
+            {
+                Message = "Track",
+                City = "Dale City",
+                From = "17035551212",
+                Zip = "22193",
+                SportId = 1,
+                ProgramId = 1
+            };
+
+            var repository = new TrainingRepository(_context);
+            repository.AddEvent(eventInformation);
+
+            Assert.Equal(1, _context.Registrant.Count());
+            Assert.Equal(1, _context.RegistrantPhone.Count());
         }
 
     }

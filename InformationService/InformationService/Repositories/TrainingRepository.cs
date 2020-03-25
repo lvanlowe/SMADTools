@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
+using System.Numerics;
 using System.Threading.Tasks;
 using InformationService.DataModels;
 using InformationService.Interfaces;
@@ -183,6 +184,20 @@ namespace InformationService.Repositories
             RemoveEmail(deletedEmail, originalEmailList);
             AddEmail(newEmailList, originalEmailList);
             return originalEmailList;
+        }
+
+        public async Task AddEvent(EventInformation eventInformation)
+        {
+            var registrant = new Registrant
+            {
+                FirstName = eventInformation.City,
+                LastName = eventInformation.Zip,
+                SportId = eventInformation.SportId,
+                ProgramId = eventInformation.ProgramId,
+            };
+
+            var x = await _context.Registrant.AddAsync(registrant);
+            _context.SaveChanges();
         }
     }
 }
