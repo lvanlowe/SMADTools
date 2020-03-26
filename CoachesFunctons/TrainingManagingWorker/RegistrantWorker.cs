@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using InformationService.DataModels;
 using InformationService.Interfaces;
 using InformationService.Models;
 using InterfaceModels;
@@ -135,7 +136,24 @@ namespace TrainingManagingWorker
 
         public async Task<NotificationEntity> AddNumberForEvent(EventTextDto dto)
         {
-            var entity = await _refRepository.GetEventByName(dto.Message) ?? new NotificationEntity {Message = "You text " + dto.Message };
+            var entity = await _refRepository.GetEventByName(dto.Message);
+            if (entity != null)
+            {
+                //EventInformation eventInformation = new EventInformation
+                //{
+                //    Message = dto.Message,
+                //    From = dto.From,
+                //    ProgramId = entity.ProgramId,
+                //    City = dto.City,
+                //    Zip = dto.Zip,
+                //    SportId = entity.SportId
+                //};
+                //await _trainingRepository.AddEvent(eventInformation);
+            }
+            else
+            {
+                entity = new NotificationEntity { Message = "You text " + dto.Message };
+            }
             return entity;
         }
     }
