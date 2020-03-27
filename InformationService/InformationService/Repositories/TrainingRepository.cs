@@ -198,7 +198,7 @@ namespace InformationService.Repositories
                 {
                     new RegistrantPhone
                     {
-                        CanText = true, Phone = eventInformation.Message, PhoneType = "cell", PhoneTypeId = 1
+                        CanText = true, Phone = eventInformation.From.Substring(2), PhoneType = "cell", PhoneTypeId = 1
                     }
                 },
             };
