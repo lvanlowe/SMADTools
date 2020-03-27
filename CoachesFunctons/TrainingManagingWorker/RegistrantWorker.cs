@@ -139,16 +139,16 @@ namespace TrainingManagingWorker
             var entity = await _refRepository.GetEventByName(dto.Message);
             if (entity != null)
             {
-                //EventInformation eventInformation = new EventInformation
-                //{
-                //    Message = dto.Message,
-                //    From = dto.From,
-                //    ProgramId = entity.ProgramId,
-                //    City = dto.City,
-                //    Zip = dto.Zip,
-                //    SportId = entity.SportId
-                //};
-                //await _trainingRepository.AddEvent(eventInformation);
+                EventInformation eventInformation = new EventInformation
+                {
+                    Message = dto.Message,
+                    From = dto.From,
+                    ProgramId = entity.ProgramId,
+                    City = dto.City,
+                    Zip = dto.Zip,
+                    SportId = entity.SportId
+                };
+                await _trainingRepository.AddEvent(eventInformation);
             }
             else
             {

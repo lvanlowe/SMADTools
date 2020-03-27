@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using InformationService.DataModels;
 using InformationService.Interfaces;
 using InformationService.Models;
 using InformationService.Repositories;
@@ -361,8 +362,8 @@ namespace TrainingManagingWorkerTest
 
         {
             List<NotificationEntity> notificationEntities = new List<NotificationEntity>();
-            notificationEntities.Add(new NotificationEntity { RowKey = "track", ProgramId = 1, SportId = 1, Message = "this track event" });
-            notificationEntities.Add(new NotificationEntity { RowKey = "polar", ProgramId = 2, SportId = 2, Message = "this polar plunge event" });
+            notificationEntities.Add(new NotificationEntity { RowKey = "track", ProgramId = 3, SportId = 1, Message = "this track event" });
+            notificationEntities.Add(new NotificationEntity { RowKey = "polar", ProgramId = 4, SportId = 2, Message = "this polar plunge event" });
             Mock<IRefRepository> mockRefRepository = new Mock<IRefRepository>();
             mockRefRepository.Setup(repository => repository.GetEventByName(notificationEntities[0].RowKey)).ReturnsAsync(notificationEntities[0]);
             mockRefRepository.Setup(repository => repository.GetEventByName(notificationEntities[1].RowKey)).ReturnsAsync(notificationEntities[1]);
@@ -371,6 +372,7 @@ namespace TrainingManagingWorkerTest
 
             var actual = worker.AddNumberForEvent(dto);
             Assert.Equal(notificationEntities[eventId].Message, actual.Result.Message);
+            _mockTrainingRepository.Verify(mock => mock.AddEvent(It.Is<EventInformation>(e => e.ProgramId == notificationEntities[eventId].ProgramId && e.SportId == notificationEntities[eventId].SportId)), Times.Once);
             //Assert.Equal(email1.Email, actual.Email1);
             //Assert.Equal(email2.Id, actual.RegistrantEmail2Id);
             //Assert.Equal(email2.Email, actual.Email2);
@@ -395,6 +397,7 @@ namespace TrainingManagingWorkerTest
 
             var actual = worker.AddNumberForEvent(dto);
             Assert.Equal("You text Bad", actual.Result.Message);
+            _mockTrainingRepository.Verify(mock => mock.AddEvent(It.IsAny<EventInformation>()), Times.Never);
             //Assert.Equal(email1.Email, actual.Email1);
             //Assert.Equal(email2.Id, actual.RegistrantEmail2Id);
             //Assert.Equal(email2.Email, actual.Email2);
