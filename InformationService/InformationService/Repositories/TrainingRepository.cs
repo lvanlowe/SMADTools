@@ -206,5 +206,12 @@ namespace InformationService.Repositories
             await _context.Registrant.AddAsync(registrant);
             _context.SaveChanges();
         }
+
+        public async Task<Registrant> AddRegistrant(Registrant registrant)
+        {
+            await _context.Registrant.AddAsync(registrant);
+            await _context.SaveChangesAsync();
+            return registrant;
+        }
     }
 }

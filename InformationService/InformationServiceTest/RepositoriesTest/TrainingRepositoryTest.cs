@@ -943,6 +943,45 @@ namespace InformationServiceTest.RepositoriesTest
         }
 
         [Theory]
+        [InlineData(2, "atom@dc.com")]
+        public void AddRegistrant_1_email_3_phone_When_registrant_added(int registrantId, string address)
+
+        {
+            // Insert seed data into the database using one instance of the context
+            InitializeRegistrants();
+            //LoadRegistrants();
+            List<RegistrantEmail> emailList = new List<RegistrantEmail>();
+            RegistrantEmail email = new RegistrantEmail() { Email = address };
+            emailList.Add(email);
+
+            List<RegistrantPhone> phoneList = new List<RegistrantPhone>();
+            RegistrantPhone phoneA = new RegistrantPhone() { CanText = false, PhoneType = "mobile", Phone = "3015551212" };
+            RegistrantPhone phoneB = new RegistrantPhone() { CanText = true, PhoneType = "mobile", Phone = "3105551212" };
+            RegistrantPhone phoneC = new RegistrantPhone() { CanText = false, PhoneType = "mobile", Phone = "4125551212" };
+            phoneList.Add(phoneA);
+            phoneList.Add(phoneB);
+            phoneList.Add(phoneC);
+
+            var registrant = new Registrant()
+            {
+                FirstName = "Jason",
+                LastName = "Todd",
+                ProgramId = 2,
+                SportId = 10,
+                Year = "1999",
+                RegistrantPhone = phoneList,
+                RegistrantEmail = emailList
+            };
+
+            var repository = new TrainingRepository(_context);
+            var actual = repository.AddRegistrant(registrant);
+            var newRegistrant = _context.Registrant.FirstOrDefault(r => r.FirstName == "Jason");
+            Assert.Equal("Todd", actual.Result.LastName);
+            Assert.Equal(3, newRegistrant.RegistrantPhone.Count);
+            Assert.Equal(1, newRegistrant.RegistrantEmail.Count);
+        }
+
+        [Theory]
         //[InlineData(3, 3)]
         [InlineData(2, 4)]
         //[InlineData(10, 2)]

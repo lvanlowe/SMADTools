@@ -15,6 +15,7 @@ namespace InformationService.Interfaces
         Task<Registrant> AddRegisteredAthlete(int registrantId, int athleteId);
         Task<Registrant> UpdateRegistrant(Registrant registrant);
         Task AddEvent(EventInformation eventInformation);
+        Task<Registrant> AddRegistrant(Registrant registrant);
     }
 
 }
